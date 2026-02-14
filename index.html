@@ -40,12 +40,64 @@
 .steps li {
   margin: 4px 0;
 }
-  </style>
+ /* --- polish layer --- */
+body{
+  background: linear-gradient(180deg, #faf7f5 0%, #ffffff 70%);
+  color:#1f2937;
+}
+
+h1{
+  letter-spacing:-0.5px;
+}
+
+p{
+  color:#374151;
+}
+
+a.button{
+  box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+a.button:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.14);
+  background-color:#111;
+}
+
+hr{
+  opacity:0.25;
+}
+
+h2{
+  margin-top: 36px;
+  letter-spacing:-0.3px;
+}
+
+.steps{
+  background:#ffffff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 18px 22px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  max-width: 640px;
+}
+
+@media (max-width: 520px){
+  body{ padding: 28px; }
+  h1{ font-size: 30px; }
+  p{ font-size: 17px; }
+  a.button{ width: 100%; box-sizing: border-box; }
+  .steps{ padding: 16px 18px; }
+}
+  </style> 
 </head>
 <body>
 
   <h1>Mailing Memories</h1>
-
+  <p style="margin-top:-10px; font-size:14px; color:#6b7280;">
+  Thoughtful, handwritten letters — mailed anywhere in the U.S.
+</p>
   <p>
 Handwritten Letters. Mailed For You.
 
