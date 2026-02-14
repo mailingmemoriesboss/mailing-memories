@@ -90,6 +90,23 @@ h2{
   a.button{ width: 100%; box-sizing: border-box; }
   .steps{ padding: 16px 18px; }
 }
+.truststrip{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin:14px auto 0;
+  max-width:820px;
+}
+
+.truststrip span{
+  background: rgba(107,114,128,0.08);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: #374151;
+}
   </style> 
 </head>
 <body>
@@ -109,7 +126,11 @@ Your message. Written by hand. Sealed. Stamped. Delivered anywhere in the U.S.
   <p style="font-size:14px; margin-top:10px; color:#555;">
 Secure checkout powered by Stripe.
 </p>
-
+<div class="truststrip">
+  <span>✉️ Mailed in 1–2 business days</span>
+  <span>🇺🇸 Delivered anywhere in the U.S.</span>
+  <span>📝 Your words, handwritten</span>
+</div>
 <hr style="margin:40px 0;">
 
 <h2>How It Works</h2>
