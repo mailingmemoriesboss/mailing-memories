@@ -109,10 +109,29 @@ h2{
 }
   
 .hero {
-  padding: 100px 20px 80px;
+  position: relative;
+  padding: 120px 20px 120px;
   text-align: center;
+
+  background-image: url("hero-letter.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  color: white;
 }
-.hero-image{
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+    .hero-image{
   display:block;
   width:100%;
   max-width: 860px;
@@ -160,7 +179,6 @@ Secure checkout powered by Stripe.
   <span>🇺🇸 Delivered anywhere in the U.S.</span>
   <span>📝 Your words, handwritten</span>
 </div>
-<img class="hero-image" src="hero-letter.png" alt="A handwritten letter pulled from an envelope">
 </div> 
 <hr style="margin:40px 0;">
 
