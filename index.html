@@ -41,6 +41,16 @@ font-family: 'Inter', sans-serif;
 .steps li {
   margin: 4px 0;
 }
+    .receive{
+  max-width:600px;
+  margin: 0 auto 30px;
+  padding-left: 22px;
+  text-align: left;
+}
+.receive li{
+  margin: 10px 0;
+  line-height: 1.5;
+}
  /* --- polish layer --- */
 body{
   background: linear-gradient(180deg, #faf7f5 0%, #ffffff 70%);
@@ -151,11 +161,38 @@ background: linear-gradient(
   max-width: 600px;
   margin: 0 auto 30px;
 }
+    
+.full-bleed{
+  margin-left: -40px;
+  margin-right: -40px;
+}
+
+    .full-bleed{
+  position: relative;
+}
+
+.full-bleed::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:80px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #faf7f5 100%);
+}
+    .full-bleed::after{
+  pointer-events: none;
+}
+
+    .full-bleed > *{
+  position: relative;
+  z-index: 1;
+}
  
   </style> 
 </head>
 <body>
-<div class="hero">
+<div class="hero full-bleed">
   <h1>Mailing Memories</h1>
   <p style="margin-top:-10px; font-size:14px; color:#6b7280;">
   Modern handwritten letters — blending print and cursive, delivered the old-fashioned way.
@@ -177,8 +214,15 @@ Secure checkout powered by Stripe.
   <span>📝 Your words, handwritten</span>
 </div>
 </div> 
-<hr style="margin:40px 0;">
 
+<h2>What You Receive</h2>
+<ul class="receive">
+  <li>One carefully handwritten letter (full page)</li>
+  <li>Written exactly as you submit it</li>
+  <li>Sealed in a clean white envelope</li>
+  <li>Stamped and mailed for you</li>
+</ul>
+  
 <h2>How It Works</h2>
 
 <ol class="steps">
@@ -187,14 +231,10 @@ Secure checkout powered by Stripe.
   <li>Your handwritten letter is mailed within 1–2 business days.</li>
 </ol>
 
-<h2>What You Receive</h2>
-<p>
-A one-page handwritten letter, written exactly as submitted, sealed and mailed to your recipient.
-</p>
 
-<h2>Refund Policy</h2>
+<h2>Our Commitment</h2>
 <p>
-Because each letter is custom written, refunds are not available once the letter has been mailed.
+Each letter is handwritten individually and prepared with care. Once completed, letters are not revised except in the case of factual errors (such as a misspelled name or incorrect address). If we make a mistake, we will correct and resend it at no additional cost.
 </p>
 </body>
 </html>
