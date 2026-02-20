@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Card to Yourself | Mailing Memories</title>
 
+  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZHP59L1YSL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -11,169 +12,566 @@
     gtag('config', 'G-ZHP59L1YSL');
   </script>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    html, body{
-      margin:0;
-      padding:0;
+    :root{
+      --bg0:#fbfaf7;
+      --bg1:#f5f2ed;
+      --card:rgba(255,255,255,0.70);
+      --ink:#111827;
+      --muted:#374151;
+      --line:rgba(17,24,39,0.10);
+      --softline:rgba(17,24,39,0.06);
+      --shadow:0 10px 26px rgba(0,0,0,0.06);
+      --shadow2:0 14px 34px rgba(0,0,0,0.08);
+      --btn:#1f2937;
+      --btnHover:#111827;
     }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      text-align: center;
-      padding: 40px;
-      background: linear-gradient(180deg, #faf7f5 0%, #ffffff 70%);
-      color:#1f2937;
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+    body{
+      font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(0,0,0,0.03), transparent 60%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
     }
 
-    h1, h2{
-      font-family: 'Playfair Display', serif;
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding: 0 18px 70px;
     }
 
-    p{
-      font-size:18px;
-      max-width:600px;
-      margin:20px auto;
-      color:#374151;
-    }
-
-    a.button, button.button{
-      display:inline-block;
-      padding:15px 25px;
-      background-color:#2b2b2b;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-      font-size:18px;
-      margin-top:20px;
-      box-shadow:0 10px 22px rgba(0,0,0,0.10);
-      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
-      border:none;
-      cursor:pointer;
-    }
-
-    a.button:hover, button.button:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 14px 28px rgba(0,0,0,0.14);
-      background-color:#1f1f1f;
-    }
-
-    @media (max-width: 520px){
-      body{ padding:28px; }
-      a.button, button.button{ width:100%; box-sizing:border-box; }
-    }
-
-    .topnav{
+    /* Header */
+    .site-header{
+      max-width:1100px;
+      margin: 18px auto 0;
+      padding: 0 18px;
       display:flex;
-      justify-content:center;
+      align-items:center;
+      justify-content:space-between;
       gap:14px;
-      flex-wrap:wrap;
-      margin: 10px auto 0;
-      font-size: 14px;
-      opacity: 0.9;
     }
 
-    .topnav a{
-      color:#374151;
+    .brand{
+      font-family:"Playfair Display", serif;
+      font-weight:700;
+      letter-spacing:-0.4px;
+      font-size:18px;
+      color:var(--ink);
       text-decoration:none;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,0.06);
-      background: rgba(107,114,128,0.06);
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.55);
+      border:1px solid var(--softline);
+      backdrop-filter: blur(4px);
+      white-space:nowrap;
     }
 
-    .topnav a:hover{
-      background: rgba(107,114,128,0.10);
-    }
-
-    .cardbox{
-      max-width: 640px;
-      margin: 22px auto 0;
-      text-align:left;
-      background:#ffffff;
-      border:1px solid rgba(0,0,0,0.06);
-      border-radius: 12px;
-      padding: 18px 22px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-      white-space: pre-wrap;
-      color:#1f2937;
-    }
-
-    .kicker{
-      font-size: 13px;
-      opacity: 0.8;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .row{
+    .nav{
       display:flex;
+      align-items:center;
+      justify-content:flex-end;
       gap:10px;
       flex-wrap:wrap;
+    }
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid var(--softline);
+      background: rgba(255,255,255,0.50);
+      backdrop-filter: blur(4px);
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .nav a:hover{ background: rgba(255,255,255,0.70); }
+
+    /* Hero */
+    .hero{
+      text-align:center;
+      padding: 46px 0 10px;
+    }
+
+    h1,h2,h3{
+      font-family:"Playfair Display", serif;
+      margin:0;
+    }
+
+    .pill{
+      display:inline-block;
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--softline);
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(4px);
+      margin-bottom: 12px;
+    }
+
+    .hero h1{
+      font-weight:700;
+      letter-spacing:-0.8px;
+      font-size:52px;
+      line-height:1.10;
+      margin: 0 auto 14px;
+      max-width: 820px;
+    }
+
+    .hero p{
+      font-size:18px;
+      color:var(--muted);
+      max-width: 760px;
+      margin: 0 auto 18px;
+      line-height:1.65;
+    }
+
+    .ctaRow{
+      display:flex;
+      gap:12px;
       justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(17,24,39,0.10);
+      text-decoration:none;
+      font-size:14px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+      background: rgba(255,255,255,0.80);
+      color: var(--ink);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    .btnPrimary{
+      background: var(--btn);
+      color:#fff;
+      border-color: rgba(0,0,0,0.12);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+    }
+    .btnPrimary:hover{
+      background: var(--btnHover);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.14);
+    }
+
+    .trust{
+      font-size:13px;
+      color:var(--muted);
+      opacity:0.88;
       margin-top: 14px;
+    }
+
+    /* “What you receive” strip */
+    .expect-panel{
+      max-width: 780px;
+      margin: 18px auto 0;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.55);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+      backdrop-filter: blur(4px);
+      text-align:left;
+    }
+    .expect-title{
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      font-size: 16px;
+      margin: 0 0 10px;
+      color: var(--ink);
+      opacity: 0.92;
+    }
+    .expect-list{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px 14px;
+    }
+    .expect-item{
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--muted);
+      opacity: 0.95;
+    }
+    .expect-dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-top: 5px;
+      flex: 0 0 auto;
+      background: rgba(17,24,39,0.35);
+    }
+
+    /* Sections */
+    .section{
+      margin-top: 22px;
+      padding: 44px 0;
+    }
+
+    .panel{
+      border:1px solid var(--softline);
+      background: linear-gradient(180deg, rgba(255,255,255,0.70) 0%, rgba(255,255,255,0.55) 100%);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 28px 22px;
+      text-align:center;
+    }
+
+    .panel h2{
+      font-size:34px;
+      margin:0 0 10px;
+      letter-spacing:-0.4px;
+    }
+
+    .panel p{
+      max-width: 780px;
+      margin: 0 auto 14px;
+      color: var(--muted);
+      line-height:1.6;
+      font-size:15px;
+    }
+
+    .how-grid{
+      max-width: 900px;
+      margin: 18px auto 0;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:14px;
+      text-align:left;
+    }
+
+    .how-card{
+      border:1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.70);
+      border-radius: 18px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+      padding: 16px 14px;
+    }
+    .how-num{
+      font-weight:600;
+      font-size:13px;
+      opacity:0.6;
+      margin-bottom: 8px;
+    }
+    .how-card p{
+      margin:0;
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    /* Pricing cards */
+    .cards{
+      max-width: 980px;
+      margin: 18px auto 0;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:14px;
+      text-align:left;
+    }
+
+    .card{
+      border:1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.72);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 22px 18px;
+    }
+
+    .card.featured{
+      border: 1px solid rgba(17,24,39,0.14);
+      box-shadow: var(--shadow2);
+      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(250,247,245,0.88) 100%);
+    }
+
+    .badge{
+      display:inline-block;
+      font-size:12px;
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(17,24,39,0.10);
+      background: rgba(255,255,255,0.70);
+      margin-bottom: 10px;
+    }
+
+    .card h3{
+      font-size:26px;
+      letter-spacing:-0.3px;
+      margin: 2px 0 8px;
+    }
+
+    .price{
+      font-size:22px;
+      font-weight:600;
+      margin: 0 0 12px;
+      color: var(--ink);
+    }
+
+    .card ul{
+      margin: 0 0 14px;
+      padding-left: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+      font-size:14px;
+    }
+
+    .card .btn{
+      width:100%;
+      border-radius: 14px;
+    }
+
+    /* FAQ */
+    .faq{
+      max-width: 920px;
+      margin: 0 auto;
+      text-align:left;
+    }
+    details{
+      border:1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.65);
+      border-radius: 16px;
+      padding: 14px 14px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+      margin: 10px 0;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:600;
+      color: var(--ink);
+    }
+    details p{
+      margin:10px 0 0;
+      color: var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    /* Mobile tuning */
+    @media (max-width: 820px){
+      .hero h1{ font-size:44px; }
+      .how-grid{ grid-template-columns: 1fr; }
+      .cards{ grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 720px){
+      .expect-list{ grid-template-columns: 1fr; }
+      .expect-panel{ max-width: 560px; }
+    }
+
+    @media (max-width: 560px){
+      .site-header{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+      }
+      .brand{ text-align:center; }
+      .nav{ justify-content:center; gap:8px; }
+      .nav a{ padding:6px 10px; font-size:12.5px; }
+
+      .hero{ padding-top: 28px; }
+      .hero h1{
+        font-size:36px;
+        max-width: 92%;
+        line-height:1.14;
+      }
+      .hero p{
+        font-size:16.5px;
+        max-width: 92%;
+      }
+      .section{ padding: 32px 0; }
+      .panel{ padding: 22px 16px; border-radius: 18px; }
+      .panel h2{ font-size:28px; }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="topnav">
-    <a href="/">Home</a>
-    <a href="/weddings/">Weddings</a>
-    <a href="/business/">Small Business</a>
-    <a href="/card-to-yourself/">Card to Yourself</a>
+  <!-- Header -->
+  <div class="site-header">
+    <a class="brand" href="/">Mailing Memories</a>
+
+    <nav class="nav">
+      <a href="/message-library/">Message Starters</a>
+      <a href="/weddings/">Weddings</a>
+      <a href="/business/">Business</a>
+      <a href="/card-to-yourself/">Card to Yourself</a>
+    </nav>
   </div>
 
-  <h1>Send yourself a handwritten card</h1>
+  <div class="wrap">
 
-  <p>
-    Sometimes you just want something real in the mailbox.
-    I’ll send you a short handwritten card with a quote, a clean joke,
-    or a small story from my life (pets, weather, whatever’s going on).
-  </p>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="pill">A weekly treat in the mail</div>
 
-  <!-- Replace # with your intake form link -->
-  <a class="button" href="#" target="_blank" rel="noopener">Send Me a Card</a>
+      <h1>Send a Card to Yourself.<br>Every week, if you want.</h1>
 
-  <h2>Today’s sample</h2>
+<p>
+  A small, handwritten note delivered to you on a steady schedule — something warm to open that isn’t a bill, an ad, or bad news.
+  Set it once, and let the surprise show up.
+</p>
 
-  <div class="cardbox">
-    <div class="kicker" id="type">Loading…</div>
-    <div id="text"></div>
+      <div class="ctaRow">
+        
+<a class="btn btnPrimary"
+   href="https://buy.stripe.com/dRmcN42416HYbtF6BV1sQ04"
+   target="_blank"
+   rel="noopener">
+   Start Weekly Cards
+</a>
+        
+<a class="btn"
+   href="https://buy.stripe.com/6oU7sK2418Q6apB9O71sQ00"
+   target="_blank"
+   rel="noopener">
+   Send One Card
+</a>
+      </div>
+
+<div class="trust">
+  Weekly is billed monthly · Cancel anytime · Mailed on a consistent schedule · Secure checkout via Stripe
+</div>
+
+      <div class="expect-panel">
+        <div class="expect-title">What you receive</div>
+        <ul class="expect-list">
+          <li class="expect-item"><span class="expect-dot"></span><span>A handwritten note (calm, encouraging, human)</span></li>
+          <li class="expect-item"><span class="expect-dot"></span><span>Addressed, stamped, mailed to your home</span></li>
+          <li class="expect-item"><span class="expect-dot"></span><span>A break from the boring mail you hate opening</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section">
+      <div class="panel">
+        <h2>How it works</h2>
+        <p>
+          You choose the tone and frequency. We handle the handwriting, envelope, stamp, and mailing.
+          It’s designed to feel like a small weekly reset—not another task.
+        </p>
+
+        <div class="how-grid">
+          <div class="how-card">
+            <div class="how-num">1</div>
+            <p>Pick a style (encouraging, reflective, proud-of-you, calm, etc.).</p>
+          </div>
+          <div class="how-card">
+            <div class="how-num">2</div>
+            <p>Choose one-time or weekly. Add any preferences you want (optional).</p>
+          </div>
+          <div class="how-card">
+            <div class="how-num">3</div>
+            <p>Cards are handwritten, sealed, stamped, and mailed on your schedule.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Options -->
+    <section class="section">
+      <div class="panel">
+        <h2>Choose your plan</h2>
+        <p>
+          Weekly is the “treat & surprise” version. One-time is great for a reset, a hard week, or a milestone.
+        </p>
+
+        <div class="cards">
+          <div class="card featured">
+            <div class="badge">Best value / Weekly ritual</div>
+            <h3>Weekly Cards</h3>
+            <div class="price">Price: (set this) · billed weekly or monthly</div>
+            <ul>
+              <li>1 handwritten card mailed every week</li>
+              <li>Choose tone (or rotate tones)</li>
+              <li>Easy to pause or cancel anytime</li>
+              <li>Ideal for consistency and motivation</li>
+            </ul>
+            <a class="btn btnPrimary" href="PASTE_YOUR_WEEKLY_CARD_FORM_OR_CHECKOUT_URL_HERE" target="_blank" rel="noopener">
+              Start Weekly Cards
+            </a>
+          </div>
+
+          <div class="card">
+            <div class="badge">Simple reset</div>
+            <h3>One Card</h3>
+            <div class="price">Price: (set this) · one-time</div>
+            <ul>
+              <li>One handwritten card mailed to you</li>
+              <li>Great for birthdays, hard weeks, or wins</li>
+              <li>Pick the tone and sign-off style</li>
+              <li>Mailed in 1–2 business days (typical)</li>
+            </ul>
+            <a class="btn" href="PASTE_YOUR_ONE_TIME_CARD_FORM_OR_CHECKOUT_URL_HERE" target="_blank" rel="noopener">
+              Send One Card
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="panel">
+        <h2>FAQ</h2>
+        <p>Keep this lightweight. Just enough to remove doubt before someone buys.</p>
+
+        <div class="faq">
+          <details>
+            <summary>What’s inside the card?</summary>
+            <p>
+              A thoughtful, handwritten message in the tone you choose. You can add preferences, topics to avoid,
+              and a sign-off style. (No “therapy” claims—just grounded encouragement.)
+            </p>
+          </details>
+
+          <details>
+            <summary>Can I pause weekly cards?</summary>
+            <p>
+              Yes. Weekly is meant to be easy. You can pause, skip weeks, or cancel anytime.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is it always the same message?</summary>
+            <p>
+              No. Weekly cards rotate content within the tone you choose so it stays fresh.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is this written by one person?</summary>
+            <p>
+              Cards are handwritten with consistent, neat handwriting. (We do not promise a specific writer.)
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
   </div>
-
-  <div class="row">
-    <button class="button" type="button" id="new">Show another</button>
-  </div>
-
-  <p style="max-width:640px;">
-    Note: the real card is handwritten on quality cardstock and mailed to you.
-  </p>
-
-  <script>
-    const cards = [
-      { type: "QUOTE", text: "A small thing done consistently becomes a big thing over time." },
-      { type: "JOKE", text: "I tried to write a joke on a postcard… but it got stamped out." },
-      { type: "LIFE UPDATE", text: "Today the weather did that Midwest thing where it can’t decide what season it is.\n\nAlso: the pets are convinced every envelope is for them." },
-      { type: "LIFE UPDATE", text: "A quick reminder from my side of the mailbox: you’re allowed to be proud of the boring progress." }
-    ];
-
-    function render() {
-      const c = cards[Math.floor(Math.random() * cards.length)];
-      document.getElementById("type").textContent = c.type;
-      document.getElementById("text").textContent = c.text;
-    }
-
-    document.getElementById("new").addEventListener("click", render);
-    render();
-  </script>
 
 </body>
 </html>
