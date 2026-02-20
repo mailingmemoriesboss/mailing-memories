@@ -199,6 +199,67 @@
       font-size:15px;
     }
 
+<style>
+/* --- What You Receive (Hero Depth Panel) --- */
+.expect-panel{
+  max-width: 720px;
+  margin: 18px auto 0;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(17,24,39,0.08);
+  background: rgba(255,255,255,0.55);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+  backdrop-filter: blur(4px);
+}
+
+.expect-title{
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  font-size: 16px;
+  margin: 0 0 8px;
+  color: #111827;
+  opacity: 0.92;
+}
+
+.expect-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 14px;
+}
+
+.expect-item{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #374151;
+  opacity: 0.95;
+}
+
+.expect-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  margin-top: 5px;
+  flex: 0 0 auto;
+  background: rgba(17,24,39,0.35);
+}
+
+@media (max-width: 720px){
+  .expect-list{
+    grid-template-columns: 1fr;
+  }
+  .expect-panel{
+    max-width: 560px;
+  }
+}
+</style>
+    
     /* Mobile tuning */
     @media (max-width: 820px){
       .hero h1{ font-size:44px; }
@@ -283,6 +344,28 @@
       <div class="trust">
         Mailed in 1–2 business days · Secure checkout via Stripe · Your words, handwritten
       </div>
+
+    <!-- What You Receive (Depth strip) -->
+<div class="expect-panel">
+  <div class="expect-title">What you receive</div>
+
+  <ul class="expect-list">
+    <li class="expect-item">
+      <span class="expect-dot"></span>
+      <span>One handwritten page</span>
+    </li>
+
+    <li class="expect-item">
+      <span class="expect-dot"></span>
+      <span>Addressed, stamped, mailed for you</span>
+    </li>
+
+    <li class="expect-item">
+      <span class="expect-dot"></span>
+      <span>Written exactly as you submit it</span>
+    </li>
+  </ul>
+</div>
     </section>
 
     <!-- Message Starters -->
