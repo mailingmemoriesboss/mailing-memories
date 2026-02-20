@@ -127,6 +127,62 @@
       h1{ font-size:32px; }
     }
 
+.wedding-process{
+  padding: 40px 0 10px;
+}
+
+.process-wrap{
+  max-width: 820px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.process-wrap h2{
+  font-family: "Playfair Display", serif;
+  font-size: 30px;
+  margin-bottom: 24px;
+}
+
+.process-steps{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.step{
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(17,24,39,0.08);
+  border-radius: 18px;
+  padding: 18px 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.step-num{
+  font-weight: 600;
+  font-size: 14px;
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+
+.step p{
+  font-size: 14px;
+  line-height: 1.5;
+  color: #374151;
+}
+
+.process-note{
+  margin-top: 18px;
+  font-size: 13px;
+  color: #374151;
+  opacity: 0.85;
+}
+
+@media (max-width: 760px){
+  .process-steps{
+    grid-template-columns: 1fr;
+  }
+
+    
   </style>
 </head>
 
@@ -145,6 +201,33 @@
     You write the message. I handwrite each card neatly, seal it, stamp it, and mail it anywhere in the U.S.
   </p>
 
+<section class="wedding-process">
+  <div class="process-wrap">
+    <h2>How It Works</h2>
+
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <p>You submit your final thank-you message and guest list.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <p>I handwrite each card neatly and consistently.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <p>Cards are sealed, stamped, and mailed directly to your guests.</p>
+      </div>
+    </div>
+
+    <div class="process-note">
+      Typical turnaround: 7–14 days depending on batch size.
+    </div>
+  </div>
+</section>
+  
   <div class="tier-wrapper">
 
     <!-- 20 Letters -->
