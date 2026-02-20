@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Card to Yourself | Mailing Memories</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZHP59L1YSL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZHP59L1YSL');
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <style>
+    html, body{
+      margin:0;
+      padding:0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: linear-gradient(180deg, #faf7f5 0%, #ffffff 70%);
+      color:#1f2937;
+    }
+
+    h1, h2{
+      font-family: 'Playfair Display', serif;
+    }
+
+    p{
+      font-size:18px;
+      max-width:600px;
+      margin:20px auto;
+      color:#374151;
+    }
+
+    a.button, button.button{
+      display:inline-block;
+      padding:15px 25px;
+      background-color:#2b2b2b;
+      color:white;
+      text-decoration:none;
+      border-radius:5px;
+      font-size:18px;
+      margin-top:20px;
+      box-shadow:0 10px 22px rgba(0,0,0,0.10);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+      border:none;
+      cursor:pointer;
+    }
+
+    a.button:hover, button.button:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.14);
+      background-color:#1f1f1f;
+    }
+
+    @media (max-width: 520px){
+      body{ padding:28px; }
+      a.button, button.button{ width:100%; box-sizing:border-box; }
+    }
+
+    .topnav{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin: 10px auto 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .topnav a{
+      color:#374151;
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.06);
+      background: rgba(107,114,128,0.06);
+    }
+
+    .topnav a:hover{
+      background: rgba(107,114,128,0.10);
+    }
+
+    .cardbox{
+      max-width: 640px;
+      margin: 22px auto 0;
+      text-align:left;
+      background:#ffffff;
+      border:1px solid rgba(0,0,0,0.06);
+      border-radius: 12px;
+      padding: 18px 22px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      white-space: pre-wrap;
+      color:#1f2937;
+    }
+
+    .kicker{
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topnav">
+    <a href="/">Home</a>
+    <a href="/weddings/">Weddings</a>
+    <a href="/business/">Small Business</a>
+    <a href="/card-to-yourself/">Card to Yourself</a>
+  </div>
+
+  <h1>Send yourself a handwritten card</h1>
+
+  <p>
+    Sometimes you just want something real in the mailbox.
+    I’ll send you a short handwritten card with a quote, a clean joke,
+    or a small story from my life (pets, weather, whatever’s going on).
+  </p>
+
+  <!-- Replace # with your intake form link -->
+  <a class="button" href="#" target="_blank" rel="noopener">Send Me a Card</a>
+
+  <h2>Today’s sample</h2>
+
+  <div class="cardbox">
+    <div class="kicker" id="type">Loading…</div>
+    <div id="text"></div>
+  </div>
+
+  <div class="row">
+    <button class="button" type="button" id="new">Show another</button>
+  </div>
+
+  <p style="max-width:640px;">
+    Note: the real card is handwritten on quality cardstock and mailed to you.
+  </p>
+
+  <script>
+    const cards = [
+      { type: "QUOTE", text: "A small thing done consistently becomes a big thing over time." },
+      { type: "JOKE", text: "I tried to write a joke on a postcard… but it got stamped out." },
+      { type: "LIFE UPDATE", text: "Today the weather did that Midwest thing where it can’t decide what season it is.\n\nAlso: the pets are convinced every envelope is for them." },
+      { type: "LIFE UPDATE", text: "A quick reminder from my side of the mailbox: you’re allowed to be proud of the boring progress." }
+    ];
+
+    function render() {
+      const c = cards[Math.floor(Math.random() * cards.length)];
+      document.getElementById("type").textContent = c.type;
+      document.getElementById("text").textContent = c.text;
+    }
+
+    document.getElementById("new").addEventListener("click", render);
+    render();
+  </script>
+
+</body>
+</html>
