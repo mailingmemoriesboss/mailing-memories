@@ -95,6 +95,8 @@
       background: rgba(255,255,255,0.70);
     }
 
+.nav{ line-height: 1; }
+    
     /* Hero */
     .hero{
       text-align:center;
@@ -159,6 +161,19 @@
       box-shadow: 0 16px 30px rgba(0,0,0,0.14);
     }
 
+/* Secondary CTA (softer than the black primary) */
+.btnSecondary{
+  background: rgba(255,255,255,0.88);
+  border: 1px solid rgba(17,24,39,0.10);
+  color: #111827;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.05);
+}
+
+.btnSecondary:hover{
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.07);
+}
+    
     .trust{
       font-size:13px;
       color:var(--muted);
@@ -263,23 +278,31 @@
       .hero h1{ font-size:44px; }
     }
 
-    @media (max-width: 560px){
-      .site-header{
-        flex-direction:column;
-        align-items:stretch;
-        gap:10px;
-      }
-      .brand{
-        text-align:center;
-      }
-      .nav{
-        justify-content:center;
-        gap:8px;
-      }
-      .nav a{
-        padding:6px 10px;
-        font-size:12.5px;
-      }
+@media (max-width: 560px){
+  .site-header{
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+
+  .brand{
+    text-align:center;
+    width:auto;
+  }
+
+  .nav{
+    justify-content:center;
+    gap:8px;
+    max-width: 100%;
+    padding: 0 6px;
+  }
+
+  .nav a{
+    padding:6px 10px;
+    font-size:12.5px;
+    flex: 0 0 auto;
+  }
+    
       .hero{
         padding-top: 28px;
       }
@@ -334,9 +357,9 @@
         <a class="btn btnPrimary" href="PASTE_YOUR_STANDARD_LETTER_FORM_URL_HERE" target="_blank" rel="noopener">
           Send a Letter — $15
         </a>
-        <a class="btn" href="/message-library/">
-          Not sure what to say?
-        </a>
+<a class="btn btnSecondary" href="/message-library/">
+  Not sure what to say?
+</a>
       </div>
 
       <div class="trust">
