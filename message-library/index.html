@@ -1,1 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Message Starters | Mailing Memories</title>
 
+  <!-- Fonts (match your site) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#fbfaf7;
+      --bg1:#f5f2ed;
+      --card:#ffffff;
+      --ink:#111827;
+      --muted:#374151;
+      --softline:rgba(17,24,39,0.07);
+      --shadow:0 10px 26px rgba(0,0,0,0.06);
+      --shadow2:0 14px 34px rgba(0,0,0,0.08);
+
+      --btn:#1f2937;
+      --btnHover:#111827;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+
+    body{
+      font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 50% -12%, rgba(0,0,0,0.03), transparent 60%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
+    }
+
+    /* Top nav */
+    .nav{
+      max-width:1100px;
+      margin: 18px auto 0;
+      padding: 0 18px;
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      font-size:14px;
+      opacity:0.92;
+    }
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid var(--softline);
+      background: rgba(17,24,39,0.035);
+    }
+    .nav a:hover{ background: rgba(17,24,39,0.06); }
+
+    .wrap{
+      max-width:1100px;
+      margin: 0 auto;
+      padding: 34px 18px 70px;
+    }
+
+    .hero{
+      text-align:center;
+      padding: 26px 10px 14px;
+    }
+    .hero h1{
+      font-family:"Playfair Display", serif;
+      font-weight:700;
+      letter-spacing:-0.6px;
+      font-size:46px;
+      margin: 0 0 10px;
+      line-height:1.12;
+    }
+    .hero p{
+      max-width:760px;
+      margin: 10px auto 0;
+      color:var(--muted);
+      line-height:1.65;
+      font-size:17px;
+    }
+
+    .helperbar{
+      margin: 18px auto 0;
+      max-width:900px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .pill{
+      font-size:13px;
+      color:var(--muted);
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(17,24,39,0.06);
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Grid */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+    @media (max-width: 920px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero h1{ font-size:40px; }
+    }
+    @media (max-width: 560px){
+      .grid{ grid-template-columns: 1fr; }
+      .hero h1{ font-size:34px; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.84) 100%);
+      border: 1px solid rgba(17,24,39,0.06);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transition: box-shadow 0.14s ease, transform 0.14s ease;
+    }
+    .card:hover{
+      box-shadow: var(--shadow2);
+      transform: translateY(-1px);
+    }
+
+    .cardHead{
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid rgba(17,24,39,0.06);
+      background: rgba(255,255,255,0.55);
+    }
+    .cardHead h2{
+      font-family:"Playfair Display", serif;
+      font-size:22px;
+      margin:0;
+      letter-spacing:-0.3px;
+    }
+    .cardHead p{
+      margin: 8px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .msgList{
+      padding: 12px 14px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .msg{
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(17,24,39,0.07);
+      border-radius: 14px;
+      padding: 12px 12px 10px;
+    }
+    .msgTitle{
+      font-weight:600;
+      font-size:13px;
+      color: var(--muted);
+      margin: 0 0 8px;
+      letter-spacing:0.1px;
+    }
+    .msgText{
+      font-size:14px;
+      line-height:1.55;
+      margin:0;
+      color:#1f2937;
+      white-space: normal;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(17,24,39,0.10);
+      text-decoration:none;
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+      background: rgba(255,255,255,0.92);
+      color: var(--ink);
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    .btnPrimary{
+      background: var(--btn);
+      color:#fff;
+      border-color: rgba(0,0,0,0.12);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+    }
+    .btnPrimary:hover{
+      background: var(--btnHover);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.14);
+    }
+
+    .bottomCta{
+      margin: 26px auto 0;
+      max-width: 980px;
+      text-align:center;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(17,24,39,0.06);
+      background: rgba(255,255,255,0.55);
+      box-shadow: var(--shadow);
+    }
+    .bottomCta h3{
+      font-family:"Playfair Display", serif;
+      margin: 0 0 8px;
+      letter-spacing:-0.3px;
+      font-size: 22px;
+    }
+    .bottomCta p{
+      margin: 0 auto 12px;
+      max-width: 760px;
+      color: var(--muted);
+      line-height:1.6;
+      font-size: 14px;
+    }
+    .footerNote{
+      text-align:center;
+      color: var(--muted);
+      font-size:13px;
+      margin-top: 10px;
+      opacity:0.85;
+    }
+
+    /* Toast */
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(17,24,39,0.92);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="nav">
+    <a href="/">Home</a>
+    <a href="/message-library/">Message Starters</a>
+    <a href="/weddings/">Weddings</a>
+    <a href="/business/">Business</a>
+    <a href="/card-to-yourself/">Card to Yourself</a>
+  </div>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1>Message Starters</h1>
+      <p>
+        Pick a category, choose a starter, personalize it, then tap <strong>Use this message</strong> to open your order form with the text prefilled.
+      </p>
+
+      <div class="helperbar">
+        <div class="pill">Calm, refined tone</div>
+        <div class="pill">Prefill + Copy</div>
+        <div class="pill">Mobile-friendly</div>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="bottomCta">
+      <h3>Already know what you want to write?</h3>
+      <p>Skip the library and go straight to your order form.</p>
+      <a class="btn btnPrimary" id="directFormBtn" href="#" target="_blank" rel="noopener">Go to Order Form</a>
+      <div class="footerNote">You can edit the message inside the form before submitting.</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script>
+    /**
+     * REQUIRED PLACEHOLDERS (fill these in):
+     *
+     * GOOGLE_FORM_URL = your public "viewform" link
+     * MESSAGE_ENTRY_ID = the message field parameter, like: entry.430354644
+     *
+     * How to find MESSAGE_ENTRY_ID:
+     * - Open your Google Form editor
+     * - Click ⋮ (top right) → "Get pre-filled link"
+     * - Type any test text into the Message field
+     * - Click "Get link"
+     * - In the URL you'll see: ...&entry.123456789=TEST
+     *   Copy that "entry.123456789" into MESSAGE_ENTRY_ID below.
+     */
+const GOOGLE_FORM_URL = "PASTE_YOUR_ACTUAL_15_DOLLAR_VIEWFORM_LINK_HERE";
+const MESSAGE_ENTRY_ID = "entry.68133621";
+
+    // 8 categories, 5 messages each (edit freely)
+    const LIBRARY = [
+      {
+        title: "Birthday",
+        desc: "Warm, simple starters you can personalize in seconds.",
+        messages: [
+          { label: "Simple & Warm", text: "Happy Birthday! I’m grateful for you and the way you show up for the people around you. I hope this year brings you steady joy, good health, and a lot of small wins." },
+          { label: "Reflective", text: "On your birthday, I just want you to know how much I appreciate who you are. Your presence makes life better, and I’m genuinely thankful to know you." },
+          { label: "Encouraging", text: "Happy Birthday. I hope you feel proud of how far you’ve come. You’ve handled a lot with strength and grace, and I’m cheering you on for what’s ahead." },
+          { label: "Playful", text: "Another year wiser… and somehow still aging in reverse. I’m lucky to celebrate you today. Have the best birthday." },
+          { label: "Short & Sweet", text: "Happy Birthday! Thinking of you today and hoping it’s a really good one." }
+        ]
+      },
+      {
+        title: "Thank You",
+        desc: "Polished gratitude that still feels personal.",
+        messages: [
+          { label: "General", text: "Thank you for your help. I noticed the effort you put in, and it meant more than I can fully explain. I’m truly grateful." },
+          { label: "Above & Beyond", text: "Thank you for going above and beyond. You made a real difference, and I won’t forget it. I appreciate you." },
+          { label: "For Your Time", text: "Thank you for taking the time to support me. Your time and attention were a gift, and I’m grateful you shared them." },
+          { label: "Thoughtful Gesture", text: "Thank you for the thoughtful gesture. It was kind, and it landed at exactly the right time. I appreciate you." },
+          { label: "Professional Thanks", text: "Thank you for your support and for the way you handled everything. I appreciate your professionalism and your care." }
+        ]
+      },
+      {
+        title: "Just Because",
+        desc: "No occasion. Just a real note.",
+        messages: [
+          { label: "Thinking of You", text: "I was thinking about you today and wanted to send a quick note. No big reason — just a reminder that you matter to me." },
+          { label: "Appreciation", text: "I don’t say it often enough, but I appreciate you. You make life steadier and better for the people around you." },
+          { label: "Simple & Sincere", text: "No special occasion — I just wanted you to know I’m glad you’re in my world." },
+          { label: "Grateful", text: "I’m grateful for you and for the way you show up. I hope you feel supported and valued, because you are." },
+          { label: "Check-In", text: "Just checking in. I hope you’re doing okay, and I’m here if you ever need anything." }
+        ]
+      },
+      {
+        title: "Encouragement",
+        desc: "Steady support without sounding dramatic.",
+        messages: [
+          { label: "Keep Going", text: "I know it’s not easy right now, but I believe in you. Keep going — one step at a time is still progress." },
+          { label: "You’ve Got This", text: "You have more strength than you give yourself credit for. You’ve made it through hard seasons before, and you’ll make it through this one too." },
+          { label: "Proud of You", text: "I’m proud of you — not just for what you do, but for who you are. The way you keep showing up matters." },
+          { label: "Gentle Reminder", text: "A reminder you might need today: you don’t have to do everything perfectly to be doing well. Keep it simple. Keep moving." },
+          { label: "Confidence", text: "I believe in your ability to figure this out. You’re capable, thoughtful, and resilient — even when it doesn’t feel like it." }
+        ]
+      },
+      {
+        title: "Love & Appreciation",
+        desc: "Warm, grounded, not overly sentimental.",
+        messages: [
+          { label: "Everyday Love", text: "I just want you to know I love you. I appreciate the little things you do and the way you make life feel more steady." },
+          { label: "You Matter", text: "You matter to me more than you realize. I’m thankful for you — for your heart, your effort, and your presence." },
+          { label: "Partnership", text: "I’m grateful we’re doing life together. I see you, I value you, and I don’t take you for granted." },
+          { label: "Admiration", text: "I admire you — the way you think, the way you care, and the way you keep going. I’m proud to know you." },
+          { label: "Simple", text: "Just a note to say I love you and I’m grateful for you." }
+        ]
+      },
+      {
+        title: "Apology",
+        desc: "Clear ownership, calm tone, no excuses.",
+        messages: [
+          { label: "Direct Apology", text: "I’m sorry for how I handled that. You didn’t deserve it. I take responsibility, and I’m going to do better." },
+          { label: "For Not Showing Up", text: "I’m sorry I wasn’t there in the way I should have been. I understand why that hurt, and I want to make it right." },
+          { label: "For Miscommunication", text: "I’m sorry for the confusion and the stress that caused. I should have been clearer, and I appreciate your patience." },
+          { label: "Repair", text: "I’m sorry. I value you and this relationship, and I want to repair what I damaged. If you’re open to it, I’d like to talk and make a plan moving forward." },
+          { label: "Short & Sincere", text: "I’m sorry. I was wrong, and I’m taking it seriously." }
+        ]
+      },
+      {
+        title: "Sympathy",
+        desc: "Supportive without clichés or pressure.",
+        messages: [
+          { label: "Simple Support", text: "I’m so sorry you’re going through this. I’m thinking of you, and I’m here for you in whatever way you need." },
+          { label: "Grief", text: "I’m sorry for your loss. I know there aren’t perfect words, but you’re not alone. I’m holding you in my thoughts." },
+          { label: "Hard Season", text: "I’m sorry things have been so heavy. I hope you feel supported and cared for. I’m here with you." },
+          { label: "Offer Help", text: "I’m thinking of you. If it would help, I’d love to bring a meal or help with something practical. No pressure — just know I’m here." },
+          { label: "Short", text: "I’m so sorry. I’m here for you." }
+        ]
+      },
+      {
+        title: "Friendship Check-In",
+        desc: "Reconnect without awkwardness.",
+        messages: [
+          { label: "Quick Hello", text: "Hey — you came to mind, and I wanted to say hi. I hope you’re doing well." },
+          { label: "Long Time", text: "It’s been a while, but I’ve been thinking about you. I’d love to catch up when you have time." },
+          { label: "Miss You", text: "I miss you. No pressure to respond right away — just wanted you to know you’re on my mind." },
+          { label: "Proud of You", text: "I’ve been noticing you from afar, and I’m proud of you. I hope you’re giving yourself credit for what you’re doing." },
+          { label: "Open Door", text: "Just a note to say I’m here. If you ever want to talk or grab coffee, I’d genuinely love that." }
+        ]
+      }
+    ];
+
+    function buildPrefillUrl(messageText){
+      // Adds the entry param cleanly whether or not the URL already has query params.
+      const url = new URL(GOOGLE_FORM_URL);
+      url.searchParams.set(MESSAGE_ENTRY_ID, messageText);
+      return url.toString();
+    }
+
+    function showToast(text){
+      const el = document.getElementById("toast");
+      el.textContent = text || "Copied";
+      el.classList.add("show");
+      window.clearTimeout(window.__toastTimer);
+      window.__toastTimer = window.setTimeout(() => el.classList.remove("show"), 1200);
+    }
+
+    async function copyToClipboard(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("Copied");
+      }catch(e){
+        // Fallback for older browsers
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("Copied");
+      }
+    }
+
+    function render(){
+      // Basic guard if placeholders weren't filled
+      const formOk = GOOGLE_FORM_URL && GOOGLE_FORM_URL.startsWith("http");
+      const entryOk = MESSAGE_ENTRY_ID && MESSAGE_ENTRY_ID.startsWith("entry.");
+
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+
+      LIBRARY.forEach(cat => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const head = document.createElement("div");
+        head.className = "cardHead";
+        head.innerHTML = `<h2>${cat.title}</h2><p>${cat.desc}</p>`;
+        card.appendChild(head);
+
+        const list = document.createElement("div");
+        list.className = "msgList";
+
+        cat.messages.forEach(m => {
+          const item = document.createElement("div");
+          item.className = "msg";
+
+          const msgHtml = `
+            <div class="msgTitle">${m.label}</div>
+            <p class="msgText">${m.text}</p>
+            <div class="actions">
+              <a class="btn btnPrimary" href="${(formOk && entryOk) ? buildPrefillUrl(m.text) : "#"}" target="_blank" rel="noopener">
+                Use this message
+              </a>
+              <button class="btn" type="button">Copy</button>
+            </div>
+          `;
+          item.innerHTML = msgHtml;
+
+          const copyBtn = item.querySelector("button");
+          copyBtn.addEventListener("click", () => copyToClipboard(m.text));
+
+          // If placeholders aren't filled, prevent dead links and hint with toast
+          const useBtn = item.querySelector("a");
+          useBtn.addEventListener("click", (e) => {
+            if(!(formOk && entryOk)){
+              e.preventDefault();
+              showToast("Set GOOGLE_FORM_URL + MESSAGE_ENTRY_ID first");
+            }
+          });
+
+          list.appendChild(item);
+        });
+
+        card.appendChild(list);
+        grid.appendChild(card);
+      });
+
+      const directBtn = document.getElementById("directFormBtn");
+      directBtn.href = formOk ? GOOGLE_FORM_URL : "#";
+      directBtn.addEventListener("click", (e) => {
+        if(!formOk){
+          e.preventDefault();
+          showToast("Set GOOGLE_FORM_URL first");
+        }
+      });
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
