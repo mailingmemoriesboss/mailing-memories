@@ -40,14 +40,12 @@
         linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 100%);
     }
 
-    /* Layout */
     .wrap{
       max-width:1100px;
       margin:0 auto;
       padding: 0 18px 70px;
     }
 
-    /* Header */
     .site-header{
       max-width:1100px;
       margin: 18px auto 0;
@@ -96,7 +94,6 @@
       background: rgba(255,255,255,0.70);
     }
 
-    /* Hero */
     .hero{
       text-align:center;
       padding: 46px 0 18px;
@@ -123,7 +120,6 @@
       line-height:1.65;
     }
 
-    /* Trust chips */
     .chips{
       display:flex;
       flex-wrap:wrap;
@@ -170,7 +166,7 @@
       background: rgba(255,255,255,0.80);
       color: var(--ink);
       box-shadow: 0 10px 22px rgba(0,0,0,0.06);
-      min-height: 44px; /* tap target */
+      min-height: 44px;
     }
     .btn:hover{ transform: translateY(-1px); }
 
@@ -202,7 +198,7 @@
       opacity:0.8;
     }
 
-    /* Micro-authority line near pricing / CTA */
+    /* UPDATED: removes "by me" language, keeps authority without implying a team */
     .micro-authority{
       font-size: 13px;
       color: #374151;
@@ -222,7 +218,6 @@
       margin-top: 14px;
     }
 
-    /* Sections */
     .section{
       margin-top: 18px;
       padding: 64px 0;
@@ -266,10 +261,7 @@
       font-size:15px;
     }
 
-    /* Left-aligned panel variant */
-    .panel-left{
-      text-align:left;
-    }
+    .panel-left{ text-align:left; }
     .panel-left h2,
     .panel-left p{
       margin-left: 0;
@@ -277,7 +269,6 @@
       max-width: none;
     }
 
-    /* --- What You Receive (Depth strip) --- */
     .expect-panel{
       max-width: 720px;
       margin: 18px auto 0;
@@ -327,7 +318,6 @@
       background: rgba(17,24,39,0.35);
     }
 
-    /* Why Handwritten Micro Section */
     .why-handwritten{
       max-width: 680px;
       margin: 22px auto 0;
@@ -341,7 +331,6 @@
       opacity: 0.95;
     }
 
-    /* Hero mini section */
     .hero-mini{
       max-width: 720px;
       margin: 18px auto 12px;
@@ -369,7 +358,6 @@
       font-size: 14px;
     }
 
-    /* Pricing includes under $15 CTA */
     .pricing-includes{
       max-width: 720px;
       margin: 14px auto 0;
@@ -403,7 +391,6 @@
       opacity: 0.9;
     }
 
-    /* Blue-ink authenticity callout */
     .ink-callout{
       max-width: 920px;
       margin: 18px auto 0;
@@ -450,7 +437,6 @@
       height:auto;
     }
 
-    /* Write It Today section layout */
     .panel-grid{
       display:grid;
       grid-template-columns: 1.25fr 0.75fr;
@@ -466,7 +452,6 @@
       margin-top: 14px;
     }
 
-    /* Supporting styles for the updated Write It Today (buttons + image note) */
     .write-social-note{
       margin-top: 10px;
       font-size: 13px;
@@ -503,7 +488,6 @@
       padding: 10px 12px;
     }
 
-    /* Urgency line */
     .urgency-line{
       margin: 6px auto 0;
       text-align: center;
@@ -517,14 +501,9 @@
       opacity: 0.95;
     }
 
-    /* Mobile tuning */
     @media (max-width: 920px){
-      .ink-callout-inner{
-        grid-template-columns: 1fr;
-      }
-      .panel-grid{
-        grid-template-columns: 1fr;
-      }
+      .ink-callout-inner{ grid-template-columns: 1fr; }
+      .panel-grid{ grid-template-columns: 1fr; }
     }
 
     @media (max-width: 820px){
@@ -532,12 +511,8 @@
     }
 
     @media (max-width: 720px){
-      .expect-list{
-        grid-template-columns: 1fr;
-      }
-      .expect-panel{
-        max-width: 560px;
-      }
+      .expect-list{ grid-template-columns: 1fr; }
+      .expect-panel{ max-width: 560px; }
     }
 
     @media (max-width: 560px){
@@ -546,28 +521,18 @@
         align-items:center;
         gap:10px;
       }
-
-      .brand{
-        text-align:center;
-        width:auto;
-      }
-
       .nav{
         justify-content:center;
         gap:8px;
         max-width: 100%;
         padding: 0 6px;
       }
-
       .nav a{
         padding:6px 10px;
         font-size:12.5px;
         flex: 0 0 auto;
       }
-
-      .hero{
-        padding-top: 28px;
-      }
+      .hero{ padding-top: 28px; }
       .hero h1{
         font-size:36px;
         max-width: 92%;
@@ -577,30 +542,16 @@
         font-size:16.5px;
         max-width: 92%;
       }
-
-      .section{
-        padding: 34px 0;
-      }
+      .section{ padding: 34px 0; }
       .panel{
         padding: 22px 16px;
         border-radius: 18px;
       }
-      .panel h2{
-        font-size:28px;
-      }
-
+      .panel h2{ font-size:28px; }
       .hero-mini,
-      .pricing-includes{
-        max-width: 92%;
-      }
-
-      .hero-mini h2{
-        font-size: 20px;
-      }
-
-      .chips{
-        max-width: 92%;
-      }
+      .pricing-includes{ max-width: 92%; }
+      .hero-mini h2{ font-size: 20px; }
+      .chips{ max-width: 92%; }
     }
   </style>
 </head>
@@ -648,7 +599,6 @@
       </div>
 
       <div class="ctaRow" aria-label="Primary actions">
-        <!-- IMPORTANT: Standard letter order link (unchanged) -->
         <a class="btn btnPrimary"
            href="https://docs.google.com/forms/d/e/1FAIpQLSeddEEh9F8r9QxYzRue-anTf7PrjprCBDrxJ6rR4TjQTfrU1g/viewform?usp=header"
            target="_blank"
@@ -656,8 +606,9 @@
           Send a Letter — $15
         </a>
 
+        <!-- UPDATED TEXT: no "by me" -->
         <div class="micro-authority">
-          Handwritten personally by me — limited daily capacity.
+          Real handwriting in blue ink — limited daily capacity.
         </div>
 
         <a class="btn btnSecondary" href="/message-library/">
@@ -686,7 +637,7 @@
           <div class="ink-text">
             <h2>Real handwriting. Blue pen.</h2>
             <p>
-              Every letter is written by hand in blue ink (my default). No printer fonts. No “handwriting” typefaces.
+              Every letter is handwritten in blue ink (the default). No printer fonts. No “handwriting” typefaces.
               If you want a different ink color for a specific order, include it in your message.
             </p>
           </div>
@@ -734,7 +685,7 @@
       </section>
     </section>
 
-    <!-- Write It Today / Daily Writing Guide (UPDATED as requested) -->
+    <!-- Write It Today / Daily Writing Guide -->
     <section class="section alt" aria-label="Write It Today">
       <div class="panel panel-left">
         <div class="panel-grid">
@@ -742,17 +693,26 @@
             <h2>Write It Today</h2>
             <p>
               I post a new handwritten prompt every day on social media. The website stays stable — but the daily movement stays alive.
-              If you want help getting started, you can use the prompt and write your own letter, or send one through Mailing Memories.
+              See today’s prompt on Instagram or Facebook, then write your own… or send one through Mailing Memories.
             </p>
 
             <div class="panel-cta" aria-label="Write It Today actions">
+              <!-- FIX: plain, clean URLs (no tracking/querystring) -->
               <a class="btn btnPrimary"
-                 href="https://www.instagram.com/themailingmemories?igsh=MTR4NnhtcDhnaXB5Mg%3D%3D&utm_source=qr"
+                 href="https://www.instagram.com/themailingmemories/"
                  target="_blank"
                  rel="noopener">
-                See Today’s Prompt
+                Instagram Prompts
               </a>
 
+              <a class="btn btnSecondary"
+                 href="https://www.facebook.com/profile.php?id=61588458414820"
+                 target="_blank"
+                 rel="noopener">
+                Facebook Prompts
+              </a>
+
+              <!-- REUSE: same order link as hero CTA -->
               <a class="btn btnSecondary"
                  href="https://docs.google.com/forms/d/e/1FAIpQLSeddEEh9F8r9QxYzRue-anTf7PrjprCBDrxJ6rR4TjQTfrU1g/viewform?usp=header"
                  target="_blank"
@@ -766,14 +726,19 @@
             </div>
           </div>
 
-          <div class="panel-aside" aria-label="Write It Today image">
+          <div class="panel-aside" aria-label="Example card image">
             <div class="photo-card">
-              <div class="photo-label">Write It Today</div>
+              <div class="photo-label">Example card</div>
+
+              <!-- IMPORTANT:
+                   1) Upload your card photo into your repo at: /assets/example-card.jpg
+                   2) This src will work once the file exists on your site. -->
               <img
-                src="/assets/write-it-today.jpg"
-                alt="Write It Today static image"
+                src="/assets/example-card.jpg"
+                alt="Example handwritten card message in blue ink"
                 loading="lazy"
               />
+
               <div class="photo-note">See today’s prompt on Instagram/Facebook.</div>
             </div>
           </div>
