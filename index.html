@@ -79,6 +79,7 @@
       justify-content:flex-end;
       gap:10px;
       flex-wrap:wrap;
+      line-height:1;
     }
     .nav a{
       color:var(--muted);
@@ -94,8 +95,6 @@
     .nav a:hover{
       background: rgba(255,255,255,0.70);
     }
-
-    .nav{ line-height: 1; }
 
     /* Hero */
     .hero{
@@ -124,12 +123,36 @@
       line-height:1.65;
     }
 
+    /* Trust chips */
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:center;
+      margin: 10px auto 16px;
+      max-width: 860px;
+      padding: 0 8px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.55);
+      color: rgba(17,24,39,0.86);
+      font-size: 12.5px;
+      line-height: 1;
+      backdrop-filter: blur(4px);
+    }
+
     .ctaRow{
       display:flex;
       gap:12px;
       justify-content:center;
       flex-wrap:wrap;
       margin-top: 10px;
+      align-items:center;
     }
 
     .btn{
@@ -147,6 +170,7 @@
       background: rgba(255,255,255,0.80);
       color: var(--ink);
       box-shadow: 0 10px 22px rgba(0,0,0,0.06);
+      min-height: 44px; /* tap target */
     }
     .btn:hover{ transform: translateY(-1px); }
 
@@ -161,17 +185,34 @@
       box-shadow: 0 16px 30px rgba(0,0,0,0.14);
     }
 
-    /* Secondary CTA (softer than the black primary) */
     .btnSecondary{
       background: rgba(255,255,255,0.88);
       border: 1px solid rgba(17,24,39,0.10);
       color: #111827;
       box-shadow: 0 10px 22px rgba(0,0,0,0.05);
     }
-
     .btnSecondary:hover{
       background: rgba(255,255,255,0.96);
       box-shadow: 0 14px 28px rgba(0,0,0,0.07);
+    }
+
+    .micro-note{
+      font-size:12.5px;
+      color:#374151;
+      opacity:0.8;
+    }
+
+    /* Micro-authority line near pricing / CTA */
+    .micro-authority{
+      font-size: 13px;
+      color: #374151;
+      opacity: 0.92;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(4px);
+      line-height: 1.15;
     }
 
     .trust{
@@ -183,8 +224,19 @@
 
     /* Sections */
     .section{
-      margin-top: 22px;
+      margin-top: 18px;
       padding: 64px 0;
+      position: relative;
+    }
+    .section::before{
+      content:"";
+      position:absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(880px, 92%);
+      height: 1px;
+      background: rgba(17,24,39,0.06);
     }
 
     .panel{
@@ -214,7 +266,18 @@
       font-size:15px;
     }
 
-    /* --- What You Receive (Hero Depth Panel) --- */
+    /* Left-aligned panel variant */
+    .panel-left{
+      text-align:left;
+    }
+    .panel-left h2,
+    .panel-left p{
+      margin-left: 0;
+      margin-right: 0;
+      max-width: none;
+    }
+
+    /* --- What You Receive (Depth strip) --- */
     .expect-panel{
       max-width: 720px;
       margin: 18px auto 0;
@@ -264,19 +327,10 @@
       background: rgba(17,24,39,0.35);
     }
 
-    @media (max-width: 720px){
-      .expect-list{
-        grid-template-columns: 1fr;
-      }
-      .expect-panel{
-        max-width: 560px;
-      }
-    }
-
     /* Why Handwritten Micro Section */
     .why-handwritten{
       max-width: 680px;
-      margin: 26px auto 0;
+      margin: 22px auto 0;
       text-align: center;
     }
 
@@ -287,14 +341,7 @@
       opacity: 0.95;
     }
 
-    .micro-note{
-      font-size:12.5px;
-      color:#374151;
-      opacity:0.8;
-      margin-top:10px;
-    }
-
-    /* NEW: Hero mini section (use cases before pricing CTA) */
+    /* Hero mini section */
     .hero-mini{
       max-width: 720px;
       margin: 18px auto 12px;
@@ -322,7 +369,7 @@
       font-size: 14px;
     }
 
-    /* NEW: Pricing includes under $15 CTA */
+    /* Pricing includes under $15 CTA */
     .pricing-includes{
       max-width: 720px;
       margin: 14px auto 0;
@@ -356,7 +403,107 @@
       opacity: 0.9;
     }
 
-    /* NEW: Urgency line directly below hero */
+    /* Blue-ink authenticity callout */
+    .ink-callout{
+      max-width: 920px;
+      margin: 18px auto 0;
+      padding: 0;
+      text-align: left;
+    }
+
+    .ink-callout-inner{
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+      align-items: stretch;
+      border-radius: 18px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.55);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+      backdrop-filter: blur(4px);
+      padding: 14px;
+    }
+
+    .ink-text h2{
+      margin: 4px 0 8px;
+      font-size: 22px;
+      letter-spacing: -0.2px;
+    }
+
+    .ink-text p{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .ink-media{
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.6);
+    }
+
+    .ink-media img{
+      display:block;
+      width:100%;
+      height:auto;
+    }
+
+    /* Write It Today section layout */
+    .panel-grid{
+      display:grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel-cta{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    /* Supporting styles for the updated Write It Today (buttons + image note) */
+    .write-social-note{
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0.95;
+    }
+
+    .photo-card{
+      border-radius: 16px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.55);
+      overflow: hidden;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.04);
+    }
+
+    .photo-label{
+      font-size: 12px;
+      color: rgba(17,24,39,0.75);
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(17,24,39,0.06);
+      background: rgba(255,255,255,0.45);
+    }
+
+    .photo-card img{
+      display:block;
+      width:100%;
+      height:auto;
+    }
+
+    .photo-note{
+      font-size: 12.5px;
+      color: var(--muted);
+      opacity: 0.9;
+      padding: 10px 12px;
+    }
+
+    /* Urgency line */
     .urgency-line{
       margin: 6px auto 0;
       text-align: center;
@@ -371,8 +518,26 @@
     }
 
     /* Mobile tuning */
+    @media (max-width: 920px){
+      .ink-callout-inner{
+        grid-template-columns: 1fr;
+      }
+      .panel-grid{
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 820px){
       .hero h1{ font-size:44px; }
+    }
+
+    @media (max-width: 720px){
+      .expect-list{
+        grid-template-columns: 1fr;
+      }
+      .expect-panel{
+        max-width: 560px;
+      }
     }
 
     @media (max-width: 560px){
@@ -412,6 +577,7 @@
         font-size:16.5px;
         max-width: 92%;
       }
+
       .section{
         padding: 34px 0;
       }
@@ -431,6 +597,10 @@
       .hero-mini h2{
         font-size: 20px;
       }
+
+      .chips{
+        max-width: 92%;
+      }
     }
   </style>
 </head>
@@ -441,7 +611,7 @@
   <div class="site-header">
     <a class="brand" href="/">Mailing Memories</a>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Primary">
       <a href="/message-library/">Message Starters</a>
       <a href="/weddings/">Weddings</a>
       <a href="/business/">Business</a>
@@ -452,14 +622,20 @@
   <div class="wrap">
 
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero" aria-label="Intro">
       <h1>The letter you’ve been meaning to send.</h1>
 
       <p>
         You write the words. I handwrite it, seal it, stamp it, and mail it — the old-fashioned way.
       </p>
 
-      <!-- NEW: When do people use this? (before pricing CTA area) -->
+      <div class="chips" aria-label="Quick trust points">
+        <span class="chip">Mailed anywhere in the U.S.</span>
+        <span class="chip">Secure checkout via Stripe</span>
+        <span class="chip">Handwritten in blue ink</span>
+        <span class="chip">Mailed in 1–2 business days</span>
+      </div>
+
       <div class="hero-mini" aria-label="When do people use this">
         <h2>When do people use this?</h2>
         <ul>
@@ -471,21 +647,28 @@
         </ul>
       </div>
 
-      <div class="ctaRow">
-        <a class="btn btnPrimary" href="PASTE_YOUR_STANDARD_LETTER_FORM_URL_HERE" target="_blank" rel="noopener">
+      <div class="ctaRow" aria-label="Primary actions">
+        <!-- IMPORTANT: Standard letter order link (unchanged) -->
+        <a class="btn btnPrimary"
+           href="https://docs.google.com/forms/d/e/1FAIpQLSeddEEh9F8r9QxYzRue-anTf7PrjprCBDrxJ6rR4TjQTfrU1g/viewform?usp=header"
+           target="_blank"
+           rel="noopener">
           Send a Letter — $15
         </a>
 
-        <div class="micro-note">
-          Most letters are mailed the next business day.
+        <div class="micro-authority">
+          Handwritten personally by me — limited daily capacity.
         </div>
 
         <a class="btn btnSecondary" href="/message-library/">
           Not sure what to say?
         </a>
+
+        <div class="micro-note">
+          Most letters are mailed the next business day.
+        </div>
       </div>
 
-      <!-- NEW: Under the $15 pricing area -->
       <div class="pricing-includes" aria-label="Each letter includes">
         <p><strong>Each letter includes:</strong></p>
         <ul>
@@ -498,11 +681,30 @@
         <p class="pricing-small-note">Less than the cost of lunch. Something they’ll keep for years.</p>
       </div>
 
+      <section class="ink-callout" aria-label="Authenticity">
+        <div class="ink-callout-inner">
+          <div class="ink-text">
+            <h2>Real handwriting. Blue pen.</h2>
+            <p>
+              Every letter is written by hand in blue ink (my default). No printer fonts. No “handwriting” typefaces.
+              If you want a different ink color for a specific order, include it in your message.
+            </p>
+          </div>
+
+          <div class="ink-media" aria-label="Close-up handwriting photo placeholder">
+            <img
+              src="https://via.placeholder.com/640x420.png?text=Close-up+of+blue-ink+handwriting"
+              alt="Close-up placeholder image for blue-ink handwriting on paper"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
       <div class="trust">
         Mailed in 1–2 business days · Secure checkout via Stripe · Your words, handwritten
       </div>
 
-      <!-- What You Receive (Depth strip) -->
       <div class="expect-panel">
         <div class="expect-title">What you receive</div>
 
@@ -524,7 +726,7 @@
         </ul>
       </div>
 
-      <section class="why-handwritten">
+      <section class="why-handwritten" aria-label="Why handwritten matters">
         <p class="why-text">
           In a world of instant messages and disappearing notifications, a handwritten letter slows everything down.
           It feels intentional. Personal. Worth keeping.
@@ -532,7 +734,53 @@
       </section>
     </section>
 
-    <!-- NEW: Urgency line directly below hero (before next major section) -->
+    <!-- Write It Today / Daily Writing Guide (UPDATED as requested) -->
+    <section class="section alt" aria-label="Write It Today">
+      <div class="panel panel-left">
+        <div class="panel-grid">
+          <div class="panel-main">
+            <h2>Write It Today</h2>
+            <p>
+              I post a new handwritten prompt every day on social media. The website stays stable — but the daily movement stays alive.
+              If you want help getting started, you can use the prompt and write your own letter, or send one through Mailing Memories.
+            </p>
+
+            <div class="panel-cta" aria-label="Write It Today actions">
+              <a class="btn btnPrimary"
+                 href="https://www.instagram.com/themailingmemories?igsh=MTR4NnhtcDhnaXB5Mg%3D%3D&utm_source=qr"
+                 target="_blank"
+                 rel="noopener">
+                See Today’s Prompt
+              </a>
+
+              <a class="btn btnSecondary"
+                 href="https://docs.google.com/forms/d/e/1FAIpQLSeddEEh9F8r9QxYzRue-anTf7PrjprCBDrxJ6rR4TjQTfrU1g/viewform?usp=header"
+                 target="_blank"
+                 rel="noopener">
+                Write One Now — $15
+              </a>
+
+              <div class="micro-note write-social-note">
+                See today’s prompt on Instagram/Facebook.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-aside" aria-label="Write It Today image">
+            <div class="photo-card">
+              <div class="photo-label">Write It Today</div>
+              <img
+                src="/assets/write-it-today.jpg"
+                alt="Write It Today static image"
+                loading="lazy"
+              />
+              <div class="photo-note">See today’s prompt on Instagram/Facebook.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="urgency-line" aria-label="Urgency">
       <p>Most people mean to send the letter. They just never do.</p>
     </section>
