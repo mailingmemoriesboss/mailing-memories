@@ -198,7 +198,6 @@
       opacity:0.8;
     }
 
-    /* UPDATED: removes "by me" language, keeps authority without implying a team */
     .micro-authority{
       font-size: 13px;
       color: #374151;
@@ -459,7 +458,7 @@
       opacity: 0.95;
     }
 
-    .photo-card{
+    .card-box{
       border-radius: 16px;
       border: 1px solid rgba(17,24,39,0.08);
       background: rgba(255,255,255,0.55);
@@ -467,7 +466,7 @@
       box-shadow: 0 10px 22px rgba(0,0,0,0.04);
     }
 
-    .photo-label{
+    .card-box-label{
       font-size: 12px;
       color: rgba(17,24,39,0.75);
       padding: 10px 12px;
@@ -475,17 +474,61 @@
       background: rgba(255,255,255,0.45);
     }
 
-    .photo-card img{
-      display:block;
-      width:100%;
-      height:auto;
+    /* Prompt click-through (no list shown) */
+    .prompt-wrap{
+      padding: 12px;
     }
 
-    .photo-note{
-      font-size: 12.5px;
+    .prompt-display{
+      border-radius: 14px;
+      border: 1px solid rgba(17,24,39,0.08);
+      background: rgba(255,255,255,0.65);
+      padding: 12px 12px;
+      min-height: 90px;
+      display:flex;
+      align-items:center;
+      line-height: 1.55;
+      color: #111827;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .prompt-meta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
       color: var(--muted);
-      opacity: 0.9;
+      font-size: 12.5px;
+      opacity: 0.95;
+    }
+
+    .prompt-controls{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .btnSmall{
       padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      min-height: 42px;
+    }
+
+    .sr-only{
+      position:absolute;
+      width:1px;
+      height:1px;
+      padding:0;
+      margin:-1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+      border:0;
     }
 
     .urgency-line{
@@ -606,7 +649,6 @@
           Send a Letter — $15
         </a>
 
-        <!-- UPDATED TEXT: no "by me" -->
         <div class="micro-authority">
           Real handwriting in blue ink — limited daily capacity.
         </div>
@@ -632,6 +674,7 @@
         <p class="pricing-small-note">Less than the cost of lunch. Something they’ll keep for years.</p>
       </div>
 
+      <!-- UPDATED: Example card image now lives here (the spot that previously had no real image) -->
       <section class="ink-callout" aria-label="Authenticity">
         <div class="ink-callout-inner">
           <div class="ink-text">
@@ -642,10 +685,10 @@
             </p>
           </div>
 
-          <div class="ink-media" aria-label="Close-up handwriting photo placeholder">
+          <div class="ink-media" aria-label="Example handwritten card photo">
             <img
-              src="https://via.placeholder.com/640x420.png?text=Close-up+of+blue-ink+handwriting"
-              alt="Close-up placeholder image for blue-ink handwriting on paper"
+              src="/assets/example-card.jpg"
+              alt="Example handwritten card written in blue ink"
               loading="lazy"
             />
           </div>
@@ -697,7 +740,6 @@
             </p>
 
             <div class="panel-cta" aria-label="Write It Today actions">
-              <!-- FIX: plain, clean URLs (no tracking/querystring) -->
               <a class="btn btnPrimary"
                  href="https://www.instagram.com/themailingmemories/"
                  target="_blank"
@@ -712,7 +754,6 @@
                 Facebook Prompts
               </a>
 
-              <!-- REUSE: same order link as hero CTA -->
               <a class="btn btnSecondary"
                  href="https://docs.google.com/forms/d/e/1FAIpQLSeddEEh9F8r9QxYzRue-anTf7PrjprCBDrxJ6rR4TjQTfrU1g/viewform?usp=header"
                  target="_blank"
@@ -726,22 +767,46 @@
             </div>
           </div>
 
-          <div class="panel-aside" aria-label="Example card image">
-            <div class="photo-card">
-              <div class="photo-label">Example card</div>
+          <!-- UPDATED: prompt click-through lives here (replaces the image card) -->
+          <div class="panel-aside" aria-label="Prompt starter generator">
+            <div class="card-box" role="group" aria-label="Prompt starter generator">
+              <div class="card-box-label">Quick message starter</div>
 
-              <!-- IMPORTANT:
-                   1) Upload your card photo into your repo at: /assets/example-card.jpg
-                   2) This src will work once the file exists on your site. -->
-              <img
-                src="/assets/example-card.jpg"
-                alt="Example handwritten card message in blue ink"
-                loading="lazy"
-              />
+              <div class="prompt-wrap">
+                <div class="sr-only" id="promptHelp">
+                  Use Next and Back to cycle through starter sentences. Use Copy to copy the current sentence.
+                </div>
 
-              <div class="photo-note">See today’s prompt on Instagram/Facebook.</div>
+                <div class="prompt-display" id="promptDisplay" aria-live="polite" aria-describedby="promptHelp">
+                  <!-- JS injects a starter sentence here -->
+                </div>
+
+                <div class="prompt-meta">
+                  <span id="promptCount">Starter 1 of 10</span>
+                  <span>Tap Next to cycle</span>
+                </div>
+
+                <div class="prompt-controls">
+                  <button class="btn btnSecondary btnSmall" type="button" id="promptPrev" aria-label="Previous starter">
+                    Back
+                  </button>
+
+                  <button class="btn btnPrimary btnSmall" type="button" id="promptNext" aria-label="Next starter">
+                    Next
+                  </button>
+
+                  <button class="btn btnSecondary btnSmall" type="button" id="promptCopy" aria-label="Copy starter sentence">
+                    Copy
+                  </button>
+                </div>
+
+                <div class="micro-note" id="copyStatus" aria-live="polite" style="margin-top:10px;">
+                  Tip: Copy a starter, then personalize it with one real detail.
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -803,6 +868,71 @@
     </section>
 
   </div>
+
+  <!-- Minimal JS (only for the click-through prompt starters) -->
+  <script>
+    (function(){
+      const starters = [
+        "One thing I appreciate about you is…",
+        "I’ve been thinking about you lately because…",
+        "A favorite memory I have with you is…",
+        "I’m proud of you for…",
+        "I’m grateful you’re in my life because…",
+        "I know things have been heavy—so I wanted to remind you…",
+        "You probably don’t hear this enough, but…",
+        "If I could give you one small encouragement today, it would be…",
+        "I’m sorry for… and I want to make it right by…",
+        "No big reason—just wanted you to know…"
+      ];
+
+      let i = 0;
+      const display = document.getElementById('promptDisplay');
+      const count = document.getElementById('promptCount');
+      const prev = document.getElementById('promptPrev');
+      const next = document.getElementById('promptNext');
+      const copy = document.getElementById('promptCopy');
+      const status = document.getElementById('copyStatus');
+
+      function render(){
+        display.textContent = starters[i];
+        count.textContent = "Starter " + (i+1) + " of " + starters.length;
+      }
+
+      function setStatus(msg){
+        status.textContent = msg;
+      }
+
+      prev.addEventListener('click', function(){
+        i = (i - 1 + starters.length) % starters.length;
+        render();
+        setStatus("Tip: Add one specific detail (place, date, or moment).");
+      });
+
+      next.addEventListener('click', function(){
+        i = (i + 1) % starters.length;
+        render();
+        setStatus("Tip: Add one specific detail (place, date, or moment).");
+      });
+
+      copy.addEventListener('click', async function(){
+        const text = starters[i];
+        try{
+          await navigator.clipboard.writeText(text);
+          setStatus("Copied. Now add one real detail so it sounds like you.");
+        }catch(e){
+          // fallback: select text for manual copy
+          const range = document.createRange();
+          range.selectNodeContents(display);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+          setStatus("Select and copy the highlighted text.");
+        }
+      });
+
+      render();
+    })();
+  </script>
 
 </body>
 </html>
