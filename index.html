@@ -52,6 +52,9 @@
     *{ box-sizing:border-box; }
     html,body{ margin:0; padding:0; }
 
+    /* Optional enhancement: smooth anchor scroll (CSS only) */
+    html{ scroll-behavior: smooth; }
+
     body{
       font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--ink);
@@ -897,6 +900,81 @@
       opacity: 0.95;
     }
 
+    /* NEW: Birthday CTA micro-interaction (CSS-only) */
+    .btnBirthday{
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+    .btnBirthday-inner{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:100%;
+    }
+    .btnBirthday-balloons{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      margin-right: 2px;
+    }
+    .bdayBalloon{
+      width: 16px;
+      height: 16px;
+      color: rgba(37,99,235,0.70);
+      transform: translateY(0);
+      transition: transform 260ms var(--easeOut);
+    }
+    .bdayBalloon1{ opacity: 0.95; }
+    .bdayBalloon2{
+      opacity: 0.65;
+      transform: translateY(1px);
+    }
+
+    .btnBirthday-send{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-left: 2px;
+    }
+    .bdayEnvelope{
+      width:18px;
+      height:18px;
+      color: rgba(37,99,235,0.82);
+      transform: translateX(0);
+      transition: transform 220ms var(--easeOut);
+    }
+    .btnBirthday-line{
+      width: 0px;
+      height: 1px;
+      background: rgba(37,99,235,0.0);
+      opacity: 0;
+      border-radius: 999px;
+      transition: width 220ms var(--easeOut), opacity 220ms var(--easeOut), background 220ms var(--easeOut);
+    }
+
+    .btnBirthday:hover .bdayBalloon1,
+    .btnBirthday:focus-visible .bdayBalloon1{
+      transform: translateY(-3px);
+    }
+    .btnBirthday:hover .bdayBalloon2,
+    .btnBirthday:focus-visible .bdayBalloon2{
+      transform: translateY(-2px);
+    }
+    .btnBirthday:hover .bdayEnvelope,
+    .btnBirthday:focus-visible .bdayEnvelope{
+      transform: translateX(6px);
+    }
+    .btnBirthday:hover .btnBirthday-line,
+    .btnBirthday:focus-visible .btnBirthday-line{
+      width: 22px;
+      opacity: 0.28;
+      background: rgba(37,99,235,0.85);
+    }
+    .btnBirthday:active .bdayEnvelope{
+      transform: translateX(4px);
+    }
+
     /* Responsive */
     @media (max-width: 920px){
       .ink-callout-inner{ grid-template-columns: 1fr; }
@@ -956,6 +1034,11 @@
         animation-duration: 0ms !important;
       }
       .scribble path{ animation: none !important; stroke-dashoffset: 0 !important; }
+      .bdayBalloon,
+      .bdayEnvelope,
+      .btnBirthday-line{
+        transition: none !important;
+      }
     }
   </style>
 </head>
@@ -1022,6 +1105,40 @@
             <path d="M4 7.5h16v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.6" opacity="0.9"/>
             <path d="m5.2 8.6 6.2 5.2c.36.3.88.3 1.24 0l6.2-5.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
           </svg>
+        </a>
+
+        <!-- NEW CTA (added only; existing links unchanged) -->
+        <a class="btn btnSecondary btnBirthday"
+           href="#birthday-starter">
+          <span class="btnBirthday-inner">
+            <span class="btnBirthday-balloons" aria-hidden="true">
+              <!-- Balloon 1 -->
+              <svg class="bdayBalloon bdayBalloon1" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2.5c3.2 0 5.5 2.25 5.5 5.15 0 2.1-1.15 3.9-2.95 5.15-.45.32-.55.94-.22 1.38l.27.36c.26.34.27.82.03 1.17l-1.03 1.47c-.32.46-.96.56-1.41.23l-.19-.14c-.27-.2-.64-.2-.91 0l-.19.14c-.45.33-1.09.23-1.41-.23l-1.03-1.47c-.24-.35-.23-.83.03-1.17l.27-.36c.33-.44.23-1.06-.22-1.38C7.65 11.55 6.5 9.75 6.5 7.65 6.5 4.75 8.8 2.5 12 2.5Z"
+                      stroke="currentColor" stroke-width="1.5" opacity="0.9"/>
+                <path d="M12 19.3v2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.65"/>
+                <path d="M12 19.3c-1 .6-1.5 1.3-1.6 2.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+              </svg>
+
+              <!-- Balloon 2 -->
+              <svg class="bdayBalloon bdayBalloon2" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2.5c3.2 0 5.5 2.25 5.5 5.15 0 2.1-1.15 3.9-2.95 5.15-.45.32-.55.94-.22 1.38l.27.36c.26.34.27.82.03 1.17l-1.03 1.47c-.32.46-.96.56-1.41.23l-.19-.14c-.27-.2-.64-.2-.91 0l-.19.14c-.45.33-1.09.23-1.41-.23l-1.03-1.47c-.24-.35-.23-.83.03-1.17l.27-.36c.33-.44.23-1.06-.22-1.38C7.65 11.55 6.5 9.75 6.5 7.65 6.5 4.75 8.8 2.5 12 2.5Z"
+                      stroke="currentColor" stroke-width="1.5" opacity="0.75"/>
+                <path d="M12 19.3v2.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+                <path d="M12 19.3c1 .6 1.5 1.3 1.6 2.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
+              </svg>
+            </span>
+
+            <span class="btnBirthday-label">Schedule a Birthday Card</span>
+
+            <span class="btnBirthday-send" aria-hidden="true">
+              <span class="btnBirthday-line"></span>
+              <svg class="bdayEnvelope" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7.5h16v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.6" opacity="0.9"/>
+                <path d="m5.2 8.6 6.2 5.2c.36.3.88.3 1.24 0l6.2-5.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+              </svg>
+            </span>
+          </span>
         </a>
 
         <div class="micro-authority">
@@ -1193,7 +1310,8 @@
     </section>
 
     <!-- Message Starters -->
-    <section class="section alt">
+    <!-- NOTE: Added id="birthday-starter" as the anchor target (no content changed). -->
+    <section class="section alt" id="birthday-starter">
       <div class="panel">
         <h2>Message Starters</h2>
         <p>
