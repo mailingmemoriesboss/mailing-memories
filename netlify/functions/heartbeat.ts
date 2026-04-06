@@ -81,6 +81,5 @@ export default async (req: Request) => {
 };
 
 export const config = {
-  path: "/api/heartbeat",
   schedule: "0 0 */5 * *", // Runs at 00:00 every 5 days
 };
