@@ -18,6 +18,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Trash2, Eraser, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 type OrderStatus =
   | "draft"
@@ -82,48 +95,39 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [apiReady, setApiReady] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [isClearingTests, setIsClearingTests] = useState(false);
+
+  async function loadOrders() {
+    try {
+      setLoading(true);
+      setErrorMessage("");
+
+      const res = await fetch("/api/orders");
+      if (!res.ok) {
+        throw new Error(`Request failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      const rows = Array.isArray(data) ? data : Array.isArray(data.orders) ? data.orders : [];
+
+      setOrders(rows);
+      setApiReady(true);
+    } catch (error) {
+      setApiReady(false);
+      setOrders([]);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Admin API is not connected yet."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    let isMounted = true;
-
-    async function loadOrders() {
-      try {
-        setLoading(true);
-        setErrorMessage("");
-
-        const res = await fetch("/api/orders");
-        if (!res.ok) {
-          throw new Error(`Request failed with status ${res.status}`);
-        }
-
-        const data = await res.json();
-        const rows = Array.isArray(data) ? data : Array.isArray(data.orders) ? data.orders : [];
-
-        if (isMounted) {
-          setOrders(rows);
-          setApiReady(true);
-        }
-      } catch (error) {
-        if (isMounted) {
-          setApiReady(false);
-          setOrders([]);
-          setErrorMessage(
-            error instanceof Error
-              ? error.message
-              : "Admin API is not connected yet."
-          );
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    }
-
     loadOrders();
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   const summary = useMemo(() => {
@@ -136,6 +140,47 @@ export default function AdminOrders() {
 
     return { paid, scheduled, active, revenue };
   }, [orders]);
+
+  const handleDeleteOrder = async (id: string) => {
+    try {
+      setIsDeleting(id);
+      const res = await fetch(`/api/delete-order?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete order");
+      }
+
+      toast.success("Order deleted successfully");
+      loadOrders();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error deleting order");
+    } finally {
+      setIsDeleting(null);
+    }
+  };
+
+  const handleClearTestOrders = async () => {
+    try {
+      setIsClearingTests(true);
+      const res = await fetch("/api/delete-order?clearTest=true", {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to clear test orders");
+      }
+
+      const data = await res.json();
+      toast.success(`Cleared ${data.deletedCount || 0} test orders`);
+      loadOrders();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Error clearing test orders");
+    } finally {
+      setIsClearingTests(false);
+    }
+  };
 
   return (
     <PageShell>
@@ -180,12 +225,34 @@ export default function AdminOrders() {
                 color: "var(--mm-ink-muted)",
               }}
             >
-              This will become your daily operating view. You should not need to live
-              inside Supabase once the order API and notifications are connected.
+              This is your daily operating view. Manage live orders and perform system cleanup here.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" className="gap-2 border-mm-line text-mm-ink" disabled={isClearingTests}>
+                  {isClearingTests ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eraser className="h-4 w-4" />}
+                  Clear Test Orders
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will delete all orders marked as test, admin_test, or keepalive. Real customer orders will not be affected.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleClearTestOrders} className="bg-mm-forest text-white">
+                    Clear Tests
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
             <Link href="/send">
               <a
                 style={{
@@ -204,27 +271,6 @@ export default function AdminOrders() {
                 }}
               >
                 Open Send a Letter
-              </a>
-            </Link>
-
-            <Link href="/plan">
-              <a
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  minHeight: "40px",
-                  padding: "0 16px",
-                  border: "1px solid var(--mm-line)",
-                  color: "var(--mm-ink)",
-                  textDecoration: "none",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.9rem",
-                  borderRadius: "6px",
-                  background: "rgba(255,255,255,0.7)",
-                }}
-              >
-                Open Plan Ahead
               </a>
             </Link>
           </div>
@@ -276,9 +322,7 @@ export default function AdminOrders() {
           <CardHeader>
             <CardTitle>Order Queue</CardTitle>
             <CardDescription>
-              {apiReady
-                ? "This page will show live orders once the backend route is connected."
-                : "The page is built, but the /api/orders route is not connected yet."}
+              Manage and fulfill your customer orders.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -296,8 +340,6 @@ export default function AdminOrders() {
                   lineHeight: 1.6,
                 }}
               >
-                Admin page is live. Data connection is the next step.
-                <br />
                 Current message: {errorMessage || "API route not available yet."}
               </div>
             )}
@@ -323,9 +365,6 @@ export default function AdminOrders() {
                 }}
               >
                 No orders are showing yet.
-                <br />
-                That is normal until form submissions are wired into the database and the
-                admin API is connected.
               </div>
             ) : (
               <Table>
@@ -339,6 +378,7 @@ export default function AdminOrders() {
                     <TableHead>Location</TableHead>
                     <TableHead>Ship Date</TableHead>
                     <TableHead>Amount</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -361,6 +401,29 @@ export default function AdminOrders() {
                       </TableCell>
                       <TableCell>{formatDate(order.requested_ship_date)}</TableCell>
                       <TableCell>{formatMoney(order.amount_cents)}</TableCell>
+                      <TableCell className="text-right">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-mm-ink-muted hover:text-destructive" disabled={isDeleting === order.id}>
+                              {isDeleting === order.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Delete Order?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete the order from <strong>{order.sender_name}</strong> to <strong>{order.recipient_name}</strong>? This action cannot be undone.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDeleteOrder(order.id)} className="bg-destructive text-white hover:bg-destructive/90">
+                                Delete
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -368,32 +431,6 @@ export default function AdminOrders() {
             )}
           </CardContent>
         </Card>
-
-        <div
-          className="mt-8 grid gap-4 md:grid-cols-2"
-          style={{ fontFamily: "var(--font-sans)" }}
-        >
-          <Card>
-            <CardHeader>
-              <CardTitle>What this page solves</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm text-muted-foreground">
-              <p>• Lets you run the business from your own site instead of raw Supabase tables.</p>
-              <p>• Gives you one place to view paid, scheduled, writing, and mailed orders.</p>
-              <p>• Becomes the natural destination for email notification links later.</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Next backend hook</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
-              <p>The next step is exposing a real <code>/api/orders</code> route from your server.</p>
-              <p>Once that exists, this page will stop being a shell and start showing live database rows.</p>
-            </CardContent>
-          </Card>
-        </div>
       </section>
     </PageShell>
   );
