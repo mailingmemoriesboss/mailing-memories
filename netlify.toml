@@ -1,7 +1,7 @@
 [build]
-  command = "pnpm install --no-frozen-lockfile && pnpm build"
+  command = "pnpm build"
   publish = "dist/public"
 
 [build.environment]
-  PNPM_VERSION = "10.4.1"
+  PNPM_VERSION = "10"
   NODE_VERSION = "22"
