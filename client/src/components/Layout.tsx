@@ -340,6 +340,7 @@ export function Footer() {
             {[
               { label: "Send a Letter", href: "/send" },
               { label: "About", href: "/#about" },
+              { label: "FAQ", href: "/faq" },
               { label: "Contact", href: "mailto:hello@mailingmemories.com" },
             ].map((link) => (
               <Link

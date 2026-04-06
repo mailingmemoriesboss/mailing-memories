@@ -8,6 +8,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import SendCard from "./pages/SendCard";
 import AdminOrders from "./pages/AdminOrders";
+import FAQ from "./pages/FAQ";
 
 function Router() {
   return (
@@ -15,6 +16,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/send"} component={SendCard} />
       <Route path={"/admin/orders"} component={AdminOrders} />
+      <Route path={"/faq"} component={FAQ} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
