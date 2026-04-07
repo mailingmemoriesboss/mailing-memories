@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "wouter";
 import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
 
 const IMAGES = {
@@ -473,11 +474,25 @@ function PreviewPanel({
 }
 
 export default function SendCard() {
+  const [location] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
 
+  // Extract URL parameters for pre-filling
   const [frontMessage, setFrontMessage] = useState("");
   const [insideMessage, setInsideMessage] = useState("");
   const [signatureName, setSignatureName] = useState("");
+
+  // Pre-fill message from URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const messageParam = params.get("message");
+    const deckParam = params.get("deck");
+    
+    if (messageParam) {
+      setInsideMessage(decodeURIComponent(messageParam));
+    }
+    // Note: deckParam is available if needed for future use (e.g., tracking which deck was used)
+  }, []);
 
   const [recipientName, setRecipientName] = useState("");
   const [recipientAddress1, setRecipientAddress1] = useState("");

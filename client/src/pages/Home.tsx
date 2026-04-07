@@ -6,7 +6,8 @@
  * Horizontal flow over vertical stacking. Restraint as luxury.
  */
 
-import { Link } from "wouter";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
 
 /* ─── CDN Image URLs ─── */
@@ -16,8 +17,51 @@ const IMAGES = {
   handWritingToday: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
   heroDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hero-desk-atmosphere-P8UMTNZD3BSYLVuuy22JRa.webp",
   paperTexture: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/paper-texture-bg-TLD2xmpcBsfnmyqpjpBz6a.webp",
-  deckGrief: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/deck-grief-placeholder.png", // Hypothetical placeholder
 };
+
+/* ─── Quote Data ─── */
+const QUOTES = [
+  {
+    deck: "In the Hard Season",
+    line: "I am not going to tell you it will pass. I am just going to stay close while it is here.",
+  },
+  {
+    deck: "The Long Friendship",
+    line: "Most of what we have built together happened in ordinary moments that did not announce themselves as important.",
+  },
+  {
+    deck: "Gratitude",
+    line: "The world is easier to be in because people like you exist in it.",
+  },
+  {
+    deck: "Love That Isn't Romantic",
+    line: "I do not say this enough, and when I do say it, it does not come out the way I mean it. So I am writing it instead.",
+  },
+  {
+    deck: "Just Because",
+    line: "You were in my mind today and I did not want to just let that pass.",
+  },
+  {
+    deck: "The Caregiver",
+    line: "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention.",
+  },
+  {
+    deck: "Admiration & Character",
+    line: "You did the right thing when the easier thing was sitting right there. I want to say that I noticed.",
+  },
+  {
+    deck: "Growth & Pride",
+    line: "I can see the difference. It is not subtle anymore and I want to say something about it.",
+  },
+  {
+    deck: "Legacy",
+    line: "You made something real. Not everyone does. I want to say that clearly.",
+  },
+  {
+    deck: "Letters I Never Sent",
+    line: "You were gone before I found the words. I have found them now.",
+  },
+];
 
 /* ═══════════════════════════════════════════════════════
    HERO SECTION
@@ -110,45 +154,159 @@ function HeroSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   EDITORIAL QUOTE STRIP
+   ROTATING QUOTES CAROUSEL
    ═══════════════════════════════════════════════════════ */
-function QuoteStrip() {
+function QuotesCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isRevealing, setIsRevealing] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsRevealing(false);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % QUOTES.length);
+        setIsRevealing(true);
+      }, 500);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentQuote = QUOTES[currentIndex];
+
   return (
     <section style={{
       background: "var(--mm-walnut)",
-      padding: "clamp(36px, 4vw, 56px) 24px",
+      padding: "clamp(48px, 6vw, 80px) 24px",
     }}>
-      <div className="max-w-[1240px] mx-auto text-center">
+      <div className="max-w-[900px] mx-auto">
         <FadeIn>
-          <blockquote style={{
-            margin: 0,
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(1.5rem, 3vw, 2.4rem)",
-            fontWeight: 400,
-            fontStyle: "italic",
-            lineHeight: 1.5,
-            color: "rgba(245, 241, 234, 0.92)",
-            maxWidth: "800px",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}>
-            "I am not going to tell you it will pass. I am just going to stay close while it is here."
-          </blockquote>
+          <div style={{
+            textAlign: "center",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "scale(1.02)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+          >
+            <p style={{
+              margin: "0 0 16px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.7rem",
+              fontWeight: 600,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(245, 241, 234, 0.65)",
+            }}>
+              From {currentQuote.deck}
+            </p>
+
+            <blockquote
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)",
+                fontWeight: 400,
+                fontStyle: "italic",
+                lineHeight: 1.6,
+                color: "rgba(245, 241, 234, 0.95)",
+                maxWidth: "800px",
+                marginLeft: "auto",
+                marginRight: "auto",
+                animation: isRevealing ? "fadeInUp 700ms ease-out forwards" : "fadeOutDown 500ms ease-in forwards",
+              }}
+              key={currentIndex}
+            >
+              "{currentQuote.line}"
+            </blockquote>
+
+            <Link
+              href={`/send?message=${encodeURIComponent(currentQuote.line)}&deck=${encodeURIComponent(currentQuote.deck)}`}
+              className="no-underline inline-flex items-center justify-center transition-all duration-200 mt-8"
+              style={{
+                minHeight: "48px",
+                padding: "0 28px",
+                borderRadius: "999px",
+                border: "1px solid rgba(245, 241, 234, 0.4)",
+                background: "transparent",
+                color: "rgba(245, 241, 234, 0.9)",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(245, 241, 234, 0.1)";
+                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.6)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.4)";
+              }}
+            >
+              Use This Quote
+            </Link>
+          </div>
         </FadeIn>
-        <FadeIn delay={0.15}>
-          <p style={{
-            margin: "16px 0 0",
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.75rem",
-            fontWeight: 500,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "rgba(245, 241, 234, 0.65)",
-          }}>
-            — From the Hard Seasons Deck
-          </p>
-        </FadeIn>
+
+        {/* Carousel indicators */}
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "8px",
+          marginTop: "32px",
+        }}>
+          {QUOTES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setIsRevealing(false);
+                setTimeout(() => {
+                  setCurrentIndex(i);
+                  setIsRevealing(true);
+                }, 300);
+              }}
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                border: "none",
+                background: i === currentIndex ? "rgba(245, 241, 234, 0.8)" : "rgba(245, 241, 234, 0.2)",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+              }}
+              aria-label={`Go to quote ${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes fadeOutDown {
+          from {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(-12px);
+          }
+        }
+      `}</style>
     </section>
   );
 }
@@ -425,7 +583,7 @@ export default function Home() {
   return (
     <PageShell>
       <HeroSection />
-      <QuoteStrip />
+      <QuotesCarousel />
       <WhatWeDo />
       <VisualProof />
       <DecksSection />
