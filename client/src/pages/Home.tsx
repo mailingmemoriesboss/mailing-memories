@@ -6,62 +6,170 @@
  * Horizontal flow over vertical stacking. Restraint as luxury.
  */
 
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "wouter";
-import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
+import { useState, useEffect, useRef } from "react";
+import { Link } from "wouter";
+import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { PageShell, FadeIn } from "@/components/Layout";
 
 /* ─── CDN Image URLs ─── */
 const IMAGES = {
-  letterPenDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/letter-pen-desk_49ca7681.png",
-  handEnvelopeCard: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-envelope-card_d47e65e0.png",
-  handWritingToday: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
   heroDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hero-desk-atmosphere-P8UMTNZD3BSYLVuuy22JRa.webp",
-  paperTexture: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/paper-texture-bg-TLD2xmpcBsfnmyqpjpBz6a.webp",
+  handWritingToday: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
 };
 
-/* ─── Quote Data ─── */
+/* ─── Tonal Hierarchy Data ─── */
+const DECK_THEMES = {
+  "In the Hard Season": {
+    base: "#5C6B73",
+    bg: "#E6EEF0",
+    header: "#455A64",
+    text: "#263238",
+  },
+  "The Caregiver": {
+    base: "#8A9A86",
+    bg: "#F0F3EF",
+    header: "#6B7D6A",
+    text: "#3C473B",
+  },
+  "Letters I Never Sent": {
+    base: "#3A3F44",
+    bg: "#EBECEE",
+    header: "#2C3034",
+    text: "#1A1D1F",
+  },
+  "The Long Friendship": {
+    base: "#C87964",
+    bg: "#F8EDE9",
+    header: "#A65F4D",
+    text: "#5C352B",
+  },
+  "Love That Isn't Romantic": {
+    base: "#D4A5A5",
+    bg: "#FDF4F4",
+    header: "#B08484",
+    text: "#6B4F4F",
+  },
+  "Gratitude": {
+    base: "#D9A05B",
+    bg: "#FFF9EC",
+    header: "#B3824A",
+    text: "#6B4F2C",
+  },
+  "Just Because": {
+    base: "#F2C9C9",
+    bg: "#FFF8F8",
+    header: "#D1A7A7",
+    text: "#8C6A6A",
+  },
+  "Admiration & Character": {
+    base: "#2C3E50",
+    bg: "#E8EDF2",
+    header: "#213040",
+    text: "#15202B",
+  },
+  "Growth & Pride": {
+    base: "#4A6741",
+    bg: "#EFF2EE",
+    header: "#3A5235",
+    text: "#243321",
+  },
+  "Legacy": {
+    base: "#5D4A66",
+    bg: "#EEEBF0",
+    header: "#4B3B52",
+    text: "#2E2432",
+  },
+};
+
 const QUOTES = [
-  {
-    deck: "In the Hard Season",
-    line: "I am not going to tell you it will pass. I am just going to stay close while it is here.",
-  },
-  {
-    deck: "The Long Friendship",
-    line: "Most of what we have built together happened in ordinary moments that did not announce themselves as important.",
-  },
-  {
-    deck: "Gratitude",
-    line: "The world is easier to be in because people like you exist in it.",
-  },
-  {
-    deck: "Love That Isn't Romantic",
-    line: "I do not say this enough, and when I do say it, it does not come out the way I mean it. So I am writing it instead.",
-  },
-  {
-    deck: "Just Because",
-    line: "You were in my mind today and I did not want to just let that pass.",
-  },
-  {
-    deck: "The Caregiver",
-    line: "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention.",
-  },
-  {
-    deck: "Admiration & Character",
-    line: "You did the right thing when the easier thing was sitting right there. I want to say that I noticed.",
-  },
-  {
-    deck: "Growth & Pride",
-    line: "I can see the difference. It is not subtle anymore and I want to say something about it.",
-  },
-  {
-    deck: "Legacy",
-    line: "You made something real. Not everyone does. I want to say that clearly.",
-  },
-  {
-    deck: "Letters I Never Sent",
-    line: "You were gone before I found the words. I have found them now.",
-  },
+  { deck: "In the Hard Season", line: "I am not going to tell you it will pass. I am just going to stay close while it is here." },
+  { deck: "The Long Friendship", line: "Most of what we have built together happened in ordinary moments that did not announce themselves as important." },
+  { deck: "Gratitude", line: "The world is easier to be in because people like you exist in it." },
+  { deck: "Love That Isn't Romantic", line: "I do not say this enough, and when I do say it, it does not come out the way I mean it. So I am writing it instead." },
+  { deck: "Just Because", line: "You were in my mind today and I did not want to just let that pass." },
+  { deck: "The Caregiver", line: "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention." },
+  { deck: "Admiration & Character", line: "You did the right thing when the easier thing was sitting right there. I want to say that I noticed." },
+  { deck: "Growth & Pride", line: "I can see the difference. It is not subtle anymore and I want to say something about it." },
+  { deck: "Legacy", line: "You made something real. Not everyone does. I want to say that clearly." },
+  { deck: "Letters I Never Sent", line: "You were gone before I found the words. I have found them now." },
 ];
+
+const DECKS = [
+  { title: "Grief & Hard Seasons", desc: "For when there are no words, but you want to stay close.", theme: DECK_THEMES["In the Hard Season"] },
+  { title: "Milestones & Gratitude", desc: "For naming the specific things that matter most.", theme: DECK_THEMES["Gratitude"] },
+  { title: "Apology & Repair", desc: "For finding a clean starting point for reconciliation.", theme: DECK_THEMES["Just Because"] },
+  { title: "The Caregiver", desc: "For honoring the invisible work that sustains us.", theme: DECK_THEMES["The Caregiver"] },
+  { title: "The Long Friendship", desc: "For celebrating the history built in ordinary moments.", theme: DECK_THEMES["The Long Friendship"] },
+];
+
+/* ─── Swipeable Carousel Component ─── */
+function SwipeCarousel({ items, renderItem, autoPlay = true, interval = 6000 }) {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const x = useMotionValue(0);
+
+  useEffect(() => {
+    if (!autoPlay) return;
+    const timer = setInterval(() => paginate(1), interval);
+    return () => clearInterval(timer);
+  }, [index, autoPlay]);
+
+  const paginate = (newDirection) => {
+    setDirection(newDirection);
+    setIndex((prevIndex) => (prevIndex + newDirection + items.length) % items.length);
+  };
+
+  const handleDragEnd = (e, { offset, velocity }) => {
+    const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500;
+    if (swipe) {
+      paginate(offset.x > 0 ? -1 : 1);
+    }
+  };
+
+  return (
+    <div className="relative overflow-hidden w-full flex flex-col items-center">
+      <div className="relative w-full flex justify-center items-center min-h-[300px]">
+        <AnimatePresence initial={false} custom={direction} mode="wait">
+          <motion.div
+            key={index}
+            custom={direction}
+            variants={{
+              enter: (direction) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+              center: { zIndex: 1, x: 0, opacity: 1 },
+              exit: (direction) => ({ zIndex: 0, x: direction < 0 ? 300 : -300, opacity: 0 }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={1}
+            onDragEnd={handleDragEnd}
+            className="absolute w-full flex justify-center cursor-grab active:cursor-grabbing"
+          >
+            {renderItem(items[index], index)}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      
+      <div className="flex gap-2 mt-8">
+        {items.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => {
+              setDirection(i > index ? 1 : -1);
+              setIndex(i);
+            }}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              i === index ? "bg-mm-ink w-4" : "bg-mm-ink/20"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 /* ═══════════════════════════════════════════════════════
    HERO SECTION
@@ -83,44 +191,20 @@ function HeroSection() {
 
       <div className="relative z-20 max-w-[1240px] mx-auto px-6 pt-32 pb-16 flex flex-col items-center text-center">
         <FadeIn>
-          <p style={{
-            margin: "0 0 20px",
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.75rem",
-            fontWeight: 600,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "var(--mm-burgundy)",
-          }}>
+          <p className="font-sans text-[0.75rem] font-semibold tracking-[0.18em] uppercase text-mm-burgundy mb-5">
             Established in the hard seasons
           </p>
         </FadeIn>
 
         <FadeIn delay={0.15}>
-          <h1 style={{
-            margin: "0 0 24px",
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
-            fontWeight: 500,
-            lineHeight: 0.95,
-            letterSpacing: "-0.03em",
-            color: "var(--mm-forest)",
-          }}>
+          <h1 className="font-serif text-[clamp(2.8rem,7vw,5.5rem)] font-medium leading-[0.95] tracking-tight text-mm-forest mb-6">
             The things that deserve<br />
-            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>more than a text.</em>
+            <em className="italic text-mm-burgundy">more than a text.</em>
           </h1>
         </FadeIn>
 
         <FadeIn delay={0.3}>
-          <p style={{
-            margin: "0 auto 48px",
-            maxWidth: "600px",
-            fontFamily: "var(--font-sans)",
-            fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
-            lineHeight: 1.8,
-            fontWeight: 500,
-            color: "var(--mm-ink-soft)",
-          }}>
+          <p className="font-sans text-[clamp(1rem,1.2vw,1.2rem)] leading-[1.8] font-medium text-mm-ink-soft max-w-[600px] mb-12">
             Mailing Memories is a handwritten letter service for the moments when 
             digital isn't enough. We write, address, and mail real letters on your behalf — 
             so the people who matter truly feel seen.
@@ -130,20 +214,7 @@ function HeroSection() {
         <FadeIn delay={0.45}>
           <Link
             href="/send"
-            className="no-underline inline-flex items-center justify-center transition-all duration-200"
-            style={{
-              minHeight: "56px",
-              padding: "0 36px",
-              borderRadius: "999px",
-              background: "var(--mm-forest)",
-              color: "#f7f2eb",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
-            }}
+            className="no-underline inline-flex items-center justify-center transition-all duration-200 h-14 px-9 rounded-full bg-mm-forest text-[#f7f2eb] font-sans text-[0.8rem] font-semibold tracking-widest uppercase shadow-xl hover:scale-105"
           >
             Send a Letter
           </Link>
@@ -154,289 +225,83 @@ function HeroSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   ROTATING QUOTES CAROUSEL
+   ROTATING QUOTES CAROUSEL (TONAL)
    ═══════════════════════════════════════════════════════ */
 function QuotesCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isRevealing, setIsRevealing] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsRevealing(false);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % QUOTES.length);
-        setIsRevealing(true);
-      }, 500);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const currentQuote = QUOTES[currentIndex];
-
   return (
-    <section style={{
-      background: "var(--mm-walnut)",
-      padding: "clamp(48px, 6vw, 80px) 24px",
-    }}>
-      <div className="max-w-[900px] mx-auto">
-        <FadeIn>
-          <div style={{
-            textAlign: "center",
-            cursor: "pointer",
-            transition: "all 0.3s ease",
+    <section className="bg-mm-walnut py-16 px-6 overflow-hidden">
+      <div className="max-w-[1000px] mx-auto">
+        <SwipeCarousel
+          items={QUOTES}
+          renderItem={(quote) => {
+            const theme = DECK_THEMES[quote.deck] || DECK_THEMES["In the Hard Season"];
+            return (
+              <div className="text-center px-4 w-full max-w-[800px]">
+                <p 
+                  className="font-sans text-[0.7rem] font-bold tracking-[0.14em] uppercase mb-4 transition-colors duration-500"
+                  style={{ color: theme.base }}
+                >
+                  From {quote.deck}
+                </p>
+                <blockquote
+                  className="font-serif text-[clamp(1.6rem,3.5vw,2.6rem)] font-normal italic leading-[1.6] mb-8 transition-colors duration-500"
+                  style={{ color: theme.bg }}
+                >
+                  "{quote.line}"
+                </blockquote>
+                <Link
+                  href={`/send?message=${encodeURIComponent(quote.line)}&deck=${encodeURIComponent(quote.deck)}`}
+                  className="no-underline inline-flex items-center justify-center transition-all duration-300 h-12 px-7 rounded-full border font-sans text-[0.75rem] font-semibold tracking-widest uppercase hover:bg-white/10"
+                  style={{ borderColor: theme.base, color: theme.bg }}
+                >
+                  Use This Quote
+                </Link>
+              </div>
+            );
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.02)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-          }}
-          >
-            <p style={{
-              margin: "0 0 16px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(245, 241, 234, 0.65)",
-            }}>
-              From {currentQuote.deck}
-            </p>
-
-            <blockquote
-              style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)",
-                fontWeight: 400,
-                fontStyle: "italic",
-                lineHeight: 1.6,
-                color: "rgba(245, 241, 234, 0.95)",
-                maxWidth: "800px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                animation: isRevealing ? "fadeInUp 700ms ease-out forwards" : "fadeOutDown 500ms ease-in forwards",
-              }}
-              key={currentIndex}
-            >
-              "{currentQuote.line}"
-            </blockquote>
-
-            <Link
-              href={`/send?message=${encodeURIComponent(currentQuote.line)}&deck=${encodeURIComponent(currentQuote.deck)}`}
-              className="no-underline inline-flex items-center justify-center transition-all duration-200 mt-8"
-              style={{
-                minHeight: "48px",
-                padding: "0 28px",
-                borderRadius: "999px",
-                border: "1px solid rgba(245, 241, 234, 0.4)",
-                background: "transparent",
-                color: "rgba(245, 241, 234, 0.9)",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(245, 241, 234, 0.1)";
-                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.6)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.4)";
-              }}
-            >
-              Use This Quote
-            </Link>
-          </div>
-        </FadeIn>
-
-        {/* Carousel indicators */}
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "8px",
-          marginTop: "32px",
-        }}>
-          {QUOTES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setIsRevealing(false);
-                setTimeout(() => {
-                  setCurrentIndex(i);
-                  setIsRevealing(true);
-                }, 300);
-              }}
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                border: "none",
-                background: i === currentIndex ? "rgba(245, 241, 234, 0.8)" : "rgba(245, 241, 234, 0.2)",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              aria-label={`Go to quote ${i + 1}`}
-            />
-          ))}
-        </div>
+        />
       </div>
-
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(12px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes fadeOutDown {
-          from {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateY(-12px);
-          }
-        }
-      `}</style>
     </section>
   );
 }
 
 /* ═══════════════════════════════════════════════════════
-   HOW IT WORKS (with background imagery)
+   HOW IT WORKS (WITH BACKGROUND IMAGE)
    ═══════════════════════════════════════════════════════ */
 function WhatWeDo() {
   return (
-    <section id="about" className="relative overflow-hidden" style={{
-      padding: "clamp(64px, 8vw, 100px) 24px",
-    }}>
-      {/* Background image with overlay */}
-      <div
-        className="absolute inset-0 z-0"
+    <section className="relative py-24 px-6 overflow-hidden bg-mm-cream">
+      <div 
+        className="absolute inset-0 z-0 opacity-20 pointer-events-none"
         style={{
           backgroundImage: `url("${IMAGES.handWritingToday}")`,
           backgroundSize: "cover",
           backgroundPosition: "center right",
-          backgroundAttachment: "fixed",
         }}
       />
-      <div className="absolute inset-0 z-[1]" style={{
-        background: "linear-gradient(to right, rgba(245, 241, 234, 0.98) 0%, rgba(245, 241, 234, 0.85) 40%, rgba(245, 241, 234, 0.4) 100%)",
-      }} />
-
-      <div className="max-w-[1240px] mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
-          <div className="lg:col-span-5">
-            <FadeIn>
-              <p style={{
-                margin: "0 0 14px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.68rem",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--mm-burgundy)",
-              }}>
-                How it works
-              </p>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <h2 style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                fontWeight: 500,
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-                color: "var(--mm-forest)",
-              }}>
-                Turn intention into<br />
-                <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>mailed follow-through.</em>
-              </h2>
-            </FadeIn>
-            <PenStroke className="my-6 max-w-[80px]" color="var(--mm-burgundy)" />
-            <FadeIn delay={0.2}>
-              <p style={{
-                margin: 0,
-                fontFamily: "var(--font-sans)",
-                fontSize: "1rem",
-                lineHeight: 1.85,
-                color: "var(--mm-ink-soft)",
-                maxWidth: "440px",
-              }}>
-                Mailing Memories helps you follow through on meaningful written connection. 
-                We write, stamp, and mail one full handwritten page on quality cardstock for $15. 
-                If you feel stuck on the wording, light help getting started is available.
-              </p>
-            </FadeIn>
-          </div>
-
-          <div className="lg:col-span-7 relative hidden lg:block">
-            {/* Background image is shown via CSS on desktop */}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   VISUAL PROOF
-   ═══════════════════════════════════════════════════════ */
-function VisualProof() {
-  return (
-    <section className="relative overflow-hidden" style={{ minHeight: "480px" }}>
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url("${IMAGES.handEnvelopeCard}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <div className="absolute inset-0" style={{
-        background: "linear-gradient(to right, rgba(29, 41, 33, 0.88) 0%, rgba(29, 41, 33, 0.65) 50%, rgba(29, 41, 33, 0.3) 100%)",
-      }} />
-      <div className="relative z-10 max-w-[1240px] mx-auto flex items-center" style={{
-        minHeight: "480px",
-        padding: "60px 24px",
-      }}>
-        <div style={{ maxWidth: "520px" }}>
+      <div className="relative z-10 max-w-[1240px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
           <FadeIn>
-            <h2 style={{
-              margin: "0 0 20px",
-              fontFamily: "var(--font-serif)",
-              fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
-              fontWeight: 500,
-              lineHeight: 1.2,
-              color: "#f5f1ea",
-            }}>
-              Not a sympathy card.<br />
-              Not a text message.<br />
-              <em style={{ fontStyle: "italic", color: "rgba(245, 241, 234, 0.7)" }}>A real letter, in their hands.</em>
-            </h2>
-          </FadeIn>
-          <FadeIn delay={0.15}>
-            <p style={{
-              margin: "0 0 28px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.95rem",
-              lineHeight: 1.85,
-              color: "rgba(245, 241, 234, 0.72)",
-            }}>
-              Every letter is written on premium cotton stationery, hand-addressed, stamped, 
-              and mailed. The person who receives it knows — this was not automated. 
-              Someone sat down and meant this.
+            <p className="font-sans text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-mm-burgundy mb-4">
+              How it works
             </p>
+            <h2 className="font-serif text-[clamp(2rem,4vw,3.2rem)] font-medium leading-tight text-mm-forest mb-8">
+              Turn intention into<br />
+              <em className="italic text-mm-burgundy">mailed follow-through.</em>
+            </h2>
+            <div className="w-16 h-1 bg-mm-burgundy/20 mb-8" />
+            <p className="font-sans text-[1.05rem] leading-[1.85] text-mm-ink-soft mb-8">
+              Mailing Memories helps you follow through on meaningful written connection. 
+              We write, stamp, and mail one full handwritten page on quality cardstock for $15. 
+              If you feel stuck on the wording, light help getting started is available.
+            </p>
+            <Link
+              href="/send"
+              className="no-underline inline-flex items-center font-sans text-[0.8rem] font-bold tracking-widest uppercase text-mm-forest group"
+            >
+              Start Writing
+              <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+            </Link>
           </FadeIn>
         </div>
       </div>
@@ -445,73 +310,60 @@ function VisualProof() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   COMING SOON: CARD DECKS
+   DECKS SECTION (PROMPT CARDS CAROUSEL)
    ═══════════════════════════════════════════════════════ */
 function DecksSection() {
   return (
-    <section style={{
-      background: "var(--mm-cream)",
-      padding: "clamp(80px, 10vw, 120px) 24px",
-      borderTop: "1px solid var(--mm-line)",
-    }}>
+    <section className="py-24 px-6 bg-[#fcfaf7]">
       <div className="max-w-[1240px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-          <div className="max-w-[500px]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div>
             <FadeIn>
-              <p style={{
-                margin: "0 0 12px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.68rem",
-                fontWeight: 600,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--mm-burgundy)",
-              }}>
-                In Development
+              <p className="font-sans text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-mm-burgundy mb-4">
+                The Library
               </p>
-              <h2 style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                fontWeight: 500,
-                lineHeight: 1.1,
-                color: "var(--mm-forest)",
-              }}>
+              <h2 className="font-serif text-[clamp(1.8rem,3vw,2.6rem)] font-medium text-mm-forest">
                 Guided Card Decks
               </h2>
-              <p style={{
-                marginTop: "16px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "1rem",
-                lineHeight: 1.7,
-                color: "var(--mm-ink-soft)",
-              }}>
-                Gentle structure for the moments when words are hard to find. 
-                Our themed decks provide the prompts you need to say what you mean.
-              </p>
             </FadeIn>
           </div>
-          <FadeIn delay={0.1}>
-            <div className="px-5 py-2 rounded-full border border-mm-line font-sans text-[0.7rem] font-semibold tracking-widest uppercase text-mm-ink-muted">
+          <FadeIn delay={0.2}>
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-mm-cream border border-mm-line font-sans text-[0.65rem] font-bold tracking-widest uppercase text-mm-ink-muted">
               Coming Soon
             </div>
           </FadeIn>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            { title: "Grief & Hard Seasons", desc: "For when there are no words, but you want to stay close." },
-            { title: "Milestones & Gratitude", desc: "For naming the specific things that matter most." },
-            { title: "Apology & Repair", desc: "For finding a clean starting point for reconciliation." },
-          ].map((deck, i) => (
-            <FadeIn key={i} delay={0.1 * (i + 1)}>
-              <div className="group relative bg-white/40 border border-mm-line p-8 transition-all hover:bg-white/60">
-                <h3 className="font-serif text-xl mb-3 text-mm-forest">{deck.title}</h3>
-                <p className="font-sans text-sm text-mm-ink-soft leading-relaxed">{deck.desc}</p>
+        <SwipeCarousel
+          autoPlay={false}
+          items={DECKS}
+          renderItem={(deck) => (
+            <div 
+              className="w-full max-w-[400px] aspect-[3/4] p-8 flex flex-col justify-between shadow-2xl rounded-sm border-t-[12px] transition-all duration-500"
+              style={{ 
+                backgroundColor: deck.theme.bg,
+                borderTopColor: deck.theme.header,
+                boxShadow: `0 20px 40px -10px ${deck.theme.base}33`
+              }}
+            >
+              <div>
+                <div className="flex justify-between items-start mb-12">
+                  <div className="w-12 h-[1px]" style={{ backgroundColor: deck.theme.header }} />
+                  <span className="font-sans text-[0.6rem] font-bold tracking-widest uppercase opacity-40" style={{ color: deck.theme.text }}>MM-PROMPT</span>
+                </div>
+                <h3 className="font-serif text-3xl mb-6 leading-tight" style={{ color: deck.theme.text }}>{deck.title}</h3>
+                <p className="font-sans text-sm leading-relaxed opacity-80" style={{ color: deck.theme.text }}>{deck.desc}</p>
               </div>
-            </FadeIn>
-          ))}
-        </div>
+              
+              <div className="pt-8 border-t border-black/5 flex justify-between items-center">
+                <span className="font-sans text-[0.65rem] font-bold tracking-widest uppercase opacity-50" style={{ color: deck.theme.text }}>Volume 01</span>
+                <div className="w-8 h-8 rounded-full border flex items-center justify-center opacity-30" style={{ borderColor: deck.theme.text }}>
+                  <span className="text-[10px]" style={{ color: deck.theme.text }}>✎</span>
+                </div>
+              </div>
+            </div>
+          )}
+        />
       </div>
     </section>
   );
@@ -522,34 +374,16 @@ function DecksSection() {
    ═══════════════════════════════════════════════════════ */
 function FinalCTA() {
   return (
-    <section id="send" style={{
-      background: "var(--mm-forest)",
-      padding: "clamp(64px, 8vw, 96px) 24px",
-      position: "relative",
-    }}>
+    <section id="send" className="bg-mm-forest py-24 px-6 relative overflow-hidden">
       <div className="relative z-10 max-w-[680px] mx-auto text-center">
         <FadeIn>
-          <h2 style={{
-            margin: "0 0 24px",
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
-            fontWeight: 500,
-            lineHeight: 1.15,
-            color: "#f5f1ea",
-          }}>
+          <h2 className="font-serif text-[clamp(2.2rem,4vw,3.4rem)] font-medium leading-[1.15] text-[#f5f1ea] mb-6">
             Someone came to mind<br />
             just now, didn't they?
           </h2>
         </FadeIn>
         <FadeIn delay={0.2}>
-          <p style={{
-            margin: "0 auto 36px",
-            maxWidth: "480px",
-            fontFamily: "var(--font-sans)",
-            fontSize: "1rem",
-            lineHeight: 1.85,
-            color: "rgba(245, 241, 234, 0.68)",
-          }}>
+          <p className="font-sans text-base leading-[1.85] text-white/70 max-w-[480px] mx-auto mb-10">
             That thought is worth something. Don't let it pass. Say what you mean on real paper — 
             and put it in their hands.
           </p>
@@ -557,19 +391,7 @@ function FinalCTA() {
         <FadeIn delay={0.3}>
           <Link
             href="/send"
-            className="no-underline inline-flex items-center justify-center transition-all duration-200"
-            style={{
-              minHeight: "54px",
-              padding: "0 32px",
-              borderRadius: "999px",
-              background: "#f5f1ea",
-              color: "var(--mm-forest)",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.78rem",
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-            }}
+            className="no-underline inline-flex items-center justify-center transition-all duration-200 h-14 px-8 rounded-full bg-[#f5f1ea] text-mm-forest font-sans text-[0.78rem] font-semibold tracking-widest uppercase hover:scale-105"
           >
             Send a Letter — $15
           </Link>
@@ -585,7 +407,6 @@ export default function Home() {
       <HeroSection />
       <QuotesCarousel />
       <WhatWeDo />
-      <VisualProof />
       <DecksSection />
       <FinalCTA />
     </PageShell>
