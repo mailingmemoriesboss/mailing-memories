@@ -37,7 +37,7 @@ function HeroSection() {
         background: "linear-gradient(to bottom, rgba(245, 241, 234, 0.4) 0%, rgba(245, 241, 234, 0.85) 60%, var(--mm-cream) 100%)" 
       }} />
 
-      <div className="relative z-20 max-w-[1240px] mx-auto px-6 pt-24 pb-12 flex flex-col items-center text-center">
+      <div className="relative z-20 max-w-[1240px] mx-auto px-6 pt-32 pb-16 flex flex-col items-center text-center">
         <FadeIn>
           <p style={{
             margin: "0 0 20px",
@@ -69,11 +69,12 @@ function HeroSection() {
 
         <FadeIn delay={0.3}>
           <p style={{
-            margin: "0 auto 40px",
+            margin: "0 auto 48px",
             maxWidth: "600px",
             fontFamily: "var(--font-sans)",
-            fontSize: "clamp(1rem, 1.2vw, 1.15rem)",
-            lineHeight: 1.7,
+            fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
+            lineHeight: 1.8,
+            fontWeight: 500,
             color: "var(--mm-ink-soft)",
           }}>
             Mailing Memories is a handwritten letter service for the moments when 
@@ -158,7 +159,7 @@ function QuoteStrip() {
 function WhatWeDo() {
   return (
     <section id="about" className="relative overflow-hidden" style={{
-      padding: "clamp(48px, 6vw, 80px) 24px",
+      padding: "clamp(64px, 8vw, 100px) 24px",
     }}>
       {/* Background image with overlay */}
       <div
@@ -292,7 +293,7 @@ function DecksSection() {
   return (
     <section style={{
       background: "var(--mm-cream)",
-      padding: "clamp(64px, 8vw, 96px) 24px",
+      padding: "clamp(80px, 10vw, 120px) 24px",
       borderTop: "1px solid var(--mm-line)",
     }}>
       <div className="max-w-[1240px] mx-auto">

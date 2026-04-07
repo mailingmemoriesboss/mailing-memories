@@ -46,12 +46,37 @@ export function RotatingTagline() {
 
   return (
     <div className="relative z-50" style={{ background: "#161412", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[6px] text-center"
+      <style>{`
+        @keyframes paperFlip {
+          0% {
+            opacity: 0;
+            transform: rotateY(-90deg) rotateX(0deg);
+          }
+          50% {
+            transform: rotateY(0deg) rotateX(0deg);
+          }
+          100% {
+            opacity: 1;
+            transform: rotateY(0deg) rotateX(0deg);
+          }
+        }
+        @keyframes paperFlipOut {
+          0% {
+            opacity: 1;
+            transform: rotateY(0deg);
+          }
+          100% {
+            opacity: 0;
+            transform: rotateY(90deg);
+          }
+        }
+      `}</style>
+      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[6px] text-center flex-wrap px-4 md:px-6"
         style={{
-          minHeight: "42px",
-          padding: "0 24px",
+          minHeight: "52px",
+          padding: "12px 24px",
           fontFamily: "var(--font-sans)",
-          fontSize: "0.7rem",
+          fontSize: "clamp(0.65rem, 2vw, 0.75rem)",
           fontWeight: 500,
           letterSpacing: "0.14em",
           textTransform: "uppercase",
@@ -61,10 +86,11 @@ export function RotatingTagline() {
         <span
           className="inline-block"
           style={{
-            minWidth: "180px",
+            minWidth: "120px",
             color: "#f2e9dc",
-            fontWeight: 600,
-            animation: isRevealing ? "inkReveal 600ms ease-out forwards" : "inkFade 350ms ease-in forwards",
+            fontWeight: 700,
+            perspective: "1000px",
+            animation: isRevealing ? "paperFlip 700ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "paperFlipOut 500ms ease-in forwards",
           }}
           key={currentIndex}
         >
@@ -93,6 +119,7 @@ export function Navigation() {
   const navLinks = [
     { label: "Send a Letter", href: "/send" },
     { label: "About", href: "/#about" },
+    { label: "FAQ", href: "/faq" },
   ];
 
   return (
@@ -111,8 +138,8 @@ export function Navigation() {
         <Link href="/" className="no-underline flex flex-col" style={{ lineHeight: 1 }}>
           <span style={{
             fontFamily: "var(--font-serif)",
-            fontSize: "1.5rem",
-            fontWeight: 500,
+            fontSize: "clamp(1.2rem, 3vw, 1.5rem)",
+            fontWeight: 600,
             color: "var(--mm-forest)",
             letterSpacing: "0.01em",
           }}>
@@ -199,7 +226,7 @@ export function Navigation() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="lg:hidden" style={{
-          padding: "8px 24px 24px",
+          padding: "16px 24px 32px",
           borderTop: "1px solid var(--mm-line)",
           background: "rgba(245, 241, 234, 0.98)",
         }}>
@@ -207,15 +234,15 @@ export function Navigation() {
             <Link
               key={item.label}
               href={item.href}
-              className="block no-underline py-3"
+              className="block no-underline py-4"
               onClick={() => setMobileOpen(false)}
               style={{
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.8rem",
-                fontWeight: 500,
-                letterSpacing: "0.06em",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "var(--mm-ink-soft)",
+                color: "var(--mm-forest)",
                 borderBottom: "1px solid var(--mm-line)",
               }}
             >
@@ -225,15 +252,15 @@ export function Navigation() {
           <Link
             href="/send"
             onClick={() => setMobileOpen(false)}
-            className="no-underline inline-flex items-center justify-center mt-4 w-full"
+            className="no-underline inline-flex items-center justify-center mt-6 w-full"
             style={{
-              minHeight: "48px",
+              minHeight: "52px",
               borderRadius: "999px",
               background: "var(--mm-forest)",
               color: "#f7f2eb",
               fontFamily: "var(--font-sans)",
-              fontSize: "0.78rem",
-              fontWeight: 600,
+              fontSize: "0.8rem",
+              fontWeight: 700,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
             }}
