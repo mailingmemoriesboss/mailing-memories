@@ -92,7 +92,7 @@ function HeroSection() {
             textTransform: "uppercase",
             color: "var(--mm-burgundy)",
           }}>
-            Established in the hard seasons
+            Because... deserves real paper
           </p>
         </FadeIn>
 
@@ -106,8 +106,8 @@ function HeroSection() {
             letterSpacing: "-0.03em",
             color: "var(--mm-forest)",
           }}>
-            The things that deserve<br />
-            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>more than a text.</em>
+            Say what you mean<br />
+            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>on real paper.</em>
           </h1>
         </FadeIn>
 
@@ -121,9 +121,7 @@ function HeroSection() {
             fontWeight: 500,
             color: "var(--mm-ink-soft)",
           }}>
-            Mailing Memories is a handwritten letter service for the moments when 
-            digital isn't enough. We write, address, and mail real letters on your behalf — 
-            so the people who matter truly feel seen.
+            For the moments when digital isn't enough. We write, address, and mail one full handwritten page on quality cardstock. $15. Ships in 1-2 business days.
           </p>
         </FadeIn>
 

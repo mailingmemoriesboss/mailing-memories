@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -48,7 +50,8 @@
 
   /* Mailing Memories custom palette */
   --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-serif-secondary: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Work Sans', system-ui, sans-serif;
 }
 
 :root {
