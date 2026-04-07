@@ -11,12 +11,12 @@ const faqData = [
     category: "The Service",
     questions: [
       {
-        q: "What is the Mailing Memories handwritten letter service?",
-        a: "We provide a thoughtful way to send a personal message. We hand-write your message on quality cardstock, place it in a clean white envelope, and mail it with a stamp on your behalf."
+        q: "What is Mailing Memories?",
+        a: "Mailing Memories is a thoughtful correspondence brand that helps people say what they mean through handwritten letters, guided tools, and simple support when they do not know where to start."
       },
       {
-        q: "How much does a handwritten letter cost?",
-        a: "Each letter is $15, which includes the materials, the handwriting service, and domestic postage."
+        q: "What can I buy right now?",
+        a: "Right now, the main live offer is a handwritten letter service. For $15, we will handwrite, stamp, and mail one full page on quality cardstock for you."
       },
       {
         q: "Who writes the letters?",
@@ -50,7 +50,7 @@ const faqData = [
     questions: [
       {
         q: "What if I’m not sure what to write?",
-        a: "We offer light help to get you started if you feel stuck on the wording of your message."
+        a: "If you feel stuck on the wording, light help getting started is available to help you turn your intention into action."
       },
       {
         q: "Can I change or cancel my order?",
@@ -58,7 +58,7 @@ const faqData = [
       },
       {
         q: "How can I contact support?",
-        a: "[Placeholder: Add support email address or contact form link]."
+        a: "You can reach us at hello@mailingmemories.com for any questions regarding your order."
       }
     ]
   }
@@ -93,7 +93,7 @@ export default function FAQ() {
               margin: "0 auto",
             }}
           >
-            Everything you need to know about our handwritten letter service.
+            Everything you need to know about our current service and brand.
           </p>
         </div>
 
@@ -143,10 +143,10 @@ export default function FAQ() {
         >
           <h3 className="text-mm-ink font-semibold mb-2">Still have questions?</h3>
           <p className="text-mm-ink-muted mb-6 text-sm">
-            We’re here to help you send the perfect message.
+            We’re here to help you follow through on what you mean to say.
           </p>
           <a
-            href="mailto:[Placeholder: support email]"
+            href="mailto:hello@mailingmemories.com"
             className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-mm-forest text-white font-medium transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             Contact Support

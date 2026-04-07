@@ -16,14 +16,14 @@ const IMAGES = {
 
 /* ─── Rotating tagline phrases ─── */
 const ROTATING_PHRASES = [
-  "being present",
-  "truly being seen",
+  "meaningful written connection",
+  "saying what you mean",
   "hard seasons",
-  "healing",
+  "following through",
   "a legacy of care",
   "an unprompted thought",
-  "showing up without the right words",
-  "invisible endurance",
+  "showing up when words are hard",
+  "being seen on real paper",
 ];
 
 /* ═══════════════════════════════════════════════════════

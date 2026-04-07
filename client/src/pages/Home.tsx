@@ -9,7 +9,6 @@
  * Palette: Warm cream, walnut, burgundy, pen-blue, forest green
  */
 
-import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
 
@@ -52,7 +51,7 @@ function HeroSection() {
             textTransform: "uppercase",
             color: "var(--mm-burgundy)",
           }}>
-            Established in the hard seasons
+            Thoughtful correspondence on real paper
           </p>
         </FadeIn>
 
@@ -66,8 +65,8 @@ function HeroSection() {
             letterSpacing: "-0.03em",
             color: "var(--mm-forest)",
           }}>
-            The things that deserve<br />
-            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>more than a text.</em>
+            Say what you mean.<br />
+            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>We will handwrite and mail it.</em>
           </h1>
         </FadeIn>
 
@@ -80,9 +79,9 @@ function HeroSection() {
             lineHeight: 1.7,
             color: "var(--mm-ink-soft)",
           }}>
-            Mailing Memories is a handwritten letter service for the moments when 
-            digital isn't enough. We write, address, and mail real letters on your behalf — 
-            so the people who matter truly feel seen.
+            Mailing Memories is a thoughtful correspondence brand. Right now, our main live offer is a 
+            handwritten letter service for when you don't have the time or the words. 
+            We write, stamp, and mail real letters on your behalf.
           </p>
         </FadeIn>
 
@@ -175,7 +174,7 @@ function WhatWeDo() {
                 textTransform: "uppercase",
                 color: "var(--mm-burgundy)",
               }}>
-                What we do
+                How it works
               </p>
             </FadeIn>
             <FadeIn delay={0.1}>
@@ -188,8 +187,8 @@ function WhatWeDo() {
                 letterSpacing: "-0.02em",
                 color: "var(--mm-forest)",
               }}>
-                We sell the relief of<br />
-                <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>knowing what to say.</em>
+                Turn intention into<br />
+                <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>mailed follow-through.</em>
               </h2>
             </FadeIn>
             <PenStroke className="my-6 max-w-[80px]" color="var(--mm-burgundy)" />
@@ -202,8 +201,9 @@ function WhatWeDo() {
                 color: "var(--mm-ink-soft)",
                 maxWidth: "440px",
               }}>
-                Mailing Memories removes the blank-page paralysis. Our concierge service writes, 
-                addresses, and mails a handwritten letter on your behalf — even when you don't have the right words.
+                Mailing Memories helps you follow through on meaningful written connection. 
+                We write, stamp, and mail one full handwritten page on quality cardstock for $15. 
+                If you feel stuck on the wording, light help getting started is available.
               </p>
             </FadeIn>
           </div>
@@ -230,7 +230,7 @@ function WhatWeDo() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   CONCIERGE SERVICE SECTION
+   SERVICE SECTION
    ═══════════════════════════════════════════════════════ */
 function ServicesSection() {
   return (
@@ -249,7 +249,7 @@ function ServicesSection() {
             lineHeight: 1.1,
             color: "#f5f1ea",
           }}>
-            Concierge Letter Service
+            Handwritten Letter Service
           </h2>
         </FadeIn>
         <FadeIn delay={0.15}>
@@ -261,8 +261,8 @@ function ServicesSection() {
             color: "rgba(245, 241, 234, 0.8)",
             maxWidth: "600px",
           }}>
-            Tell us who it's for and what you want to say. We write the letter, hand-address the envelope, 
-            and mail it — so the people who matter hear from you, even when life gets in the way.
+            Tell us who it's for and what you want to say. We hand-write the letter, address the envelope, 
+            and mail it within 1–2 business days. It’s a simple way to show up when you can’t find the time.
           </p>
         </FadeIn>
         <FadeIn delay={0.3}>
@@ -291,144 +291,48 @@ function ServicesSection() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   HOW IT WORKS
-   ═══════════════════════════════════════════════════════ */
-function HowItWorks() {
-  const steps = [
-    { num: "01", title: "Choose Your Card", desc: "Select from our curated collection of premium cotton stationery." },
-    { num: "02", title: "Share Your Message", desc: "Type what you'd like to say, or give us a few details and we'll write it for you." },
-    { num: "03", title: "We Handle the Rest", desc: "We hand-write your message, address the envelope, and mail it with a real stamp." },
-  ];
-
-  return (
-    <section id="how" style={{ background: "var(--mm-cream)", padding: "clamp(64px, 8vw, 96px) 24px" }}>
-      <div className="max-w-[1240px] mx-auto">
-        <FadeIn>
-          <div className="flex flex-col md:flex-row gap-8">
-            {steps.map((step) => (
-              <div key={step.num} className="flex-1 p-8 border border-mm-line bg-white/40">
-                <span className="block mb-4 font-serif text-3xl text-mm-burgundy opacity-30">{step.num}</span>
-                <h3 className="mb-3 font-serif text-xl font-semibold text-mm-forest">{step.title}</h3>
-                <p className="text-mm-ink-soft leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </FadeIn>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   VISUAL PROOF
-   ═══════════════════════════════════════════════════════ */
-function VisualProof() {
-  return (
-    <section className="relative overflow-hidden" style={{ minHeight: "480px" }}>
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url("${IMAGES.handEnvelopeCard}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <div className="absolute inset-0" style={{
-        background: "linear-gradient(to right, rgba(29, 41, 33, 0.88) 0%, rgba(29, 41, 33, 0.65) 50%, rgba(29, 41, 33, 0.3) 100%)",
-      }} />
-      <div className="relative z-10 max-w-[1240px] mx-auto flex items-center" style={{
-        minHeight: "480px",
-        padding: "60px 24px",
-      }}>
-        <div style={{ maxWidth: "520px" }}>
-          <FadeIn>
-            <h2 style={{
-              margin: "0 0 20px",
-              fontFamily: "var(--font-serif)",
-              fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
-              fontWeight: 500,
-              lineHeight: 1.2,
-              color: "#f5f1ea",
-            }}>
-              Not a sympathy card.<br />
-              Not a text message.<br />
-              <em style={{ fontStyle: "italic", color: "rgba(245, 241, 234, 0.7)" }}>A real letter, in their hands.</em>
-            </h2>
-          </FadeIn>
-          <FadeIn delay={0.15}>
-            <p style={{
-              margin: "0 0 28px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.95rem",
-              lineHeight: 1.85,
-              color: "rgba(245, 241, 234, 0.72)",
-            }}>
-              Every letter is written on premium cotton stationery, hand-addressed, stamped, 
-              and mailed. The person who receives it knows — this was not automated. 
-              Someone sat down and meant this.
-            </p>
-          </FadeIn>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   FINAL CTA
+   FINAL CALL TO ACTION
    ═══════════════════════════════════════════════════════ */
 function FinalCTA() {
   return (
-    <section id="send" style={{
-      background: "var(--mm-forest)",
-      padding: "clamp(64px, 8vw, 96px) 24px",
-      position: "relative",
+    <section style={{
+      background: "var(--mm-cream)",
+      padding: "clamp(80px, 12vw, 140px) 24px",
+      textAlign: "center",
     }}>
-      <div className="relative z-10 max-w-[680px] mx-auto text-center">
+      <div className="max-w-[700px] mx-auto">
         <FadeIn>
           <h2 style={{
             margin: "0 0 24px",
             fontFamily: "var(--font-serif)",
-            fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
+            fontSize: "clamp(2.5rem, 5vw, 4rem)",
             fontWeight: 500,
-            lineHeight: 1.15,
-            color: "#f5f1ea",
+            lineHeight: 1,
+            color: "var(--mm-forest)",
           }}>
-            Someone came to mind<br />
-            just now, didn't they?
+            Say what you mean<br />
+            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>on real paper.</em>
           </h2>
         </FadeIn>
         <FadeIn delay={0.2}>
-          <p style={{
-            margin: "0 auto 36px",
-            maxWidth: "480px",
-            fontFamily: "var(--font-sans)",
-            fontSize: "1rem",
-            lineHeight: 1.85,
-            color: "rgba(245, 241, 234, 0.68)",
-          }}>
-            That thought is worth something. Don't let it pass. Write it down, or let us write it for you — 
-            and put it in their hands.
-          </p>
-        </FadeIn>
-        <FadeIn delay={0.3}>
           <Link
             href="/send"
             className="no-underline inline-flex items-center justify-center transition-all duration-200"
             style={{
-              minHeight: "54px",
-              padding: "0 32px",
+              minHeight: "60px",
+              padding: "0 48px",
               borderRadius: "999px",
-              background: "#f5f1ea",
-              color: "var(--mm-forest)",
+              background: "var(--mm-forest)",
+              color: "#f7f2eb",
               fontFamily: "var(--font-sans)",
-              fontSize: "0.78rem",
+              fontSize: "0.85rem",
               fontWeight: 600,
-              letterSpacing: "0.1em",
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
+              boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
             }}
           >
-            Start Writing
+            Start Your Letter
           </Link>
         </FadeIn>
       </div>
@@ -436,9 +340,6 @@ function FinalCTA() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   HOME PAGE — Assembly
-   ═══════════════════════════════════════════════════════ */
 export default function Home() {
   return (
     <PageShell>
@@ -446,8 +347,6 @@ export default function Home() {
       <QuoteStrip />
       <WhatWeDo />
       <ServicesSection />
-      <HowItWorks />
-      <VisualProof />
       <FinalCTA />
     </PageShell>
   );

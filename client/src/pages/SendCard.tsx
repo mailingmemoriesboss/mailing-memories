@@ -10,10 +10,10 @@ const IMAGES = {
 };
 
 const STEPS = [
-  { num: 1, label: "Card" },
-  { num: 2, label: "Envelope" },
-  { num: 3, label: "Review" },
-];
+    { num: 1, label: "Letter" },
+    { num: 2, label: "Envelope" },
+    { num: 3, label: "Review" },
+  ];
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -613,19 +613,19 @@ export default function SendCard() {
       >
         <div className="max-w-[1240px] mx-auto">
           <FadeIn>
-            <p
-              style={{
-                margin: "0 0 8px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.65rem",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--mm-burgundy)",
-              }}
-            >
-              Concierge Service
-            </p>
+              <p
+                style={{
+                  margin: "0 0 8px",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.65rem",
+                  fontWeight: 500,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "var(--mm-burgundy)",
+                }}
+              >
+                Handwritten Letter Service
+              </p>
           </FadeIn>
           <FadeIn delay={0.05}>
             <h1
@@ -653,8 +653,7 @@ export default function SendCard() {
                 maxWidth: "560px",
               }}
             >
-              Build the card, address the envelope, and review the order before
-              continuing.
+              Write your letter, address the envelope, and review your details before sending.
             </p>
           </FadeIn>
         </div>
@@ -765,7 +764,7 @@ export default function SendCard() {
                         color: "var(--mm-forest)",
                       }}
                     >
-                      Card
+                      Letter
                     </h2>
                     <p
                       style={{
@@ -776,12 +775,12 @@ export default function SendCard() {
                         lineHeight: 1.6,
                       }}
                     >
-                      Write what appears on the front and inside of the card.
+                      Write the message that will be handwritten on quality cardstock.
                     </p>
 
                     <div className="flex flex-col gap-4">
                       <div>
-                        <SectionLabel>Front of card</SectionLabel>
+                        <SectionLabel>Front of card (optional)</SectionLabel>
                         <input
                           type="text"
                           value={frontMessage}
@@ -797,12 +796,12 @@ export default function SendCard() {
                             color: "var(--mm-ink-muted)",
                           }}
                         >
-                          A short line that appears on the front.
+                          A short line or occasion for the front of the card.
                         </p>
                       </div>
 
                       <div>
-                        <SectionLabel>Inside your card</SectionLabel>
+                        <SectionLabel>Your message</SectionLabel>
                         <textarea
                           value={insideMessage}
                           onChange={(e) => setInsideMessage(e.target.value)}
@@ -822,7 +821,7 @@ export default function SendCard() {
                             color: "var(--mm-ink-muted)",
                           }}
                         >
-                          Your full message appears inside the card.
+                          Your full message will be handwritten on the card. If you feel stuck, simple support is available.
                         </p>
                       </div>
 
@@ -868,8 +867,7 @@ export default function SendCard() {
                         lineHeight: 1.6,
                       }}
                     >
-                      Tell us where the card is going and what return address should
-                      appear on the envelope.
+                      Tell us where the letter is going and what return address should appear on the envelope.
                     </p>
 
                     <div className="flex flex-col gap-6">
