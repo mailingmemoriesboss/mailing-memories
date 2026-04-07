@@ -4,8 +4,12 @@
  * Design Philosophy: Wabi-sabi meets editorial stationery.
  * Every element feels placed by hand. Texture over flatness.
  * Horizontal flow over vertical stacking. Restraint as luxury.
+ * 
+ * Typography: Cormorant Garamond (serif, emotional) + DM Sans (sans, functional)
+ * Palette: Warm cream, walnut, burgundy, pen-blue, forest green
  */
 
+import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
 import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
 
@@ -16,7 +20,6 @@ const IMAGES = {
   handWritingToday: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
   heroDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hero-desk-atmosphere-P8UMTNZD3BSYLVuuy22JRa.webp",
   paperTexture: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/paper-texture-bg-TLD2xmpcBsfnmyqpjpBz6a.webp",
-  deckGrief: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/deck-grief-placeholder.png", // Hypothetical placeholder
 };
 
 /* ═══════════════════════════════════════════════════════
@@ -25,6 +28,7 @@ const IMAGES = {
 function HeroSection() {
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "clamp(600px, 85vh, 900px)" }}>
+      {/* Background Atmosphere */}
       <div 
         className="absolute inset-0 z-0"
         style={{
@@ -83,25 +87,35 @@ function HeroSection() {
         </FadeIn>
 
         <FadeIn delay={0.45}>
-          <Link
-            href="/send"
-            className="no-underline inline-flex items-center justify-center transition-all duration-200"
-            style={{
-              minHeight: "56px",
-              padding: "0 36px",
-              borderRadius: "999px",
-              background: "var(--mm-forest)",
-              color: "#f7f2eb",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
-            }}
-          >
-            Send a Letter
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center gap-5">
+            <Link
+              href="/send"
+              className="no-underline inline-flex items-center justify-center transition-all duration-200"
+              style={{
+                minHeight: "56px",
+                padding: "0 36px",
+                borderRadius: "999px",
+                background: "var(--mm-forest)",
+                color: "#f7f2eb",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 16px 40px rgba(29, 41, 33, 0.22)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 12px 32px rgba(29, 41, 33, 0.15)";
+              }}
+            >
+              Send a Letter
+            </Link>
+          </div>
         </FadeIn>
       </div>
     </section>
@@ -161,7 +175,7 @@ function WhatWeDo() {
                 textTransform: "uppercase",
                 color: "var(--mm-burgundy)",
               }}>
-                How it works
+                What we do
               </p>
             </FadeIn>
             <FadeIn delay={0.1}>
@@ -174,8 +188,8 @@ function WhatWeDo() {
                 letterSpacing: "-0.02em",
                 color: "var(--mm-forest)",
               }}>
-                Turn intention into<br />
-                <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>mailed follow-through.</em>
+                We sell the relief of<br />
+                <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>knowing what to say.</em>
               </h2>
             </FadeIn>
             <PenStroke className="my-6 max-w-[80px]" color="var(--mm-burgundy)" />
@@ -188,9 +202,8 @@ function WhatWeDo() {
                 color: "var(--mm-ink-soft)",
                 maxWidth: "440px",
               }}>
-                Mailing Memories helps you follow through on meaningful written connection. 
-                We write, stamp, and mail one full handwritten page on quality cardstock for $15. 
-                If you feel stuck on the wording, light help getting started is available.
+                Mailing Memories removes the blank-page paralysis. Our concierge service writes, 
+                addresses, and mails a handwritten letter on your behalf — even when you don't have the right words.
               </p>
             </FadeIn>
           </div>
@@ -211,6 +224,96 @@ function WhatWeDo() {
             </FadeIn>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   CONCIERGE SERVICE SECTION
+   ═══════════════════════════════════════════════════════ */
+function ServicesSection() {
+  return (
+    <section style={{
+      background: "var(--mm-forest)",
+      padding: "clamp(64px, 10vw, 100px) 24px",
+      position: "relative",
+    }}>
+      <div className="max-w-[800px] mx-auto text-center">
+        <FadeIn>
+          <h2 style={{
+            margin: "0 0 24px",
+            fontFamily: "var(--font-serif)",
+            fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
+            fontWeight: 500,
+            lineHeight: 1.1,
+            color: "#f5f1ea",
+          }}>
+            Concierge Letter Service
+          </h2>
+        </FadeIn>
+        <FadeIn delay={0.15}>
+          <p style={{
+            margin: "0 auto 40px",
+            fontFamily: "var(--font-sans)",
+            fontSize: "1.1rem",
+            lineHeight: 1.8,
+            color: "rgba(245, 241, 234, 0.8)",
+            maxWidth: "600px",
+          }}>
+            Tell us who it's for and what you want to say. We write the letter, hand-address the envelope, 
+            and mail it — so the people who matter hear from you, even when life gets in the way.
+          </p>
+        </FadeIn>
+        <FadeIn delay={0.3}>
+          <Link
+            href="/send"
+            className="no-underline inline-flex items-center justify-center transition-all duration-200"
+            style={{
+              minHeight: "56px",
+              padding: "0 40px",
+              borderRadius: "999px",
+              background: "#f5f1ea",
+              color: "var(--mm-forest)",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
+          >
+            Send a letter — $15
+          </Link>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   HOW IT WORKS
+   ═══════════════════════════════════════════════════════ */
+function HowItWorks() {
+  const steps = [
+    { num: "01", title: "Choose Your Card", desc: "Select from our curated collection of premium cotton stationery." },
+    { num: "02", title: "Share Your Message", desc: "Type what you'd like to say, or give us a few details and we'll write it for you." },
+    { num: "03", title: "We Handle the Rest", desc: "We hand-write your message, address the envelope, and mail it with a real stamp." },
+  ];
+
+  return (
+    <section id="how" style={{ background: "var(--mm-cream)", padding: "clamp(64px, 8vw, 96px) 24px" }}>
+      <div className="max-w-[1240px] mx-auto">
+        <FadeIn>
+          <div className="flex flex-col md:flex-row gap-8">
+            {steps.map((step) => (
+              <div key={step.num} className="flex-1 p-8 border border-mm-line bg-white/40">
+                <span className="block mb-4 font-serif text-3xl text-mm-burgundy opacity-30">{step.num}</span>
+                <h3 className="mb-3 font-serif text-xl font-semibold text-mm-forest">{step.title}</h3>
+                <p className="text-mm-ink-soft leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -272,79 +375,6 @@ function VisualProof() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   COMING SOON: CARD DECKS
-   ═══════════════════════════════════════════════════════ */
-function DecksSection() {
-  return (
-    <section style={{
-      background: "var(--mm-cream)",
-      padding: "clamp(64px, 8vw, 96px) 24px",
-      borderTop: "1px solid var(--mm-line)",
-    }}>
-      <div className="max-w-[1240px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-          <div className="max-w-[500px]">
-            <FadeIn>
-              <p style={{
-                margin: "0 0 12px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.68rem",
-                fontWeight: 600,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--mm-burgundy)",
-              }}>
-                In Development
-              </p>
-              <h2 style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                fontWeight: 500,
-                lineHeight: 1.1,
-                color: "var(--mm-forest)",
-              }}>
-                Guided Card Decks
-              </h2>
-              <p style={{
-                marginTop: "16px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "1rem",
-                lineHeight: 1.7,
-                color: "var(--mm-ink-soft)",
-              }}>
-                Gentle structure for the moments when words are hard to find. 
-                Our themed decks provide the prompts you need to say what you mean.
-              </p>
-            </FadeIn>
-          </div>
-          <FadeIn delay={0.1}>
-            <div className="px-5 py-2 rounded-full border border-mm-line font-sans text-[0.7rem] font-semibold tracking-widest uppercase text-mm-ink-muted">
-              Coming Soon
-            </div>
-          </FadeIn>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            { title: "Grief & Hard Seasons", desc: "For when there are no words, but you want to stay close." },
-            { title: "Milestones & Gratitude", desc: "For naming the specific things that matter most." },
-            { title: "Apology & Repair", desc: "For finding a clean starting point for reconciliation." },
-          ].map((deck, i) => (
-            <FadeIn key={i} delay={0.1 * (i + 1)}>
-              <div className="group relative bg-white/40 border border-mm-line p-8 transition-all hover:bg-white/60">
-                <h3 className="font-serif text-xl mb-3 text-mm-forest">{deck.title}</h3>
-                <p className="font-sans text-sm text-mm-ink-soft leading-relaxed">{deck.desc}</p>
-              </div>
-            </FadeIn>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
    FINAL CTA
    ═══════════════════════════════════════════════════════ */
 function FinalCTA() {
@@ -377,7 +407,7 @@ function FinalCTA() {
             lineHeight: 1.85,
             color: "rgba(245, 241, 234, 0.68)",
           }}>
-            That thought is worth something. Don't let it pass. Say what you mean on real paper — 
+            That thought is worth something. Don't let it pass. Write it down, or let us write it for you — 
             and put it in their hands.
           </p>
         </FadeIn>
@@ -398,7 +428,7 @@ function FinalCTA() {
               textTransform: "uppercase",
             }}
           >
-            Send a Letter — $15
+            Start Writing
           </Link>
         </FadeIn>
       </div>
@@ -406,14 +436,18 @@ function FinalCTA() {
   );
 }
 
+/* ═══════════════════════════════════════════════════════
+   HOME PAGE — Assembly
+   ═══════════════════════════════════════════════════════ */
 export default function Home() {
   return (
     <PageShell>
       <HeroSection />
       <QuoteStrip />
       <WhatWeDo />
+      <ServicesSection />
+      <HowItWorks />
       <VisualProof />
-      <DecksSection />
       <FinalCTA />
     </PageShell>
   );
