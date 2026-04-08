@@ -481,15 +481,20 @@ export default function SendCard() {
   const [frontMessage, setFrontMessage] = useState("");
   const [insideMessage, setInsideMessage] = useState("");
   const [signatureName, setSignatureName] = useState("");
+  const [mailingDate, setMailingDate] = useState("");
 
-  // Pre-fill message from URL on mount
+  // Pre-fill message and mailing date from URL on mount
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const messageParam = params.get("message");
     const deckParam = params.get("deck");
+    const mailingDateParam = params.get("mailingDate");
     
     if (messageParam) {
       setInsideMessage(decodeURIComponent(messageParam));
+    }
+    if (mailingDateParam) {
+      setMailingDate(mailingDateParam);
     }
     // Note: deckParam is available if needed for future use (e.g., tracking which deck was used)
   }, []);
@@ -1238,6 +1243,44 @@ export default function SendCard() {
                             </p>
                           </div>
                         </div>
+                      {mailingDate && (
+                        <div
+                          style={{
+                            padding: "16px 20px",
+                            background: "rgba(139, 58, 58, 0.06)",
+                            border: "1px solid rgba(139, 58, 58, 0.15)",
+                          }}
+                        >
+                          <p
+                            style={{
+                              margin: "0 0 8px",
+                              fontFamily: "var(--font-sans)",
+                              fontSize: "0.7rem",
+                              fontWeight: 600,
+                              letterSpacing: "0.1em",
+                              textTransform: "uppercase",
+                              color: "var(--mm-burgundy)",
+                            }}
+                          >
+                            📬 Mailing Date
+                          </p>
+                          <p
+                            style={{
+                              margin: 0,
+                              fontFamily: "var(--font-sans)",
+                              fontSize: "0.88rem",
+                              color: "var(--mm-ink)",
+                            }}
+                          >
+                            {new Date(mailingDate).toLocaleDateString("en-US", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </p>
+                        </div>
+                      )}
+
                       </div>
 
                       <div
