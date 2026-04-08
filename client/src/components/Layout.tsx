@@ -118,6 +118,7 @@ export function Navigation() {
 
   const navLinks = [
     { label: "Send a Letter", href: "/send" },
+    { label: "Plan Ahead", href: "/plan" },
     { label: "About", href: "/#about" },
     { label: "FAQ", href: "/faq" },
   ];

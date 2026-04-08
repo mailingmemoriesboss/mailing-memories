@@ -1,18 +1,18 @@
 /**
  * PLAN A LETTER — Future Correspondence Scheduling
  * 
- * Design: Calm, organized, reassuring. Like booking a reservation at a nice restaurant.
+ * Design: Calm, organized, reassuring.
  * The emotional hook: "You remembered. That's what matters."
  * 
  * Flow: Choose occasion → Set date → Recipient info → Message/instructions → Review & pay
  * 
- * Typography: Cormorant Garamond (serif) + DM Sans (sans)
+ * Typography: Cormorant Garamond (serif) + Work Sans (sans)
  * Palette: Warm cream, walnut, burgundy, forest green
  */
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
 
 /* ─── CDN Image URLs ─── */
@@ -20,6 +20,20 @@ const IMAGES = {
   handWritingToday: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
   letterPenDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/letter-pen-desk_49ca7681.png",
 };
+
+/* ─── Starter Phrases (from Home.tsx) ─── */
+const STARTER_PHRASES = [
+  { deck: "In the Hard Season", line: "I am not going to tell you it will pass. I am just going to stay close while it is here." },
+  { deck: "The Long Friendship", line: "Most of what we have built together happened in ordinary moments that did not announce themselves as important." },
+  { deck: "Gratitude", line: "The world is easier to be in because people like you exist in it." },
+  { deck: "Love That Isn't Romantic", line: "I do not say this enough, and when I do say it, it does not come out the way I mean it. So I am writing it instead." },
+  { deck: "Just Because", line: "You were in my mind today and I did not want to just let that pass." },
+  { deck: "The Caregiver", line: "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention." },
+  { deck: "Admiration & Character", line: "You did the right thing when the easier thing was sitting right there. I want to say that I noticed." },
+  { deck: "Growth & Pride", line: "I can see the difference. It is not subtle anymore and I want to say something about it." },
+  { deck: "Legacy", line: "You made something real. Not everyone does. I want to say that clearly." },
+  { deck: "Letters I Never Sent", line: "You were gone before I found the words. I have found them now." },
+];
 
 /* ─── Occasion types ─── */
 const OCCASIONS = [
@@ -70,6 +84,7 @@ const focusHandlers = {
 };
 
 export default function PlanLetter() {
+  const [, setLocation] = useLocation();
   const [occasion, setOccasion] = useState("");
   const [sendDate, setSendDate] = useState("");
   const [recipientName, setRecipientName] = useState("");
@@ -78,12 +93,17 @@ export default function PlanLetter() {
   const [recipientState, setRecipientState] = useState("");
   const [recipientZip, setRecipientZip] = useState("");
   const [messageInstructions, setMessageInstructions] = useState("");
-  const [writeItForMe, setWriteItForMe] = useState(false);
+  const [showPhrases, setShowPhrases] = useState(false);
   const [senderName, setSenderName] = useState("");
   const [senderEmail, setSenderEmail] = useState("");
   const [reminderEnabled, setReminderEnabled] = useState(true);
 
-  const isComplete = occasion && sendDate && recipientName && recipientAddress && recipientCity && recipientState && recipientZip && (messageInstructions.length > 5 || writeItForMe) && senderName && senderEmail;
+  const isComplete = occasion && sendDate && recipientName && recipientAddress && recipientCity && recipientState && recipientZip && messageInstructions.length > 5 && senderName && senderEmail;
+
+  const handleUsePhrase = (phrase: string) => {
+    setMessageInstructions(phrase);
+    setShowPhrases(false);
+  };
 
   return (
     <PageShell>
@@ -140,7 +160,7 @@ export default function PlanLetter() {
               <FadeIn delay={0.15}>
                 <img
                   src={IMAGES.handWritingToday}
-                  alt="Hand writing a letter with a blue pen"
+                  alt="Hand writing a letter"
                   style={{
                     width: "100%",
                     maxWidth: "520px",
@@ -150,29 +170,6 @@ export default function PlanLetter() {
               </FadeIn>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Trust bar */}
-      <section style={{ padding: "16px 24px", background: "var(--mm-cream-deep)" }}>
-        <div className="max-w-[1240px] mx-auto flex flex-wrap items-center justify-center gap-x-10 gap-y-2">
-          {[
-            "Set it and forget it",
-            "Mailed on the exact date",
-            "Handwritten on real stationery",
-            "Email reminder before it ships",
-          ].map((text, i) => (
-            <span key={i} style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.65rem",
-              fontWeight: 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--mm-ink-muted)",
-            }}>
-              {text}
-            </span>
-          ))}
         </div>
       </section>
 
@@ -208,7 +205,7 @@ export default function PlanLetter() {
                 This helps us match the right tone and stationery.
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
                 {OCCASIONS.map((occ) => (
                   <button
                     key={occ.id}
@@ -259,8 +256,197 @@ export default function PlanLetter() {
             </div>
           </FadeIn>
 
-          {/* Section 2: Recipient */}
+          {/* Section 2: Decision Step */}
           <FadeIn delay={0.05}>
+            <div style={{
+              padding: "32px",
+              background: "rgba(255,255,255,0.5)",
+              border: "1px solid var(--mm-line)",
+              borderTop: "none",
+              backdropFilter: "blur(8px)",
+              marginBottom: "2px",
+            }}>
+              <h2 style={{
+                margin: "0 0 4px",
+                fontFamily: "var(--font-serif)",
+                fontSize: "1.4rem",
+                fontWeight: 500,
+                color: "var(--mm-forest)",
+              }}>
+                Your Words
+              </h2>
+              <p style={{
+                margin: "0 0 24px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.85rem",
+                color: "var(--mm-ink-muted)",
+                lineHeight: 1.6,
+              }}>
+                Choose how you'd like to prepare your message.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Option 1: Send Now */}
+                <div 
+                  onClick={() => setLocation('/send')}
+                  className="cursor-pointer transition-all duration-300 hover:border-mm-forest group"
+                  style={{
+                    padding: "24px",
+                    background: "rgba(255,255,255,0.4)",
+                    border: "1px solid var(--mm-line)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>
+                    <h3 style={{
+                      margin: "0 0 8px",
+                      fontFamily: "var(--font-serif)",
+                      fontSize: "1.1rem",
+                      fontWeight: 500,
+                      color: "var(--mm-forest)",
+                    }}>
+                      I know what I want to write
+                    </h3>
+                    <p style={{
+                      margin: 0,
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.75rem",
+                      lineHeight: 1.6,
+                      color: "var(--mm-ink-soft)",
+                    }}>
+                      Go directly to the letter editor to write and send your message now.
+                    </p>
+                  </div>
+                  <div style={{
+                    marginTop: "16px",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.65rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--mm-burgundy)",
+                  }}>
+                    Send a letter →
+                  </div>
+                </div>
+
+                {/* Option 2: Need Help */}
+                <div 
+                  onClick={() => setShowPhrases(!showPhrases)}
+                  className="cursor-pointer transition-all duration-300 hover:border-mm-burgundy"
+                  style={{
+                    padding: "24px",
+                    background: "rgba(255,255,255,0.4)",
+                    border: showPhrases ? "1px solid var(--mm-burgundy)" : "1px solid var(--mm-line)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>
+                    <h3 style={{
+                      margin: "0 0 8px",
+                      fontFamily: "var(--font-serif)",
+                      fontSize: "1.1rem",
+                      fontWeight: 500,
+                      color: "var(--mm-forest)",
+                    }}>
+                      I need help getting started
+                    </h3>
+                    <p style={{
+                      margin: 0,
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.75rem",
+                      lineHeight: 1.6,
+                      color: "var(--mm-ink-soft)",
+                    }}>
+                      Browse some of our starter phrases to find the right words for this moment.
+                    </p>
+                  </div>
+                  <div style={{
+                    marginTop: "16px",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.65rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--mm-burgundy)",
+                  }}>
+                    {showPhrases ? "Close phrases ↑" : "Browse phrases ↓"}
+                  </div>
+                </div>
+              </div>
+
+              {/* Phrase Browser */}
+              <AnimatePresence>
+                {showPhrases && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    style={{ overflow: "hidden" }}
+                  >
+                    <div style={{
+                      marginTop: "24px",
+                      padding: "20px",
+                      background: "rgba(255,255,255,0.8)",
+                      border: "1px solid var(--mm-line)",
+                    }}>
+                      <div className="flex flex-col gap-3">
+                        {STARTER_PHRASES.map((phrase, idx) => (
+                          <div 
+                            key={idx}
+                            onClick={() => handleUsePhrase(phrase.line)}
+                            className="p-4 cursor-pointer transition-colors hover:bg-mm-cream-soft border border-transparent hover:border-mm-line"
+                          >
+                            <p style={{
+                              margin: "0 0 4px",
+                              fontFamily: "var(--font-sans)",
+                              fontSize: "0.6rem",
+                              fontWeight: 600,
+                              letterSpacing: "0.05em",
+                              textTransform: "uppercase",
+                              color: "var(--mm-burgundy)",
+                            }}>
+                              {phrase.deck}
+                            </p>
+                            <p style={{
+                              margin: 0,
+                              fontFamily: "var(--font-serif)",
+                              fontSize: "0.95rem",
+                              fontStyle: "italic",
+                              color: "var(--mm-ink)",
+                              lineHeight: 1.5,
+                            }}>
+                              "{phrase.line}"
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Message Input (Always shown if instructions exist, or if they choose a phrase) */}
+              <div style={{ marginTop: "24px" }}>
+                <label style={labelStyle}>Your message instructions</label>
+                <textarea
+                  value={messageInstructions}
+                  onChange={(e) => setMessageInstructions(e.target.value)}
+                  placeholder="Write the exact message, or give us the gist and we'll craft it for you..."
+                  rows={6}
+                  style={{ ...inputStyle, resize: "vertical", lineHeight: 1.8 }}
+                  {...focusHandlers}
+                />
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Section 3: Recipient */}
+          <FadeIn delay={0.1}>
             <div style={{
               padding: "32px",
               background: "rgba(255,255,255,0.5)",
@@ -311,92 +497,6 @@ export default function PlanLetter() {
                     <input type="text" value={recipientZip} onChange={(e) => setRecipientZip(e.target.value)} placeholder="22980" maxLength={10} style={inputStyle} {...focusHandlers} />
                   </div>
                 </div>
-              </div>
-            </div>
-          </FadeIn>
-
-          {/* Section 3: Message */}
-          <FadeIn delay={0.1}>
-            <div style={{
-              padding: "32px",
-              background: "rgba(255,255,255,0.5)",
-              border: "1px solid var(--mm-line)",
-              borderTop: "none",
-              backdropFilter: "blur(8px)",
-              marginBottom: "2px",
-            }}>
-              <h2 style={{
-                margin: "0 0 4px",
-                fontFamily: "var(--font-serif)",
-                fontSize: "1.4rem",
-                fontWeight: 500,
-                color: "var(--mm-forest)",
-              }}>
-                What should it say?
-              </h2>
-              <p style={{
-                margin: "0 0 20px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.85rem",
-                color: "var(--mm-ink-muted)",
-                lineHeight: 1.6,
-              }}>
-                Write the exact message, or give us the gist and we'll craft it for you.
-              </p>
-
-              {/* Toggle */}
-              <div className="flex gap-2 mb-5">
-                <button
-                  onClick={() => setWriteItForMe(false)}
-                  className="bg-transparent border-none transition-all duration-200"
-                  style={{
-                    padding: "8px 16px",
-                    border: !writeItForMe ? "2px solid var(--mm-forest)" : "1px solid var(--mm-line)",
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "0.72rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    color: !writeItForMe ? "var(--mm-forest)" : "var(--mm-ink-muted)",
-                    background: !writeItForMe ? "rgba(255,255,255,0.8)" : "transparent",
-                  }}
-                >
-                  I'll write it
-                </button>
-                <button
-                  onClick={() => setWriteItForMe(true)}
-                  className="bg-transparent border-none transition-all duration-200"
-                  style={{
-                    padding: "8px 16px",
-                    border: writeItForMe ? "2px solid var(--mm-burgundy)" : "1px solid var(--mm-line)",
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "0.72rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    color: writeItForMe ? "var(--mm-burgundy)" : "var(--mm-ink-muted)",
-                    background: writeItForMe ? "rgba(255,255,255,0.8)" : "transparent",
-                  }}
-                >
-                  Write it for me
-                </button>
-              </div>
-
-              <div>
-                <label style={labelStyle}>
-                  {writeItForMe ? "Tell us the sentiment — we'll find the words" : "Your message (we'll handwrite it exactly)"}
-                </label>
-                <textarea
-                  value={messageInstructions}
-                  onChange={(e) => setMessageInstructions(e.target.value)}
-                  placeholder={writeItForMe
-                    ? "She's been going through a hard time with her mom's health. I want her to know I'm thinking about her and that she doesn't have to be strong all the time..."
-                    : "I've been thinking about you lately. I know things have been hard, and I just wanted you to know..."
-                  }
-                  rows={6}
-                  style={{ ...inputStyle, resize: "vertical", lineHeight: 1.8 }}
-                  {...focusHandlers}
-                />
               </div>
             </div>
           </FadeIn>
@@ -490,7 +590,7 @@ export default function PlanLetter() {
                       textTransform: "uppercase",
                       color: "rgba(245, 241, 234, 0.55)",
                     }}>
-                      Scheduled letter · handwritten &amp; mailed
+                      Scheduled letter · handwritten & mailed
                     </p>
                     <p style={{
                       margin: "4px 0 0",
@@ -534,7 +634,7 @@ export default function PlanLetter() {
                       }
                     }}
                   >
-                    Schedule &amp; Pay
+                    Schedule & Pay
                   </button>
                 </div>
               </div>

@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import SendCard from "./pages/SendCard";
 import AdminOrders from "./pages/AdminOrders";
 import FAQ from "./pages/FAQ";
+import PlanLetter from "./pages/PlanLetter";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
       <Route path={"/send"} component={SendCard} />
       <Route path={"/admin/orders"} component={AdminOrders} />
       <Route path={"/faq"} component={FAQ} />
+      <Route path={"/plan"} component={PlanLetter} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>
