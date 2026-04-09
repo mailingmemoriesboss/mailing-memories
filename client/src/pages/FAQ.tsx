@@ -1,4 +1,4 @@
-import { PageShell } from "@/components/Layout";
+import { PageShell, FadeIn } from "@/components/Layout";
 import {
   Accordion,
   AccordionContent,
@@ -12,11 +12,11 @@ const faqData = [
     questions: [
       {
         q: "What is Mailing Memories?",
-        a: "Mailing Memories is a thoughtful correspondence brand that helps people say what they mean through handwritten letters, guided tools, and simple support when they do not know where to start."
+        a: "Mailing Memories is a thoughtful correspondence brand. The current live offer is a handwritten letter service that helps you send a real, personal message on paper."
       },
       {
         q: "What can I buy right now?",
-        a: "Right now, the main live offer is a handwritten letter service. For $15, we will handwrite, stamp, and mail one full page on quality cardstock for you."
+        a: "Right now, you can order the handwritten letter service. For $15, we handwrite, stamp, and mail one full page on quality cardstock for you."
       },
       {
         q: "Who writes the letters?",
@@ -24,7 +24,7 @@ const faqData = [
       },
       {
         q: "How long can my message be?",
-        a: "The service covers one full handwritten page. [Placeholder: Specify character or word limit here]."
+        a: "The current service includes one full handwritten page on quality cardstock."
       }
     ]
   },
@@ -41,7 +41,7 @@ const faqData = [
       },
       {
         q: "How long does delivery take?",
-        a: "[Placeholder: Add typical USPS delivery timeframe estimate here]."
+        a: "Delivery timing depends on USPS after your letter has been mailed."
       }
     ]
   },
@@ -54,7 +54,7 @@ const faqData = [
       },
       {
         q: "Can I change or cancel my order?",
-        a: "[Placeholder: Define cancellation/edit policy before the letter is written]."
+        a: "If you need help with an existing order, email hello@mailingmemories.com as soon as possible so we can review what stage it is in."
       },
       {
         q: "How can I contact support?",
@@ -71,86 +71,84 @@ export default function FAQ() {
         className="mx-auto w-full max-w-[800px]"
         style={{ padding: "80px 24px 120px" }}
       >
-        <div className="mb-12 text-center">
-          <h1
-            style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: "clamp(2.4rem, 6vw, 3.8rem)",
-              lineHeight: 1.1,
-              color: "var(--mm-forest)",
-              marginBottom: "16px",
-            }}
-          >
-            Frequently Asked Questions
-          </h1>
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontSize: "1.1rem",
-              lineHeight: 1.6,
-              color: "var(--mm-ink-muted)",
-              maxWidth: "600px",
-              margin: "0 auto",
-            }}
-          >
-            Everything you need to know about our current service and brand.
-          </p>
-        </div>
+        <FadeIn>
+          <div className="mb-12 text-center">
+            <h1
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2.4rem, 6vw, 3.8rem)",
+                lineHeight: 1.1,
+                color: "var(--mm-forest)",
+                marginBottom: "16px",
+              }}
+            >
+              Frequently Asked Questions
+            </h1>
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontSize: "1.1rem",
+                lineHeight: 1.6,
+                color: "var(--mm-ink-muted)",
+                maxWidth: "600px",
+                margin: "0 auto",
+              }}
+            >
+              Everything you need to know about the current handwritten letter service.
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="space-y-12">
-          {faqData.map((section, idx) => (
-            <div key={idx}>
-              <h2
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.85rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-ink-muted)",
-                  marginBottom: "24px",
-                  borderBottom: "1px solid var(--mm-line)",
-                  paddingBottom: "12px",
-                }}
-              >
-                {section.category}
-              </h2>
-              <Accordion type="single" collapsible className="w-full">
-                {section.questions.map((item, qIdx) => (
-                  <AccordionItem key={qIdx} value={`item-${idx}-${qIdx}`}>
-                    <AccordionTrigger 
-                      className="text-lg font-medium text-mm-ink hover:no-underline py-5"
-                      style={{ fontFamily: "var(--font-serif)" }}
-                    >
-                      {item.q}
-                    </AccordionTrigger>
-                    <AccordionContent 
-                      className="text-mm-ink-muted leading-relaxed pb-6"
-                      style={{ fontFamily: "var(--font-sans)", fontSize: "1rem" }}
-                    >
-                      {item.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+          {faqData.map((section, sIdx) => (
+            <FadeIn key={sIdx} delay={0.1 * (sIdx + 1)}>
+              <div className="mb-8">
+                <h2
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.75rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                    color: "var(--mm-burgundy)",
+                    marginBottom: "24px",
+                    paddingBottom: "12px",
+                    borderBottom: "1px solid var(--mm-line)",
+                  }}
+                >
+                  {section.category}
+                </h2>
+                <Accordion type="single" collapsible className="w-full">
+                  {section.questions.map((item, qIdx) => (
+                    <AccordionItem key={qIdx} value={`item-${sIdx}-${qIdx}`}>
+                      <AccordionTrigger
+                        style={{
+                          fontFamily: "var(--font-serif)",
+                          fontSize: "1.25rem",
+                          color: "var(--mm-forest)",
+                          textAlign: "left",
+                        }}
+                      >
+                        {item.q}
+                      </AccordionTrigger>
+                      <AccordionContent
+                        style={{
+                          fontFamily: "var(--font-sans)",
+                          fontSize: "1rem",
+                          lineHeight: 1.6,
+                          color: "var(--mm-ink-soft)",
+                          paddingTop: "8px",
+                          paddingBottom: "16px",
+                        }}
+                      >
+                        {item.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            </FadeIn>
           ))}
-        </div>
-
-        <div 
-          className="mt-20 p-8 rounded-2xl bg-mm-parchment/30 border border-mm-line text-center"
-          style={{ fontFamily: "var(--font-sans)" }}
-        >
-          <h3 className="text-mm-ink font-semibold mb-2">Still have questions?</h3>
-          <p className="text-mm-ink-muted mb-6 text-sm">
-            We’re here to help you follow through on what you mean to say.
-          </p>
-          <a
-            href="mailto:hello@mailingmemories.com"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-mm-forest text-white font-medium transition-transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            Contact Support
-          </a>
         </div>
       </section>
     </PageShell>

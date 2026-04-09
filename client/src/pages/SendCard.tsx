@@ -6,8 +6,7 @@ import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
 const IMAGES = {
   woodTexture:
     "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/desk-wood-texture-jhuAnbfnjU7sz2zq4KXdHG.webp",
-  foreverStamp:
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Flag_over_White_House_forever_stamp.jpg/120px-Flag_over_White_House_forever_stamp.jpg",
+  foreverStamp: "/forever-stamp.png",
 };
 
 const STEPS = [
@@ -80,7 +79,7 @@ function PreviewPanel({
   compact?: boolean;
 }) {
   const handwrittenFont =
-    '"Patrick Hand", "Segoe Print", "Bradley Hand", "Trebuchet MS", sans-serif';
+    '"Shadows Into Light", "Patrick Hand", "Segoe Print", "Bradley Hand", cursive';
 
   const frontDisplay = frontMessage.trim() || "Thinking of You";
   const insideDisplay =

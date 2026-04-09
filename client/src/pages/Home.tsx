@@ -121,7 +121,7 @@ function HeroSection() {
             fontWeight: 500,
             color: "var(--mm-ink-soft)",
           }}>
-            For the moments when digital isn't enough. We write, address, and mail one full handwritten page on quality cardstock. $15. Ships in 1-2 business days.
+            For the moments when digital isn't enough. We write, address, stamp, and mail one full handwritten page on quality cardstock for $15.
           </p>
         </FadeIn>
 

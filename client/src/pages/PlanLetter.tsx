@@ -223,8 +223,7 @@ export default function PlanLetter() {
                     color: "var(--mm-ink-soft)",
                     lineHeight: 1.6,
                   }}>
-                    This is the date we physically mail the letter. Delivery typically takes 3–5 business days 
-                    from this date, so your letter should arrive around <strong>{getDeliveryEstimate(selectedDate)}</strong>.
+                    This is the date we plan to hand your letter to USPS. Final delivery timing depends on USPS after that date.
                   </p>
                 </motion.div>
               )}
