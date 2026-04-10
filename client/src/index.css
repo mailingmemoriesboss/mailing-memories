@@ -52,6 +52,7 @@
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-serif-secondary: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Work Sans', system-ui, sans-serif;
+  --font-handwriting: 'Shadows Into Light', cursive;
 }
 
 :root {

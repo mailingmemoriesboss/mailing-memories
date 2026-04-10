@@ -1,4 +1,4 @@
-import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
+
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
@@ -8,8 +8,12 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    jsxLocPlugin()
   ],
+  server: {
+    allowedHosts: ["themailingmemories.netlify.app", "mailingmemories.com", "localhost"],
+    port: 3000,
+    host: true,
+  },
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -22,9 +26,5 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
-  },
-  server: {
-    port: 3000,
-    host: true,
   },
 });

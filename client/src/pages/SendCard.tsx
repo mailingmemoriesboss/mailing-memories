@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
 import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
@@ -10,10 +10,10 @@ const IMAGES = {
 };
 
 const STEPS = [
-    { num: 1, label: "Letter" },
-    { num: 2, label: "Envelope" },
-    { num: 3, label: "Review" },
-  ];
+  { num: 1, label: "Letter" },
+  { num: 2, label: "Envelope" },
+  { num: 3, label: "Review" },
+];
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -41,462 +41,14 @@ function fitNameFontSize(name: string) {
   return "13px";
 }
 
-function PreviewPanel({
-  currentStep,
-  frontMessage,
-  insideMessage,
-  signatureName,
-  recipientName,
-  recipientAddress1,
-  recipientAddress2,
-  recipientCity,
-  recipientState,
-  recipientZip,
-  returnName,
-  returnAddress1,
-  returnAddress2,
-  returnCity,
-  returnState,
-  returnZip,
-  compact = false,
-}: {
-  currentStep: number;
-  frontMessage: string;
-  insideMessage: string;
-  signatureName: string;
-  recipientName: string;
-  recipientAddress1: string;
-  recipientAddress2: string;
-  recipientCity: string;
-  recipientState: string;
-  recipientZip: string;
-  returnName: string;
-  returnAddress1: string;
-  returnAddress2: string;
-  returnCity: string;
-  returnState: string;
-  returnZip: string;
-  compact?: boolean;
-}) {
-  const handwrittenFont =
-    '"Shadows Into Light", "Patrick Hand", "Segoe Print", "Bradley Hand", cursive';
-
-  const frontDisplay = frontMessage.trim() || "Thinking of You";
-  const insideDisplay =
-    insideMessage.trim() || "Your full message will appear here as you type.";
-  const signatureDisplay = signatureName.trim() || "Your Name";
-
-  const recipientLines = [
-    recipientName || "Recipient Name",
-    recipientAddress1 || "123 Main Street",
-    recipientAddress2 || "",
-    recipientCity || recipientState || recipientZip
-      ? `${recipientCity || "City"}, ${recipientState || "ST"} ${recipientZip || "00000"}`
-      : "City, ST 00000",
-  ].filter(Boolean);
-
-  const returnNameDisplay = returnName.trim() || "Your Name";
-
-  const labelColor = compact
-    ? "rgba(15, 23, 42, 0.46)"
-    : "rgba(245, 241, 234, 0.54)";
-  const overlay = compact ? "rgba(40, 30, 22, 0.18)" : "rgba(40, 30, 22, 0.38)";
-
-  const baseFrameWidth = compact ? 320 : 360;
-  const frameWidth = compact ? Math.min(320, window.innerWidth - 72) : baseFrameWidth;
-  const frameHeight = 210;
-
-  const shellWidth = compact ? "100%" : "430px";
-
-  return (
-    <div
-      className="relative flex flex-col items-center justify-center"
-      style={{
-        minHeight: "100%",
-        padding: compact ? "20px 12px" : "40px 32px",
-        backgroundImage: `url("${IMAGES.woodTexture}")`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        overflow: "hidden",
-      }}
-    >
-      <div className="absolute inset-0" style={{ background: overlay }} />
-      <div
-        className="relative z-10 w-full"
-        style={{ maxWidth: shellWidth, overflow: "hidden" }}
-      >
-        {currentStep !== 3 && (
-          <p
-            style={{
-              margin: "0 0 16px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.6rem",
-              fontWeight: 600,
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: labelColor,
-              textAlign: "center",
-            }}
-          >
-            Live Preview
-          </p>
-        )}
-
-        <div style={{ display: "flex", justifyContent: "center", overflow: "hidden" }}>
-          <AnimatePresence mode="wait">
-            {currentStep === 1 && (
-              <motion.div
-                key="card-preview"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.32 }}
-                className="flex flex-col gap-4"
-                style={{ width: frameWidth, maxWidth: "100%" }}
-              >
-                <div
-                  style={{
-                    width: frameWidth,
-                    maxWidth: "100%",
-                    height: frameHeight,
-                    background: "#faf7f2",
-                    padding: "28px 26px",
-                    boxShadow:
-                      "0 24px 60px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    border: "1px solid rgba(61,43,31,0.06)",
-                    margin: "0 auto",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "18px",
-                      left: "24px",
-                      right: "24px",
-                      height: "1px",
-                      background: "rgba(55, 93, 129, 0.18)",
-                    }}
-                  />
-                  <p
-                    style={{
-                      margin: 0,
-                      fontFamily: handwrittenFont,
-                      fontSize: compact ? "24px" : "30px",
-                      fontWeight: 500,
-                      lineHeight: 1.12,
-                      color: "var(--mm-forest)",
-                      textAlign: "center",
-                      maxWidth: compact ? "220px" : "280px",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {frontDisplay}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    width: frameWidth,
-                    maxWidth: "100%",
-                    height: frameHeight,
-                    background: "#faf7f2",
-                    padding: "18px 20px 16px",
-                    boxShadow:
-                      "0 24px 60px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1)",
-                    position: "relative",
-                    border: "1px solid rgba(61,43,31,0.06)",
-                    margin: "0 auto",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: "18px",
-                      right: "18px",
-                      height: "18px",
-                      borderBottom: "1px solid rgba(61,43,31,0.06)",
-                    }}
-                  />
-                  <div className="relative z-10" style={{ paddingTop: "6px" }}>
-                    <p
-                      style={{
-                        margin: 0,
-                        fontFamily: handwrittenFont,
-                        fontSize: compact ? "14px" : "16px",
-                        lineHeight: compact ? 1.28 : 1.34,
-                        color: "var(--mm-pen-blue)",
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
-                        minHeight: "116px",
-                        overflow: "hidden",
-                        letterSpacing: "0.01em",
-                      }}
-                    >
-                      {insideDisplay}
-                    </p>
-                    <p
-                      style={{
-                        margin: "12px 0 0",
-                        fontFamily: handwrittenFont,
-                        fontSize: compact ? "14px" : "16px",
-                        color: "var(--mm-pen-blue)",
-                        letterSpacing: "0.01em",
-                      }}
-                    >
-                      — {signatureDisplay}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {currentStep === 2 && (
-              <motion.div
-                key="envelope-preview"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.32 }}
-                style={{
-                  width: frameWidth,
-                  maxWidth: "100%",
-                  height: frameHeight,
-                  background: "#f0ebe3",
-                  padding: "16px 18px 14px",
-                  boxShadow:
-                    "0 24px 60px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1)",
-                  position: "relative",
-                  border: "1px solid rgba(61,43,31,0.06)",
-                  overflow: "hidden",
-                  margin: "0 auto",
-                }}
-              >
-                <img
-                  src={IMAGES.foreverStamp}
-                  alt="Forever stamp"
-                  style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "12px",
-                    width: compact ? "30px" : "40px",
-                    height: compact ? "38px" : "50px",
-                    objectFit: "contain",
-                    background: "transparent",
-                    borderRadius: "2px",
-                  }}
-                />
-
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "14px",
-                    left: "16px",
-                    width: compact ? "108px" : "136px",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0 0 6px",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: compact ? "6px" : "7px",
-                      fontWeight: 600,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "rgba(55, 93, 129, 0.24)",
-                    }}
-                  >
-                    Return address
-                  </p>
-
-                  <p
-                    style={{
-                      margin: 0,
-                      fontFamily: handwrittenFont,
-                      fontSize: compact ? "10px" : fitNameFontSize(returnNameDisplay),
-                      lineHeight: 1.08,
-                      color: "var(--mm-ink-muted)",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {returnNameDisplay}
-                  </p>
-
-                  <p
-                    style={{
-                      margin: "1px 0 0",
-                      fontFamily: handwrittenFont,
-                      fontSize: compact ? "10px" : "12px",
-                      lineHeight: 1.08,
-                      color: "var(--mm-ink-muted)",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {returnAddress1 || "456 Return Ave"}
-                  </p>
-
-                  {returnAddress2 && (
-                    <p
-                      style={{
-                        margin: "1px 0 0",
-                        fontFamily: handwrittenFont,
-                        fontSize: compact ? "10px" : "12px",
-                        lineHeight: 1.08,
-                        color: "var(--mm-ink-muted)",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        letterSpacing: "0.01em",
-                      }}
-                    >
-                      {returnAddress2}
-                    </p>
-                  )}
-
-                  <p
-                    style={{
-                      margin: "1px 0 0",
-                      fontFamily: handwrittenFont,
-                      fontSize: compact ? "10px" : "12px",
-                      lineHeight: 1.08,
-                      color: "var(--mm-ink-muted)",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      letterSpacing: "0.01em",
-                    }}
-                  >
-                    {(returnCity || "City")}, {(returnState || "ST")} {returnZip || "00000"}
-                  </p>
-                </div>
-
-                <div
-                  style={{
-                    position: "absolute",
-                    top: compact ? "72px" : "78px",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: compact ? "190px" : "220px",
-                    textAlign: "center",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: "0 0 6px",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: compact ? "6px" : "7px",
-                      fontWeight: 600,
-                      letterSpacing: "0.18em",
-                      textTransform: "uppercase",
-                      color: "rgba(55, 93, 129, 0.24)",
-                    }}
-                  >
-                    Recipient
-                  </p>
-
-                  {recipientLines.map((line, idx) => (
-                    <p
-                      key={idx}
-                      style={{
-                        margin: idx === 0 ? 0 : "2px 0 0",
-                        fontFamily: handwrittenFont,
-                        fontSize: compact
-                          ? idx === 0
-                            ? "12px"
-                            : "11px"
-                          : idx === 0
-                          ? "15px"
-                          : "13px",
-                        lineHeight: 1.08,
-                        color: "var(--mm-ink)",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        letterSpacing: "0.01em",
-                      }}
-                    >
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {currentStep === 3 && (
-              <motion.div
-                key="review-preview-empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div
-                  style={{
-                    background: "#faf7f2",
-                    padding: compact ? "14px 16px" : "18px 20px",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                    border: "1px solid rgba(61,43,31,0.06)",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: 0,
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.78rem",
-                      lineHeight: 1.6,
-                      color: "var(--mm-ink-muted)",
-                      textAlign: "center",
-                    }}
-                  >
-                    Review is intentionally kept simple.
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function SendCard() {
-  const [location] = useLocation();
+  const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Extract URL parameters for pre-filling
   const [frontMessage, setFrontMessage] = useState("");
   const [insideMessage, setInsideMessage] = useState("");
   const [signatureName, setSignatureName] = useState("");
   const [mailingDate, setMailingDate] = useState("");
-
-  // Pre-fill message and mailing date from URL on mount
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const messageParam = params.get("message");
-    const deckParam = params.get("deck");
-    const mailingDateParam = params.get("mailingDate");
-    
-    if (messageParam) {
-      setInsideMessage(decodeURIComponent(messageParam));
-    }
-    if (mailingDateParam) {
-      setMailingDate(mailingDateParam);
-    }
-    // Note: deckParam is available if needed for future use (e.g., tracking which deck was used)
-  }, []);
 
   const [recipientName, setRecipientName] = useState("");
   const [recipientAddress1, setRecipientAddress1] = useState("");
@@ -519,6 +71,54 @@ export default function SendCard() {
   const [submitError, setSubmitError] = useState("");
   const [savedOrderId, setSavedOrderId] = useState("");
 
+  const frontRef = useRef<HTMLDivElement>(null);
+  const insideRef = useRef<HTMLDivElement>(null);
+  const signatureRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const messageParam = params.get("message");
+    const mailingDateParam = params.get("mailingDate");
+
+    if (messageParam) {
+      setInsideMessage(decodeURIComponent(messageParam));
+    }
+    if (mailingDateParam) {
+      setMailingDate(mailingDateParam);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (frontRef.current && frontRef.current.textContent !== frontMessage) {
+      frontRef.current.textContent = frontMessage;
+    }
+  }, [frontMessage]);
+
+  useEffect(() => {
+    if (insideRef.current && insideRef.current.textContent !== insideMessage) {
+      insideRef.current.textContent = insideMessage;
+    }
+  }, [insideMessage]);
+
+  useEffect(() => {
+    if (signatureRef.current && signatureRef.current.textContent !== signatureName) {
+      signatureRef.current.textContent = signatureName;
+    }
+  }, [signatureName]);
+
+  const handleFrontChange = (e: React.FormEvent<HTMLDivElement>) => {
+    setFrontMessage(e.currentTarget.textContent || "");
+  };
+
+  const handleInsideChange = (e: React.FormEvent<HTMLDivElement>) => {
+    setInsideMessage(e.currentTarget.textContent || "");
+  };
+
+  const handleSignatureChange = (e: React.FormEvent<HTMLDivElement>) => {
+    const text = (e.currentTarget.textContent || "").replace(/^[-–—]\s*/, "");
+    setSignatureName(text);
+  };
+
   const inputStyle = useMemo(
     () => ({
       width: "100%",
@@ -528,12 +128,14 @@ export default function SendCard() {
       color: "var(--mm-ink)",
       background: "rgba(255,255,255,0.6)",
       border: "1px solid var(--mm-line)",
-      borderRadius: "2px",
+      borderRadius: "3px",
       outline: "none",
       transition: "border-color 0.2s, box-shadow 0.2s",
     }),
     []
   );
+
+  const handwrittenFont = "var(--font-handwriting)";
 
   const canAdvance = () => {
     if (currentStep === 1) {
@@ -601,6 +203,7 @@ export default function SendCard() {
           return_city: returnCity,
           return_state: returnState.toUpperCase(),
           return_postal_code: returnZip,
+          requested_ship_date: mailingDate || null,
         }),
       });
 
@@ -622,6 +225,21 @@ export default function SendCard() {
     }
   }
 
+  const frontDisplay = frontMessage.trim() || "Click to write front message";
+  const insideDisplay = insideMessage.trim() || "Click to write your message";
+  const signatureDisplay = signatureName.trim() || "Click to sign";
+
+  const recipientLines = [
+    recipientName || "Recipient Name",
+    recipientAddress1 || "123 Main Street",
+    recipientAddress2 || "",
+    recipientCity || recipientState || recipientZip
+      ? `${recipientCity || "City"}, ${recipientState || "ST"} ${recipientZip || "00000"}`
+      : "City, ST 00000",
+  ].filter(Boolean);
+
+  const returnNameDisplay = returnName.trim() || "Your Name";
+
   return (
     <PageShell>
       <section
@@ -632,19 +250,19 @@ export default function SendCard() {
       >
         <div className="max-w-[1240px] mx-auto">
           <FadeIn>
-              <p
-                style={{
-                  margin: "0 0 8px",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.65rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-burgundy)",
-                }}
-              >
-                Handwritten Letter Service
-              </p>
+            <p
+              style={{
+                margin: "0 0 8px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.65rem",
+                fontWeight: 500,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--mm-burgundy)",
+              }}
+            >
+              Handwritten Letter Service
+            </p>
           </FadeIn>
           <FadeIn delay={0.05}>
             <h1
@@ -672,7 +290,7 @@ export default function SendCard() {
                 maxWidth: "560px",
               }}
             >
-              Write your letter, address the envelope, and review your details before sending.
+              Write directly on the card, address the envelope, and review your details before sending.
             </p>
           </FadeIn>
         </div>
@@ -757,520 +375,621 @@ export default function SendCard() {
         }}
       >
         <div className="max-w-[1240px] mx-auto">
-          <div
-            className="grid grid-cols-1 xl:grid-cols-12 gap-0 overflow-hidden"
-            style={{
-              border: "1px solid var(--mm-line)",
-              background: "rgba(255,255,255,0.3)",
-            }}
-          >
-            <div className="xl:col-span-7" style={{ padding: "clamp(28px, 3vw, 44px)" }}>
-              <AnimatePresence mode="wait">
-                {currentStep === 1 && (
-                  <motion.div
-                    key="step-card"
-                    initial={{ opacity: 0, x: -18 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 18 }}
-                    transition={{ duration: 0.28 }}
+          <AnimatePresence mode="wait">
+            {currentStep === 1 && (
+              <motion.div
+                key="step-card"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.28 }}
+              >
+                <div style={{ marginBottom: "32px" }}>
+                  <h2
+                    style={{
+                      margin: "0 0 8px",
+                      fontFamily: "var(--font-serif)",
+                      fontSize: "1.8rem",
+                      fontWeight: 500,
+                      color: "var(--mm-forest)",
+                    }}
                   >
-                    <h2
+                    Write Your Card
+                  </h2>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.95rem",
+                      color: "var(--mm-ink-soft)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Click directly on the card to write. The front is optional. The inside message and signature are required to continue.
+                  </p>
+                </div>
+
+                <div
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+                  style={{ alignItems: "start" }}
+                >
+                  <div
+                    style={{
+                      backgroundImage: `url("${IMAGES.woodTexture}")`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      padding: "40px 32px",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minHeight: "320px",
+                    }}
+                  >
+                    <div
                       style={{
-                        margin: "0 0 6px",
-                        fontFamily: "var(--font-serif)",
-                        fontSize: "1.6rem",
-                        fontWeight: 500,
-                        color: "var(--mm-forest)",
+                        width: "100%",
+                        maxWidth: "100%",
+                        background: "#faf7f2",
+                        padding: "28px 26px",
+                        boxShadow: "0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
+                        border: "1px solid rgba(61,43,31,0.08)",
+                        borderRadius: "3px",
+                        minHeight: "160px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        position: "relative",
                       }}
                     >
-                      Letter
-                    </h2>
-                    <p
-                      style={{
-                        margin: "0 0 24px",
-                        fontFamily: "var(--font-sans)",
-                        fontSize: "0.88rem",
-                        color: "var(--mm-ink-soft)",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      Write the message that will be handwritten on quality cardstock.
-                    </p>
-
-                    <div className="flex flex-col gap-4">
-                      <div>
-                        <SectionLabel>Front of card (optional)</SectionLabel>
-                        <input
-                          type="text"
-                          value={frontMessage}
-                          onChange={(e) => setFrontMessage(e.target.value)}
-                          placeholder="Thinking of You"
-                          style={inputStyle}
-                        />
-                        <p
-                          style={{
-                            margin: "8px 0 0",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.74rem",
-                            color: "var(--mm-ink-muted)",
-                          }}
-                        >
-                          A short line or occasion for the front of the card.
-                        </p>
-                      </div>
-
-                      <div>
-                        <SectionLabel>Your message</SectionLabel>
-                        <textarea
-                          value={insideMessage}
-                          onChange={(e) => setInsideMessage(e.target.value)}
-                          placeholder="Write your message here..."
-                          rows={8}
-                          style={{
-                            ...inputStyle,
-                            resize: "vertical",
-                            lineHeight: 1.75,
-                          }}
-                        />
-                        <p
-                          style={{
-                            margin: "8px 0 0",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.74rem",
-                            color: "var(--mm-ink-muted)",
-                          }}
-                        >
-                          Your full message will be handwritten on the card. If you feel stuck, simple support is available.
-                        </p>
-                      </div>
-
-                      <div>
-                        <SectionLabel>Sign it as</SectionLabel>
-                        <input
-                          type="text"
-                          value={signatureName}
-                          onChange={(e) => setSignatureName(e.target.value)}
-                          placeholder="Your name"
-                          style={inputStyle}
-                        />
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "18px",
+                          left: "24px",
+                          right: "24px",
+                          height: "1px",
+                          background: "rgba(55, 93, 129, 0.18)",
+                        }}
+                      />
+                      <div
+                        ref={frontRef}
+                        contentEditable
+                        onInput={handleFrontChange}
+                        suppressContentEditableWarning
+                        style={{
+                          fontFamily: handwrittenFont,
+                          fontSize: "clamp(24px, 5vw, 30px)",
+                          fontWeight: 400,
+                          lineHeight: 1.12,
+                          color: frontMessage.trim() ? "var(--mm-forest)" : "rgba(15, 23, 42, 0.35)",
+                          textAlign: "center",
+                          maxWidth: "220px",
+                          letterSpacing: "0.01em",
+                          outline: "none",
+                          minHeight: "60px",
+                          cursor: "text",
+                          padding: "8px",
+                          borderRadius: "2px",
+                          transition: "background 0.2s",
+                        }}
+                        onFocus={(e) => {
+                          e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.background = "transparent";
+                        }}
+                      >
+                        {frontDisplay}
                       </div>
                     </div>
-                  </motion.div>
-                )}
+                  </div>
 
-                {currentStep === 2 && (
-                  <motion.div
-                    key="step-envelope"
-                    initial={{ opacity: 0, x: -18 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 18 }}
-                    transition={{ duration: 0.28 }}
+                  <div
+                    style={{
+                      backgroundImage: `url("${IMAGES.woodTexture}")`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      padding: "40px 32px",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minHeight: "320px",
+                    }}
                   >
-                    <h2
+                    <div
                       style={{
-                        margin: "0 0 6px",
-                        fontFamily: "var(--font-serif)",
-                        fontSize: "1.6rem",
-                        fontWeight: 500,
-                        color: "var(--mm-forest)",
+                        width: "100%",
+                        maxWidth: "100%",
+                        background: "#faf7f2",
+                        padding: "18px 20px 16px",
+                        boxShadow: "0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
+                        border: "1px solid rgba(61,43,31,0.08)",
+                        borderRadius: "3px",
+                        minHeight: "160px",
+                        position: "relative",
                       }}
                     >
-                      Envelope
-                    </h2>
-                    <p
-                      style={{
-                        margin: "0 0 24px",
-                        fontFamily: "var(--font-sans)",
-                        fontSize: "0.88rem",
-                        color: "var(--mm-ink-soft)",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      Tell us where the letter is going and what return address should appear on the envelope.
-                    </p>
-
-                    <div className="flex flex-col gap-6">
-                      <div>
-                        <p
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: "18px",
+                          right: "18px",
+                          height: "18px",
+                          borderBottom: "1px solid rgba(61,43,31,0.06)",
+                        }}
+                      />
+                      <div style={{ paddingTop: "6px" }}>
+                        <div
+                          ref={insideRef}
+                          contentEditable
+                          onInput={handleInsideChange}
+                          suppressContentEditableWarning
                           style={{
-                            margin: "0 0 12px",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.74rem",
-                            fontWeight: 600,
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--mm-burgundy)",
+                            fontFamily: handwrittenFont,
+                            fontSize: "clamp(14px, 4vw, 16px)",
+                            lineHeight: 1.34,
+                            color: insideMessage.trim() ? "var(--mm-pen-blue)" : "rgba(15, 23, 42, 0.25)",
+                            whiteSpace: "pre-wrap",
+                            wordBreak: "break-word",
+                            minHeight: "80px",
+                            outline: "none",
+                            cursor: "text",
+                            padding: "8px",
+                            borderRadius: "2px",
+                            transition: "background 0.2s",
+                            marginBottom: "8px",
+                          }}
+                          onFocus={(e) => {
+                            e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
+                          }}
+                          onBlur={(e) => {
+                            e.currentTarget.style.background = "transparent";
                           }}
                         >
-                          Who’s receiving this?
-                        </p>
-
-                        <div className="grid gap-4">
-                          <div>
-                            <SectionLabel>Recipient full name</SectionLabel>
-                            <input
-                              type="text"
-                              value={recipientName}
-                              onChange={(e) => setRecipientName(e.target.value)}
-                              placeholder="Their full name"
-                              style={inputStyle}
-                            />
-                          </div>
-
-                          <div>
-                            <SectionLabel>Address line 1</SectionLabel>
-                            <input
-                              type="text"
-                              value={recipientAddress1}
-                              onChange={(e) => setRecipientAddress1(e.target.value)}
-                              placeholder="123 Main Street"
-                              style={inputStyle}
-                            />
-                          </div>
-
-                          <div>
-                            <SectionLabel>Address line 2 (optional)</SectionLabel>
-                            <input
-                              type="text"
-                              value={recipientAddress2}
-                              onChange={(e) => setRecipientAddress2(e.target.value)}
-                              placeholder="Apt, suite, unit"
-                              style={inputStyle}
-                            />
-                          </div>
-
-                          <div className="grid grid-cols-3 gap-3">
-                            <div>
-                              <SectionLabel>City</SectionLabel>
-                              <input
-                                type="text"
-                                value={recipientCity}
-                                onChange={(e) => setRecipientCity(e.target.value)}
-                                placeholder="City"
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div>
-                              <SectionLabel>State</SectionLabel>
-                              <input
-                                type="text"
-                                value={recipientState}
-                                onChange={(e) => setRecipientState(e.target.value)}
-                                placeholder="ND"
-                                maxLength={2}
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div>
-                              <SectionLabel>ZIP</SectionLabel>
-                              <input
-                                type="text"
-                                value={recipientZip}
-                                onChange={(e) => setRecipientZip(e.target.value)}
-                                placeholder="58102"
-                                maxLength={10}
-                                style={inputStyle}
-                              />
-                            </div>
-                          </div>
+                          {insideDisplay}
+                        </div>
+                        <div
+                          ref={signatureRef}
+                          contentEditable
+                          onInput={handleSignatureChange}
+                          suppressContentEditableWarning
+                          style={{
+                            fontFamily: handwrittenFont,
+                            fontSize: "clamp(14px, 4vw, 16px)",
+                            color: signatureName.trim() ? "var(--mm-pen-blue)" : "rgba(15, 23, 42, 0.25)",
+                            letterSpacing: "0.01em",
+                            outline: "none",
+                            cursor: "text",
+                            padding: "8px",
+                            borderRadius: "2px",
+                            transition: "background 0.2s",
+                            minHeight: "24px",
+                          }}
+                          onFocus={(e) => {
+                            e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
+                          }}
+                          onBlur={(e) => {
+                            e.currentTarget.style.background = "transparent";
+                          }}
+                        >
+                          — {signatureDisplay}
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
 
-                      <PenStroke className="my-1" color="var(--mm-line-strong)" />
+                <button
+                  onClick={() => canAdvance() && setCurrentStep(2)}
+                  disabled={!canAdvance()}
+                  style={{
+                    marginTop: "32px",
+                    padding: "14px 32px",
+                    background: canAdvance() ? "var(--mm-forest)" : "var(--mm-line)",
+                    color: canAdvance() ? "#f5f1ea" : "var(--mm-ink-muted)",
+                    border: "none",
+                    borderRadius: "3px",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.95rem",
+                    fontWeight: 600,
+                    cursor: canAdvance() ? "pointer" : "not-allowed",
+                    transition: "background 0.2s",
+                    display: "block",
+                    marginInline: "auto",
+                  }}
+                >
+                  Continue to Envelope →
+                </button>
+              </motion.div>
+            )}
 
-                      <div>
+            {currentStep === 2 && (
+              <motion.div
+                key="step-envelope"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.28 }}
+              >
+                <div style={{ marginBottom: "32px" }}>
+                  <h2
+                    style={{
+                      margin: "0 0 8px",
+                      fontFamily: "var(--font-serif)",
+                      fontSize: "1.8rem",
+                      fontWeight: 500,
+                      color: "var(--mm-forest)",
+                    }}
+                  >
+                    Address Your Envelope
+                  </h2>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.95rem",
+                      color: "var(--mm-ink-soft)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Tell us where the letter is going and what return address should appear.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div
+                    style={{
+                      backgroundImage: `url("${IMAGES.woodTexture}")`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      padding: "40px 32px",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      minHeight: "320px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        maxWidth: "320px",
+                        height: "200px",
+                        background: "#f0ebe3",
+                        padding: "16px 18px 14px",
+                        boxShadow: "0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
+                        border: "1px solid rgba(61,43,31,0.08)",
+                        position: "relative",
+                        borderRadius: "3px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <img
+                        src={IMAGES.foreverStamp}
+                        alt="Forever stamp"
+                        style={{
+                          position: "absolute",
+                          top: "10px",
+                          right: "12px",
+                          width: "40px",
+                          height: "50px",
+                          objectFit: "contain",
+                          background: "transparent",
+                          borderRadius: "2px",
+                        }}
+                      />
+
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "14px",
+                          left: "16px",
+                          width: "136px",
+                        }}
+                      >
                         <p
                           style={{
-                            margin: "0 0 12px",
+                            margin: "0 0 6px",
                             fontFamily: "var(--font-sans)",
-                            fontSize: "0.74rem",
+                            fontSize: "7px",
                             fontWeight: 600,
-                            letterSpacing: "0.1em",
+                            letterSpacing: "0.18em",
                             textTransform: "uppercase",
-                            color: "var(--mm-burgundy)",
+                            color: "rgba(55, 93, 129, 0.24)",
                           }}
                         >
                           Return address
                         </p>
-
-                        <div className="grid gap-4">
-                          <div>
-                            <SectionLabel>Sender full name</SectionLabel>
-                            <input
-                              type="text"
-                              value={returnName}
-                              onChange={(e) => setReturnName(e.target.value)}
-                              placeholder="Your full name"
-                              style={inputStyle}
-                            />
-                          </div>
-
-                          <div>
-                            <SectionLabel>Address line 1</SectionLabel>
-                            <input
-                              type="text"
-                              value={returnAddress1}
-                              onChange={(e) => setReturnAddress1(e.target.value)}
-                              placeholder="456 Return Ave"
-                              style={inputStyle}
-                            />
-                          </div>
-
-                          <div>
-                            <SectionLabel>Address line 2 (optional)</SectionLabel>
-                            <input
-                              type="text"
-                              value={returnAddress2}
-                              onChange={(e) => setReturnAddress2(e.target.value)}
-                              placeholder="Apt, suite, unit"
-                              style={inputStyle}
-                            />
-                          </div>
-
-                          <div className="grid grid-cols-3 gap-3">
-                            <div>
-                              <SectionLabel>City</SectionLabel>
-                              <input
-                                type="text"
-                                value={returnCity}
-                                onChange={(e) => setReturnCity(e.target.value)}
-                                placeholder="City"
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div>
-                              <SectionLabel>State</SectionLabel>
-                              <input
-                                type="text"
-                                value={returnState}
-                                onChange={(e) => setReturnState(e.target.value)}
-                                placeholder="ND"
-                                maxLength={2}
-                                style={inputStyle}
-                              />
-                            </div>
-                            <div>
-                              <SectionLabel>ZIP</SectionLabel>
-                              <input
-                                type="text"
-                                value={returnZip}
-                                onChange={(e) => setReturnZip(e.target.value)}
-                                placeholder="58102"
-                                maxLength={10}
-                                style={inputStyle}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                {currentStep === 3 && (
-                  <motion.div
-                    key="step-review"
-                    initial={{ opacity: 0, x: -18 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 18 }}
-                    transition={{ duration: 0.28 }}
-                  >
-                    <h2
-                      style={{
-                        margin: "0 0 6px",
-                        fontFamily: "var(--font-serif)",
-                        fontSize: "1.6rem",
-                        fontWeight: 500,
-                        color: "var(--mm-forest)",
-                      }}
-                    >
-                      Review
-                    </h2>
-                    <p
-                      style={{
-                        margin: "0 0 24px",
-                        fontFamily: "var(--font-sans)",
-                        fontSize: "0.88rem",
-                        color: "var(--mm-ink-soft)",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      Make sure the card, envelope, and mailing details look right
-                      before continuing.
-                    </p>
-
-                    <div className="flex flex-col gap-4">
-                      <div
-                        style={{
-                          padding: "16px 20px",
-                          background: "rgba(255,255,255,0.5)",
-                          border: "1px solid var(--mm-line)",
-                        }}
-                      >
-                        <p
-                          style={{
-                            margin: "0 0 4px",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.7rem",
-                            fontWeight: 600,
-                            letterSpacing: "0.1em",
-                            textTransform: "uppercase",
-                            color: "var(--mm-ink-muted)",
-                          }}
-                        >
-                          Card
-                        </p>
-                        <p
-                          style={{
-                            margin: "0 0 8px",
-                            fontFamily: "var(--font-serif)",
-                            fontSize: "1.02rem",
-                            color: "var(--mm-forest)",
-                          }}
-                        >
-                          {frontMessage || "No front message added"}
-                        </p>
                         <p
                           style={{
                             margin: 0,
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.86rem",
-                            color: "var(--mm-ink-soft)",
-                            lineHeight: 1.65,
-                            whiteSpace: "pre-wrap",
+                            fontFamily: handwrittenFont,
+                            fontSize: fitNameFontSize(returnNameDisplay),
+                            lineHeight: 1.08,
+                            color: "var(--mm-ink-muted)",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            letterSpacing: "0.01em",
                           }}
                         >
-                          {insideMessage}
+                          {returnNameDisplay}
                         </p>
                         <p
                           style={{
-                            margin: "8px 0 0",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.82rem",
+                            margin: "1px 0 0",
+                            fontFamily: handwrittenFont,
+                            fontSize: "12px",
+                            lineHeight: 1.08,
                             color: "var(--mm-ink-muted)",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            letterSpacing: "0.01em",
                           }}
                         >
-                          — {signatureName}
+                          {returnAddress1 || "456 Return Ave"}
+                        </p>
+                        {returnAddress2 && (
+                          <p
+                            style={{
+                              margin: "1px 0 0",
+                              fontFamily: handwrittenFont,
+                              fontSize: "12px",
+                              lineHeight: 1.08,
+                              color: "var(--mm-ink-muted)",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              letterSpacing: "0.01em",
+                            }}
+                          >
+                            {returnAddress2}
+                          </p>
+                        )}
+                        <p
+                          style={{
+                            margin: "1px 0 0",
+                            fontFamily: handwrittenFont,
+                            fontSize: "12px",
+                            lineHeight: 1.08,
+                            color: "var(--mm-ink-muted)",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            letterSpacing: "0.01em",
+                          }}
+                        >
+                          {(returnCity || "City")}, {(returnState || "ST")} {returnZip || "00000"}
                         </p>
                       </div>
 
                       <div
                         style={{
-                          padding: "16px 20px",
-                          background: "rgba(255,255,255,0.5)",
-                          border: "1px solid var(--mm-line)",
+                          position: "absolute",
+                          top: "88px",
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          width: "220px",
+                          textAlign: "center",
                         }}
                       >
                         <p
                           style={{
-                            margin: "0 0 8px",
+                            margin: "0 0 6px",
                             fontFamily: "var(--font-sans)",
-                            fontSize: "0.7rem",
+                            fontSize: "7px",
                             fontWeight: 600,
-                            letterSpacing: "0.1em",
+                            letterSpacing: "0.18em",
                             textTransform: "uppercase",
-                            color: "var(--mm-ink-muted)",
+                            color: "rgba(55, 93, 129, 0.24)",
                           }}
                         >
-                          Envelope
+                          Recipient
                         </p>
-
-                        <div className="grid md:grid-cols-2 gap-5">
-                          <div>
-                            <p
-                              style={{
-                                margin: "0 0 4px",
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "0.72rem",
-                                fontWeight: 600,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                color: "var(--mm-burgundy)",
-                              }}
-                            >
-                              Recipient
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "0.84rem",
-                                lineHeight: 1.6,
-                                color: "var(--mm-ink-soft)",
-                                whiteSpace: "pre-line",
-                              }}
-                            >
-                              {recipientName}
-                              {"\n"}
-                              {recipientAddress1}
-                              {recipientAddress2 ? `\n${recipientAddress2}` : ""}
-                              {"\n"}
-                              {recipientCity}, {recipientState.toUpperCase()} {recipientZip}
-                            </p>
-                          </div>
-
-                          <div>
-                            <p
-                              style={{
-                                margin: "0 0 4px",
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "0.72rem",
-                                fontWeight: 600,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                color: "var(--mm-burgundy)",
-                              }}
-                            >
-                              Return address
-                            </p>
-                            <p
-                              style={{
-                                margin: 0,
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "0.84rem",
-                                lineHeight: 1.6,
-                                color: "var(--mm-ink-soft)",
-                                whiteSpace: "pre-line",
-                              }}
-                            >
-                              {returnName}
-                              {"\n"}
-                              {returnAddress1}
-                              {returnAddress2 ? `\n${returnAddress2}` : ""}
-                              {"\n"}
-                              {returnCity}, {returnState.toUpperCase()} {returnZip}
-                            </p>
-                          </div>
-                        </div>
-                      {mailingDate && (
-                        <div
-                          style={{
-                            padding: "16px 20px",
-                            background: "rgba(139, 58, 58, 0.06)",
-                            border: "1px solid rgba(139, 58, 58, 0.15)",
-                          }}
-                        >
+                        {recipientLines.map((line, idx) => (
                           <p
+                            key={idx}
                             style={{
-                              margin: "0 0 8px",
-                              fontFamily: "var(--font-sans)",
-                              fontSize: "0.7rem",
-                              fontWeight: 600,
-                              letterSpacing: "0.1em",
-                              textTransform: "uppercase",
-                              color: "var(--mm-burgundy)",
-                            }}
-                          >
-                            📬 Mailing Date
-                          </p>
-                          <p
-                            style={{
-                              margin: 0,
-                              fontFamily: "var(--font-sans)",
-                              fontSize: "0.88rem",
+                              margin: idx === 0 ? 0 : "2px 0 0",
+                              fontFamily: handwrittenFont,
+                              fontSize: idx === 0 ? "15px" : "13px",
+                              lineHeight: 1.08,
                               color: "var(--mm-ink)",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              letterSpacing: "0.01em",
                             }}
                           >
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-6">
+                    <div>
+                      <p
+                        style={{
+                          margin: "0 0 12px",
+                          fontFamily: "var(--font-sans)",
+                          fontSize: "0.74rem",
+                          fontWeight: 600,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          color: "var(--mm-burgundy)",
+                        }}
+                      >
+                        Who’s receiving this?
+                      </p>
+                      <div className="flex flex-col gap-3">
+                        <input type="text" value={recipientName} onChange={(e) => setRecipientName(e.target.value)} placeholder="Full name" style={inputStyle} />
+                        <input type="text" value={recipientAddress1} onChange={(e) => setRecipientAddress1(e.target.value)} placeholder="Street address" style={inputStyle} />
+                        <input type="text" value={recipientAddress2} onChange={(e) => setRecipientAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
+                        <div className="grid grid-cols-3 gap-3">
+                          <input type="text" value={recipientCity} onChange={(e) => setRecipientCity(e.target.value)} placeholder="City" style={inputStyle} />
+                          <input type="text" value={recipientState} onChange={(e) => setRecipientState(e.target.value.toUpperCase())} placeholder="ST" maxLength={2} style={inputStyle} />
+                          <input type="text" value={recipientZip} onChange={(e) => setRecipientZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p
+                        style={{
+                          margin: "0 0 12px",
+                          fontFamily: "var(--font-sans)",
+                          fontSize: "0.74rem",
+                          fontWeight: 600,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                          color: "var(--mm-burgundy)",
+                        }}
+                      >
+                        Return address
+                      </p>
+                      <div className="flex flex-col gap-3">
+                        <input type="text" value={returnName} onChange={(e) => setReturnName(e.target.value)} placeholder="Your name" style={inputStyle} />
+                        <input type="text" value={returnAddress1} onChange={(e) => setReturnAddress1(e.target.value)} placeholder="Street address" style={inputStyle} />
+                        <input type="text" value={returnAddress2} onChange={(e) => setReturnAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
+                        <div className="grid grid-cols-3 gap-3">
+                          <input type="text" value={returnCity} onChange={(e) => setReturnCity(e.target.value)} placeholder="City" style={inputStyle} />
+                          <input type="text" value={returnState} onChange={(e) => setReturnState(e.target.value.toUpperCase())} placeholder="ST" maxLength={2} style={inputStyle} />
+                          <input type="text" value={returnZip} onChange={(e) => setReturnZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-8">
+                  <button
+                    onClick={() => setCurrentStep(1)}
+                    className="bg-transparent border-none"
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.8rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      color: "var(--mm-ink-muted)",
+                      padding: "10px 0",
+                    }}
+                  >
+                    ← Back to Card
+                  </button>
+                  <button
+                    onClick={() => canAdvance() && setCurrentStep(3)}
+                    disabled={!canAdvance()}
+                    style={{
+                      padding: "12px 24px",
+                      background: canAdvance() ? "var(--mm-forest)" : "var(--mm-line)",
+                      color: canAdvance() ? "#f5f1ea" : "var(--mm-ink-muted)",
+                      border: "none",
+                      borderRadius: "3px",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      cursor: canAdvance() ? "pointer" : "not-allowed",
+                    }}
+                  >
+                    Continue to Review →
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {currentStep === 3 && (
+              <motion.div
+                key="step-review"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.28 }}
+              >
+                <div style={{ maxWidth: "760px", margin: "0 auto" }}>
+                  <h2
+                    style={{
+                      margin: "0 0 8px",
+                      fontFamily: "var(--font-serif)",
+                      fontSize: "1.8rem",
+                      fontWeight: 500,
+                      color: "var(--mm-forest)",
+                    }}
+                  >
+                    Review
+                  </h2>
+                  <p
+                    style={{
+                      margin: "0 0 24px",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.95rem",
+                      color: "var(--mm-ink-soft)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Make sure the card, envelope, and mailing details look right before saving the order.
+                  </p>
+
+                  <div className="flex flex-col gap-4">
+                    <div style={{ padding: "16px 20px", background: "rgba(255,255,255,0.5)", border: "1px solid var(--mm-line)" }}>
+                      <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-ink-muted)" }}>
+                        Card
+                      </p>
+                      <p style={{ margin: "0 0 8px", fontFamily: "var(--font-serif)", fontSize: "1.02rem", color: "var(--mm-forest)" }}>
+                        {frontMessage || "No front message added"}
+                      </p>
+                      <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.86rem", color: "var(--mm-ink-soft)", lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
+                        {insideMessage}
+                      </p>
+                      <p style={{ margin: "8px 0 0", fontFamily: "var(--font-sans)", fontSize: "0.82rem", color: "var(--mm-ink-muted)" }}>
+                        — {signatureName}
+                      </p>
+                    </div>
+
+                    <div style={{ padding: "16px 20px", background: "rgba(255,255,255,0.5)", border: "1px solid var(--mm-line)" }}>
+                      <p style={{ margin: "0 0 8px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-ink-muted)" }}>
+                        Envelope
+                      </p>
+                      <div className="grid md:grid-cols-2 gap-5">
+                        <div>
+                          <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+                            Recipient
+                          </p>
+                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6, color: "var(--mm-ink-soft)", whiteSpace: "pre-line" }}>
+                            {recipientName}
+                            {"\n"}
+                            {recipientAddress1}
+                            {recipientAddress2 ? `\n${recipientAddress2}` : ""}
+                            {"\n"}
+                            {recipientCity}, {recipientState.toUpperCase()} {recipientZip}
+                          </p>
+                        </div>
+                        <div>
+                          <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+                            Return address
+                          </p>
+                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6, color: "var(--mm-ink-soft)", whiteSpace: "pre-line" }}>
+                            {returnName}
+                            {"\n"}
+                            {returnAddress1}
+                            {returnAddress2 ? `\n${returnAddress2}` : ""}
+                            {"\n"}
+                            {returnCity}, {returnState.toUpperCase()} {returnZip}
+                          </p>
+                        </div>
+                      </div>
+                      {mailingDate && (
+                        <div style={{ padding: "16px 20px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.15)", marginTop: "16px" }}>
+                          <p style={{ margin: "0 0 8px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+                            Mailing Date
+                          </p>
+                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.88rem", color: "var(--mm-ink)" }}>
                             {new Date(mailingDate).toLocaleDateString("en-US", {
                               month: "long",
                               day: "numeric",
@@ -1279,124 +998,74 @@ export default function SendCard() {
                           </p>
                         </div>
                       )}
+                    </div>
 
-                      </div>
-
-                      <div
-                        style={{
-                          padding: "18px 20px",
-                          background: "var(--mm-forest)",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "10px",
-                        }}
-                      >
-                        <div className="flex items-end justify-between gap-4 flex-wrap">
-                          <div>
-                            <p
-                              style={{
-                                margin: 0,
-                                fontFamily: "var(--font-sans)",
-                                fontSize: "0.62rem",
-                                fontWeight: 600,
-                                letterSpacing: "0.1em",
-                                textTransform: "uppercase",
-                                color: "rgba(245,241,234,0.56)",
-                              }}
-                            >
-                              Handwritten and mailed
-                            </p>
-                            <p
-                              style={{
-                                margin: "4px 0 0",
-                                fontFamily: "var(--font-serif)",
-                                fontSize: "1.55rem",
-                                color: "#f5f1ea",
-                              }}
-                            >
-                              $15
-                            </p>
-                          </div>
-
-                          <div
-                            style={{
-                              fontFamily: "var(--font-sans)",
-                              fontSize: "0.8rem",
-                              lineHeight: 1.5,
-                              color: "rgba(245,241,234,0.72)",
-                              textAlign: "right",
-                            }}
-                          >
-                            Ships in 1–2 business days
-                          </div>
+                    <div style={{ padding: "18px 20px", background: "var(--mm-forest)", display: "flex", flexDirection: "column", gap: "10px" }}>
+                      <div className="flex items-end justify-between gap-4 flex-wrap">
+                        <div>
+                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,241,234,0.56)" }}>
+                            Handwritten and mailed
+                          </p>
+                          <p style={{ margin: "4px 0 0", fontFamily: "var(--font-serif)", fontSize: "1.55rem", color: "#f5f1ea" }}>
+                            $15
+                          </p>
+                        </div>
+                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", lineHeight: 1.5, color: "rgba(245,241,234,0.72)", textAlign: "right" }}>
+                          Ships in 1–2 business days
                         </div>
                       </div>
+                    </div>
 
-                      <div>
-                        <SectionLabel>Your email</SectionLabel>
-                        <input
-                          type="email"
-                          value={contactEmail}
-                          onChange={(e) => setContactEmail(e.target.value)}
-                          placeholder="you@email.com"
-                          style={inputStyle}
-                        />
+                    <div>
+                      <SectionLabel>Your email</SectionLabel>
+                      <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="you@email.com" style={inputStyle} />
+                    </div>
+
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "10px",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.84rem",
+                        lineHeight: 1.55,
+                        color: "var(--mm-ink-soft)",
+                      }}
+                    >
+                      <input type="checkbox" checked={reviewConfirmed} onChange={(e) => setReviewConfirmed(e.target.checked)} style={{ marginTop: "3px" }} />
+                      <span>I’ve reviewed the message and mailing details.</span>
+                    </label>
+
+                    {submitError && (
+                      <div style={{ padding: "14px 16px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.16)", color: "var(--mm-ink)", fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6 }}>
+                        {submitError}
                       </div>
+                    )}
 
-                      <label
+                    {savedOrderId && (
+                      <div style={{ padding: "14px 16px", background: "rgba(62, 92, 67, 0.08)", border: "1px solid rgba(62, 92, 67, 0.18)", color: "var(--mm-ink)", fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6 }}>
+                        Order details saved successfully.
+                        <br />
+                        Order ID: {savedOrderId}
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <button
+                        onClick={() => setCurrentStep(2)}
+                        className="bg-transparent border-none"
                         style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: "10px",
                           fontFamily: "var(--font-sans)",
-                          fontSize: "0.84rem",
-                          lineHeight: 1.55,
-                          color: "var(--mm-ink-soft)",
+                          fontSize: "0.8rem",
+                          fontWeight: 500,
+                          letterSpacing: "0.06em",
+                          textTransform: "uppercase",
+                          color: "var(--mm-ink-muted)",
+                          padding: "10px 0",
                         }}
                       >
-                        <input
-                          type="checkbox"
-                          checked={reviewConfirmed}
-                          onChange={(e) => setReviewConfirmed(e.target.checked)}
-                          style={{ marginTop: "3px" }}
-                        />
-                        <span>I’ve reviewed the message and mailing details.</span>
-                      </label>
-
-                      {submitError && (
-                        <div
-                          style={{
-                            padding: "14px 16px",
-                            background: "rgba(139, 58, 58, 0.06)",
-                            border: "1px solid rgba(139, 58, 58, 0.16)",
-                            color: "var(--mm-ink)",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.84rem",
-                            lineHeight: 1.6,
-                          }}
-                        >
-                          {submitError}
-                        </div>
-                      )}
-
-                      {savedOrderId && (
-                        <div
-                          style={{
-                            padding: "14px 16px",
-                            background: "rgba(62, 92, 67, 0.08)",
-                            border: "1px solid rgba(62, 92, 67, 0.18)",
-                            color: "var(--mm-ink)",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "0.84rem",
-                            lineHeight: 1.6,
-                          }}
-                        >
-                          Order details saved successfully.
-                          <br />
-                          Order ID: {savedOrderId}
-                        </div>
-                      )}
-
+                        ← Back to Envelope
+                      </button>
                       <button
                         className="bg-transparent border-none"
                         style={{
@@ -1421,110 +1090,13 @@ export default function SendCard() {
                         {isSubmitting ? "Saving..." : "Save Order Details"}
                       </button>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {currentStep < 3 && (
-                <div className="xl:hidden" style={{ marginTop: "24px" }}>
-                  <PreviewPanel
-                    compact
-                    currentStep={currentStep}
-                    frontMessage={frontMessage}
-                    insideMessage={insideMessage}
-                    signatureName={signatureName}
-                    recipientName={recipientName}
-                    recipientAddress1={recipientAddress1}
-                    recipientAddress2={recipientAddress2}
-                    recipientCity={recipientCity}
-                    recipientState={recipientState}
-                    recipientZip={recipientZip}
-                    returnName={returnName}
-                    returnAddress1={returnAddress1}
-                    returnAddress2={returnAddress2}
-                    returnCity={returnCity}
-                    returnState={returnState}
-                    returnZip={returnZip}
-                  />
+                  </div>
                 </div>
-              )}
-
-              {currentStep < 3 && (
-                <div
-                  className="flex items-center justify-between mt-8 pt-6"
-                  style={{ borderTop: "1px solid var(--mm-line)" }}
-                >
-                  {currentStep > 1 ? (
-                    <button
-                      onClick={() => setCurrentStep(currentStep - 1)}
-                      className="bg-transparent border-none"
-                      style={{
-                        fontFamily: "var(--font-sans)",
-                        fontSize: "0.76rem",
-                        fontWeight: 500,
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        color: "var(--mm-ink-muted)",
-                        padding: "10px 0",
-                      }}
-                    >
-                      ← Back
-                    </button>
-                  ) : (
-                    <div />
-                  )}
-
-                  <button
-                    onClick={() => canAdvance() && setCurrentStep(currentStep + 1)}
-                    className="bg-transparent border-none"
-                    style={{
-                      padding: "12px 24px",
-                      borderRadius: "999px",
-                      background: canAdvance() ? "var(--mm-forest)" : "var(--mm-line)",
-                      color: canAdvance() ? "#f5f1ea" : "var(--mm-ink-muted)",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.76rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      cursor: canAdvance() ? "pointer" : "not-allowed",
-                      opacity: canAdvance() ? 1 : 0.5,
-                    }}
-                  >
-                    Continue →
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {currentStep < 3 && (
-              <div
-                className="hidden xl:block xl:col-span-5"
-                style={{ borderLeft: "1px solid var(--mm-line)" }}
-              >
-                <PreviewPanel
-                  currentStep={currentStep}
-                  frontMessage={frontMessage}
-                  insideMessage={insideMessage}
-                  signatureName={signatureName}
-                  recipientName={recipientName}
-                  recipientAddress1={recipientAddress1}
-                  recipientAddress2={recipientAddress2}
-                  recipientCity={recipientCity}
-                  recipientState={recipientState}
-                  recipientZip={recipientZip}
-                  returnName={returnName}
-                  returnAddress1={returnAddress1}
-                  returnAddress2={returnAddress2}
-                  returnCity={returnCity}
-                  returnState={returnState}
-                  returnZip={returnZip}
-                />
-              </div>
+              </motion.div>
             )}
-          </div>
+          </AnimatePresence>
         </div>
       </section>
     </PageShell>
   );
-                        }
+}
