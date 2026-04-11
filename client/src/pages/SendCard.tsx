@@ -71,10 +71,6 @@ export default function SendCard() {
   const [submitError, setSubmitError] = useState("");
   const [savedOrderId, setSavedOrderId] = useState("");
 
-  const frontRef = useRef<HTMLDivElement>(null);
-  const insideRef = useRef<HTMLDivElement>(null);
-  const signatureRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const messageParam = params.get("message");
@@ -88,24 +84,16 @@ export default function SendCard() {
     }
   }, []);
 
-  // Initialize content on mount only, to avoid cursor jumping during typing
-  useEffect(() => {
-    if (frontRef.current) frontRef.current.textContent = frontMessage;
-    if (insideRef.current) insideRef.current.textContent = insideMessage;
-    if (signatureRef.current) signatureRef.current.textContent = signatureName;
-  }, []);
-
-  const handleFrontChange = (e: React.FormEvent<HTMLDivElement>) => {
-    setFrontMessage(e.currentTarget.textContent || "");
+  const handleFrontChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFrontMessage(e.target.value);
   };
 
-  const handleInsideChange = (e: React.FormEvent<HTMLDivElement>) => {
-    setInsideMessage(e.currentTarget.textContent || "");
+  const handleInsideChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInsideMessage(e.target.value);
   };
 
-  const handleSignatureChange = (e: React.FormEvent<HTMLDivElement>) => {
-    const text = (e.currentTarget.textContent || "").replace(/^[-–—]\s*/, "");
-    setSignatureName(text);
+  const handleSignatureChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSignatureName(e.target.value);
   };
 
   const inputStyle = useMemo(
@@ -441,25 +429,28 @@ export default function SendCard() {
                           background: "rgba(55, 93, 129, 0.18)",
                         }}
                       />
-                      <div
-                        ref={frontRef}
-                        contentEditable
-                        onInput={handleFrontChange}
-                        suppressContentEditableWarning
+                      <textarea
+                        value={frontMessage}
+                        onChange={handleFrontChange}
+                        placeholder="Click to write front message"
                         style={{
                           fontFamily: handwrittenFont,
                           fontSize: "clamp(24px, 5vw, 30px)",
                           fontWeight: 400,
                           lineHeight: 1.12,
-                          color: frontMessage.trim() ? "var(--mm-forest)" : "rgba(15, 23, 42, 0.35)",
+                          color: "var(--mm-forest)",
                           textAlign: "center",
-                          maxWidth: "220px",
+                          width: "100%",
+                          maxWidth: "260px",
                           letterSpacing: "0.01em",
                           outline: "none",
-                          minHeight: "60px",
+                          background: "transparent",
+                          border: "none",
+                          resize: "none",
+                          overflow: "hidden",
+                          minHeight: "80px",
                           cursor: "text",
                           padding: "8px",
-                          borderRadius: "2px",
                           transition: "background 0.2s",
                         }}
                         onFocus={(e) => {
@@ -468,9 +459,7 @@ export default function SendCard() {
                         onBlur={(e) => {
                           e.currentTarget.style.background = "transparent";
                         }}
-                      >
-                        {frontDisplay}
-                      </div>
+                      />
                     </div>
                   </div>
 
@@ -511,25 +500,25 @@ export default function SendCard() {
                         }}
                       />
                       <div style={{ paddingTop: "6px" }}>
-                        <div
-                          ref={insideRef}
-                          contentEditable
-                          onInput={handleInsideChange}
-                          suppressContentEditableWarning
+                        <textarea
+                          value={insideMessage}
+                          onChange={handleInsideChange}
+                          placeholder="Click to write your message"
                           style={{
                             fontFamily: handwrittenFont,
                             fontSize: "clamp(14px, 4vw, 16px)",
                             lineHeight: 1.34,
-                            color: insideMessage.trim() ? "var(--mm-pen-blue)" : "rgba(15, 23, 42, 0.25)",
-                            whiteSpace: "pre-wrap",
-                            wordBreak: "break-word",
-                            minHeight: "80px",
+                            color: "var(--mm-pen-blue)",
+                            width: "100%",
+                            minHeight: "120px",
                             outline: "none",
+                            background: "transparent",
+                            border: "none",
+                            resize: "none",
                             cursor: "text",
                             padding: "8px",
-                            borderRadius: "2px",
                             transition: "background 0.2s",
-                            marginBottom: "8px",
+                            marginBottom: "4px",
                           }}
                           onFocus={(e) => {
                             e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
@@ -537,34 +526,25 @@ export default function SendCard() {
                           onBlur={(e) => {
                             e.currentTarget.style.background = "transparent";
                           }}
-                        >
-                          {insideDisplay}
-                        </div>
-                        <div
-                          ref={signatureRef}
-                          contentEditable
-                          onInput={handleSignatureChange}
-                          suppressContentEditableWarning
-                          style={{
-                            fontFamily: handwrittenFont,
-                            fontSize: "clamp(14px, 4vw, 16px)",
-                            color: signatureName.trim() ? "var(--mm-pen-blue)" : "rgba(15, 23, 42, 0.25)",
-                            letterSpacing: "0.01em",
-                            outline: "none",
-                            cursor: "text",
-                            padding: "8px",
-                            borderRadius: "2px",
-                            transition: "background 0.2s",
-                            minHeight: "24px",
-                          }}
-                          onFocus={(e) => {
-                            e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
-                          }}
-                          onBlur={(e) => {
-                            e.currentTarget.style.background = "transparent";
-                          }}
-                        >
-                          — {signatureDisplay}
+                        />
+                        <div className="flex items-center">
+                          <span style={{ fontFamily: handwrittenFont, fontSize: "clamp(14px, 4vw, 16px)", color: "var(--mm-pen-blue)", paddingLeft: "8px" }}>—</span>
+                          <input
+                            value={signatureName}
+                            onChange={(e) => setSignatureName(e.target.value)}
+                            placeholder="Your Name"
+                            style={{
+                              fontFamily: handwrittenFont,
+                              fontSize: "clamp(14px, 4vw, 16px)",
+                              color: "var(--mm-pen-blue)",
+                              background: "transparent",
+                              border: "none",
+                              outline: "none",
+                              padding: "8px 4px",
+                              width: "100%",
+                              cursor: "text",
+                            }}
+                          />
                         </div>
                       </div>
                     </div>
