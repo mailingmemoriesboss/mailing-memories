@@ -39,63 +39,80 @@ export function RotatingTagline() {
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % ROTATING_PHRASES.length);
         setIsRevealing(true);
-      }, 400);
-    }, 4000);
+      }, 500);
+    }, 4500);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative z-50" style={{ background: "#161412", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+    <div className="relative z-50" style={{ 
+      background: "var(--mm-forest)", 
+      borderBottom: "1px solid rgba(255,255,255,0.1)",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
+    }}>
       <style>{`
-        @keyframes paperFlip {
+        @keyframes pageFlipIn {
           0% {
             opacity: 0;
-            transform: rotateY(-90deg) rotateX(0deg);
-          }
-          50% {
-            transform: rotateY(0deg) rotateX(0deg);
+            transform: rotateX(-90deg);
+            transform-origin: top;
           }
           100% {
             opacity: 1;
-            transform: rotateY(0deg) rotateX(0deg);
+            transform: rotateX(0deg);
+            transform-origin: top;
           }
         }
-        @keyframes paperFlipOut {
+        @keyframes pageFlipOut {
           0% {
             opacity: 1;
-            transform: rotateY(0deg);
+            transform: rotateX(0deg);
+            transform-origin: bottom;
           }
           100% {
             opacity: 0;
-            transform: rotateY(90deg);
+            transform: rotateX(90deg);
+            transform-origin: bottom;
           }
         }
       `}</style>
-      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[6px] text-center flex-wrap px-4 md:px-6"
+      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[8px] text-center flex-wrap px-4 md:px-6"
         style={{
-          minHeight: "52px",
-          padding: "12px 24px",
+          minHeight: "64px",
+          padding: "16px 24px",
           fontFamily: "var(--font-sans)",
-          fontSize: "clamp(0.65rem, 2vw, 0.75rem)",
-          fontWeight: 500,
-          letterSpacing: "0.14em",
+          fontSize: "clamp(0.7rem, 2.5vw, 0.85rem)",
+          fontWeight: 600,
+          letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "rgba(255,255,255,0.82)",
+          color: "rgba(255,255,255,0.9)",
         }}>
         <span>Because</span>
-        <span
-          className="inline-block"
+        <div
+          className="inline-block overflow-hidden"
           style={{
-            minWidth: "120px",
-            color: "#f2e9dc",
-            fontWeight: 700,
+            minWidth: "160px",
+            height: "1.4em",
             perspective: "1000px",
-            animation: isRevealing ? "paperFlip 700ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "paperFlipOut 500ms ease-in forwards",
+            verticalAlign: "middle",
+            position: "relative"
           }}
-          key={currentIndex}
         >
-          {ROTATING_PHRASES[currentIndex]}
-        </span>
+          <span
+            className="inline-block w-full"
+            style={{
+              color: "#f2e9dc",
+              fontWeight: 800,
+              position: "absolute",
+              left: 0,
+              top: 0,
+              animation: isRevealing ? "pageFlipIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards" : "pageFlipOut 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+            }}
+            key={currentIndex}
+          >
+            {ROTATING_PHRASES[currentIndex]}
+          </span>
+        </div>
         <span>deserves real paper.</span>
       </div>
     </div>

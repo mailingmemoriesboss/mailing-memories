@@ -82,20 +82,6 @@ function HeroSection() {
       }} />
 
       <div className="relative z-20 max-w-[1240px] mx-auto px-6 pt-32 pb-16 flex flex-col items-center text-center">
-        <FadeIn>
-          <p style={{
-            margin: "0 0 20px",
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.75rem",
-            fontWeight: 600,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "var(--mm-burgundy)",
-          }}>
-            Because... deserves real paper
-          </p>
-        </FadeIn>
-
         <FadeIn delay={0.15}>
           <h1 style={{
             margin: "0 0 24px",
@@ -106,8 +92,7 @@ function HeroSection() {
             letterSpacing: "-0.03em",
             color: "var(--mm-forest)",
           }}>
-            Say what you mean<br />
-            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>on real paper.</em>
+            The message you’ve been meaning to send.
           </h1>
         </FadeIn>
 
@@ -121,7 +106,7 @@ function HeroSection() {
             fontWeight: 500,
             color: "var(--mm-ink-soft)",
           }}>
-            For the moments when digital isn't enough. We handwrite, address, stamp, and mail one full page on quality cardstock for $15.
+            For the moments a text is not enough. We handwrite your words on a quality card, address it, stamp it, and mail it for you.
           </p>
         </FadeIn>
 
