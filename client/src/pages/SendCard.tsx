@@ -49,6 +49,7 @@ export default function SendCard() {
   const [insideMessage, setInsideMessage] = useState("");
   const [signatureName, setSignatureName] = useState("");
   const [mailingDate, setMailingDate] = useState("");
+  const [isCustomDate, setIsCustomDate] = useState(false);
 
   const [recipientName, setRecipientName] = useState("");
   const [recipientAddress1, setRecipientAddress1] = useState("");
@@ -115,9 +116,11 @@ export default function SendCard() {
   const handwrittenFont = "var(--font-handwriting)";
 
   const canAdvance = () => {
+    // Letter step validation
     if (currentStep === 1) {
       return Boolean(insideMessage.trim().length > 0 && signatureName.trim().length > 0);
     }
+    // Envelope step validation
     if (currentStep === 2) {
       return Boolean(
         recipientName.trim() &&
@@ -132,11 +135,16 @@ export default function SendCard() {
           returnZip.trim()
       );
     }
+    // Review step validation
     if (currentStep === 3) {
       return Boolean(contactEmail.trim() && reviewConfirmed);
     }
     return false;
   };
+
+  const US_STATES = [
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+  ];
 
   async function handleCreateOrder() {
     setSubmitError("");
@@ -283,11 +291,11 @@ export default function SendCard() {
                   className="flex items-center"
                   style={{ flex: i < STEPS.length - 1 ? 1 : "none" }}
                 >
-                  <button
-                    onClick={() => step.num <= currentStep && setCurrentStep(step.num)}
-                    className="flex items-center gap-2 bg-transparent border-none p-0"
-                    style={{ opacity: step.num <= currentStep ? 1 : 0.35 }}
-                  >
+                    <button
+                      onClick={() => setCurrentStep(step.num)}
+                      className="flex items-center gap-2 bg-transparent border-none p-0"
+                      style={{ opacity: 1, cursor: "pointer" }}
+                    >
                     <span
                       style={{
                         width: "28px",
@@ -802,7 +810,14 @@ export default function SendCard() {
                         <input type="text" value={recipientAddress2} onChange={(e) => setRecipientAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
                         <div className="grid grid-cols-3 gap-3">
                           <input type="text" value={recipientCity} onChange={(e) => setRecipientCity(e.target.value)} placeholder="City" style={inputStyle} />
-                          <input type="text" value={recipientState} onChange={(e) => setRecipientState(e.target.value.toUpperCase())} placeholder="ST" maxLength={2} style={inputStyle} />
+                          <select 
+                            value={recipientState} 
+                            onChange={(e) => setRecipientState(e.target.value)} 
+                            style={{...inputStyle, appearance: "none"}}
+                          >
+                            <option value="">ST</option>
+                            {US_STATES.map(st => <option key={st} value={st}>{st}</option>)}
+                          </select>
                           <input type="text" value={recipientZip} onChange={(e) => setRecipientZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
                         </div>
                       </div>
@@ -828,7 +843,14 @@ export default function SendCard() {
                         <input type="text" value={returnAddress2} onChange={(e) => setReturnAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
                         <div className="grid grid-cols-3 gap-3">
                           <input type="text" value={returnCity} onChange={(e) => setReturnCity(e.target.value)} placeholder="City" style={inputStyle} />
-                          <input type="text" value={returnState} onChange={(e) => setReturnState(e.target.value.toUpperCase())} placeholder="ST" maxLength={2} style={inputStyle} />
+                          <select 
+                            value={returnState} 
+                            onChange={(e) => setReturnState(e.target.value)} 
+                            style={{...inputStyle, appearance: "none"}}
+                          >
+                            <option value="">ST</option>
+                            {US_STATES.map(st => <option key={st} value={st}>{st}</option>)}
+                          </select>
                           <input type="text" value={returnZip} onChange={(e) => setReturnZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
                         </div>
                       </div>
@@ -953,20 +975,52 @@ export default function SendCard() {
                           </p>
                         </div>
                       </div>
-                      {mailingDate && (
-                        <div style={{ padding: "16px 20px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.15)", marginTop: "16px" }}>
-                          <p style={{ margin: "0 0 8px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+                      <div style={{ padding: "16px 20px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.15)", marginTop: "16px" }}>
+                        <div className="flex justify-between items-start mb-2">
+                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
                             Mailing Date
                           </p>
+                          <button 
+                            onClick={() => setIsCustomDate(!isCustomDate)}
+                            style={{ background: "none", border: "none", color: "var(--mm-burgundy)", fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", cursor: "pointer", textDecoration: "underline" }}
+                          >
+                            {isCustomDate ? "Use Default" : "Select Date"}
+                          </button>
+                        </div>
+                        
+                        {!isCustomDate ? (
                           <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.88rem", color: "var(--mm-ink)" }}>
-                            {new Date(mailingDate).toLocaleDateString("en-US", {
+                            Next 1–2 business days
+                          </p>
+                        ) : (
+                          <input 
+                            type="date" 
+                            value={mailingDate || ""} 
+                            onChange={(e) => setMailingDate(e.target.value)}
+                            min={new Date().toISOString().split("T")[0]}
+                            style={{
+                              width: "100%",
+                              padding: "8px 12px",
+                              fontFamily: "var(--font-sans)",
+                              fontSize: "0.88rem",
+                              background: "white",
+                              border: "1px solid var(--mm-line)",
+                              borderRadius: "3px",
+                              outline: "none"
+                            }}
+                          />
+                        )}
+                        
+                        {mailingDate && isCustomDate && (
+                          <p style={{ margin: "8px 0 0", fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--mm-ink-soft)" }}>
+                            Will be mailed on: {new Date(mailingDate + "T12:00:00").toLocaleDateString("en-US", {
                               month: "long",
                               day: "numeric",
                               year: "numeric",
                             })}
                           </p>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
 
                     <div style={{ padding: "18px 20px", background: "var(--mm-forest)", display: "flex", flexDirection: "column", gap: "10px" }}>
