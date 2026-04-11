@@ -82,6 +82,7 @@ export default function SendCard() {
     }
     if (mailingDateParam) {
       setMailingDate(mailingDateParam);
+      setIsCustomDate(true);
     }
   }, []);
 
