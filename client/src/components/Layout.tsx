@@ -366,7 +366,7 @@ export function Footer() {
               color: "rgba(245, 241, 234, 0.4)",
               maxWidth: "320px",
             }}>
-              Handwritten letter services for the things that deserve more than a text.
+              Handwritten card services for the things that deserve more than a text.
             </p>
           </div>
 
@@ -384,10 +384,12 @@ export function Footer() {
               Navigate
             </p>
             {[
-              { label: "Send a Letter", href: "/send" },
-              { label: "About", href: "/#about" },
+              { label: "Home", href: "/" },
+              { label: "Send a Card", href: "/send" },
+              { label: "Plan Ahead", href: "/plan" },
+              { label: "Find Your Words", href: "/messages" },
               { label: "FAQ", href: "/faq" },
-              { label: "Contact", href: "mailto:hello@mailingmemories.com" },
+              { label: "Contact", href: "mailto:mailingmemoriesboss@gmail.com" },
             ].map((link) => (
               <Link
                 key={link.label}
@@ -421,7 +423,7 @@ export function Footer() {
               Get in touch
             </p>
             <a
-              href="mailto:hello@mailingmemories.com"
+              href="mailto:mailingmemoriesboss@gmail.com"
               className="no-underline transition-colors duration-200"
               style={{
                 fontFamily: "var(--font-sans)",
@@ -431,17 +433,30 @@ export function Footer() {
               onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.55)")}
             >
-              hello@mailingmemories.com
+              mailingmemoriesboss@gmail.com
             </a>
-            <p style={{
-              margin: "12px 0 0",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.78rem",
-              lineHeight: 1.7,
-              color: "rgba(245, 241, 234, 0.35)",
-            }}>
-              Waynesboro, Virginia
-            </p>
+            <div style={{ marginTop: "16px", display: "flex", gap: "16px" }}>
+              <a 
+                href="https://www.facebook.com/share/1H5deSru5W/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: "rgba(245, 241, 234, 0.45)", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.45)")}
+              >
+                Facebook
+              </a>
+              <a 
+                href="https://www.instagram.com/themailingmemories?igsh=MTR4NnhtcDhnaXB5Mg==" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: "rgba(245, 241, 234, 0.45)", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.45)")}
+              >
+                Instagram
+              </a>
+            </div>
           </div>
         </div>
 
