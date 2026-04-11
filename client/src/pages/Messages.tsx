@@ -452,6 +452,19 @@ export default function Messages() {
               >
                 Message help for meaningful mail. Browse opening lines and ready-to-lift phrases from real people writing real letters.
               </p>
+              <p
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.6,
+                  color: "var(--mm-burgundy)",
+                  maxWidth: "700px",
+                  margin: "16px auto 0",
+                  fontWeight: 500,
+                }}
+              >
+                Click any phrase to start your card with it.
+              </p>
             </div>
           </FadeIn>
 

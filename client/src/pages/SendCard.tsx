@@ -81,7 +81,12 @@ export default function SendCard() {
     const mailingDateParam = params.get("mailingDate");
 
     if (messageParam) {
-      setInsideMessage(decodeURIComponent(messageParam));
+      const decodedMessage = decodeURIComponent(messageParam);
+      setInsideMessage(decodedMessage);
+      // Ensure the ref is updated immediately
+      if (insideRef.current) {
+        insideRef.current.textContent = decodedMessage;
+      }
     }
     if (mailingDateParam) {
       setMailingDate(mailingDateParam);
@@ -95,7 +100,7 @@ export default function SendCard() {
   }, [frontMessage]);
 
   useEffect(() => {
-    if (insideRef.current && insideRef.current.textContent !== insideMessage) {
+    if (insideRef.current) {
       insideRef.current.textContent = insideMessage;
     }
   }, [insideMessage]);
