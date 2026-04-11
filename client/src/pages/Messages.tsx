@@ -7,7 +7,7 @@
  */
 
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { PageShell, FadeIn } from "@/components/Layout";
 import {
   Accordion,
@@ -233,21 +233,34 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
           </h3>
           <div style={{ display: "grid", gap: "16px" }}>
             {category.openingLines.map((line, idx) => (
-              <div
+              <button
                 key={idx}
+                onClick={() => handlePhraseClick(line)}
                 style={{
                   padding: "16px",
                   background: "var(--mm-cream-soft)",
                   borderLeft: "3px solid var(--mm-burgundy)",
+                  border: "none",
                   fontFamily: "var(--font-serif)",
                   fontSize: "1.05rem",
                   lineHeight: 1.7,
                   color: "var(--mm-ink)",
                   fontStyle: "italic",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "var(--mm-cream-deep)";
+                  e.currentTarget.style.transform = "translateX(4px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "var(--mm-cream-soft)";
+                  e.currentTarget.style.transform = "translateX(0)";
                 }}
               >
                 "{line}"
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -271,20 +284,33 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
           </h3>
           <div style={{ display: "grid", gap: "12px" }}>
             {category.phrases.slice(0, 2).map((phrase, idx) => (
-              <div
+              <button
                 key={idx}
+                onClick={() => handlePhraseClick(phrase)}
                 style={{
                   padding: "12px 16px",
                   background: "transparent",
+                  border: "none",
                   borderLeft: "2px solid var(--mm-line-strong)",
                   fontFamily: "var(--font-sans)",
                   fontSize: "0.95rem",
                   lineHeight: 1.6,
                   color: "var(--mm-ink-soft)",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  transition: "all 0.2s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "var(--mm-ink)";
+                  e.currentTarget.style.borderLeftColor = "var(--mm-forest)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "var(--mm-ink-soft)";
+                  e.currentTarget.style.borderLeftColor = "var(--mm-line-strong)";
                 }}
               >
                 "{phrase}"
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -313,20 +339,33 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
               >
                 <div style={{ display: "grid", gap: "12px" }}>
                   {category.phrases.slice(2).map((phrase, idx) => (
-                    <div
+                    <button
                       key={idx}
+                      onClick={() => handlePhraseClick(phrase)}
                       style={{
                         padding: "12px 16px",
                         background: "transparent",
+                        border: "none",
                         borderLeft: "2px solid var(--mm-line-strong)",
                         fontFamily: "var(--font-sans)",
                         fontSize: "0.95rem",
                         lineHeight: 1.6,
                         color: "var(--mm-ink-soft)",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = "var(--mm-ink)";
+                        e.currentTarget.style.borderLeftColor = "var(--mm-forest)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "var(--mm-ink-soft)";
+                        e.currentTarget.style.borderLeftColor = "var(--mm-line-strong)";
                       }}
                     >
                       "{phrase}"
-                    </div>
+                    </button>
                   ))}
                 </div>
               </AccordionContent>
@@ -373,8 +412,14 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
    MESSAGES PAGE
    ═══════════════════════════════════════════════════════ */
 export default function Messages() {
+  const [, setLocation] = useLocation();
   const [activeCategory, setActiveCategory] = useState("just-because");
   const activeData = CATEGORIES.find((c) => c.id === activeCategory);
+
+  const handlePhraseClick = (phrase: string) => {
+    const encodedPhrase = encodeURIComponent(phrase);
+    setLocation(`/send?message=${encodedPhrase}`);
+  };
 
   return (
     <PageShell>

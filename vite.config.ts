@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   server: {
-    allowedHosts: ["themailingmemories.netlify.app", "mailingmemories.com", "localhost"],
+    allowedHosts: true,
     port: 3000,
     host: true,
   },
