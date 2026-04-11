@@ -814,10 +814,23 @@ export default function SendCard() {
                           <select 
                             value={recipientState} 
                             onChange={(e) => setRecipientState(e.target.value)} 
-                            style={{...inputStyle, appearance: "none"}}
+                            style={{
+                              ...inputStyle, 
+                              appearance: "none", 
+                              color: recipientState ? "var(--mm-ink)" : "rgba(23, 21, 19, 0.4)",
+                              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath fill=\'none\' stroke=\'%23867d72\' stroke-width=\'1.5\' d=\'M1 1l4 4 4-4\'/%3E%3C/svg%3E")',
+                              backgroundRepeat: "no-repeat",
+                              backgroundPosition: "right 12px center",
+                              backgroundSize: "10px 6px",
+                              paddingRight: "30px"
+                            }}
                           >
-                            <option value="">ST</option>
-                            {US_STATES.map(st => <option key={st} value={st}>{st}</option>)}
+                            <option value="" style={{ background: "white", color: "var(--mm-ink)" }}>ST</option>
+                            {US_STATES.map(st => (
+                              <option key={st} value={st} style={{ background: "white", color: "var(--mm-ink)" }}>
+                                {st}
+                              </option>
+                            ))}
                           </select>
                           <input type="text" value={recipientZip} onChange={(e) => setRecipientZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
                         </div>
@@ -847,10 +860,23 @@ export default function SendCard() {
                           <select 
                             value={returnState} 
                             onChange={(e) => setReturnState(e.target.value)} 
-                            style={{...inputStyle, appearance: "none"}}
+                            style={{
+                              ...inputStyle, 
+                              appearance: "none", 
+                              color: returnState ? "var(--mm-ink)" : "rgba(23, 21, 19, 0.4)",
+                              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath fill=\'none\' stroke=\'%23867d72\' stroke-width=\'1.5\' d=\'M1 1l4 4 4-4\'/%3E%3C/svg%3E")',
+                              backgroundRepeat: "no-repeat",
+                              backgroundPosition: "right 12px center",
+                              backgroundSize: "10px 6px",
+                              paddingRight: "30px"
+                            }}
                           >
-                            <option value="">ST</option>
-                            {US_STATES.map(st => <option key={st} value={st}>{st}</option>)}
+                            <option value="" style={{ background: "white", color: "var(--mm-ink)" }}>ST</option>
+                            {US_STATES.map(st => (
+                              <option key={st} value={st} style={{ background: "white", color: "var(--mm-ink)" }}>
+                                {st}
+                              </option>
+                            ))}
                           </select>
                           <input type="text" value={returnZip} onChange={(e) => setReturnZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
                         </div>
