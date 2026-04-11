@@ -400,7 +400,7 @@ function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
               e.currentTarget.style.color = "var(--mm-forest)";
             }}
           >
-            Use This in a Letter
+            Use This in a Card
           </Link>
         </div>
       </div>
@@ -511,7 +511,7 @@ export default function Messages() {
                   marginBottom: "24px",
                 }}
               >
-                Use any of these phrases in a handwritten letter. We'll write, address, stamp, and mail it for you.
+                Use any of these phrases in a handwritten card. We'll write, address, stamp, and mail it for you.
               </p>
               <Link
                 href="/send"
@@ -550,7 +550,7 @@ export default function Messages() {
               }}
             >
               <p>
-                <strong>What's live right now:</strong> The handwritten letter service. For $15, we handwrite, address, stamp, and mail one full page on quality cardstock. Light help getting started is available to guide you as you write.
+                <strong>What's live right now:</strong> The handwritten card service. For $15, we handwrite, address, stamp, and mail one full page on quality cardstock. Light help getting started is available to guide you as you write.
               </p>
             </div>
           </FadeIn>

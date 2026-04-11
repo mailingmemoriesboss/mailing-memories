@@ -10,7 +10,7 @@ const IMAGES = {
 };
 
 const STEPS = [
-  { num: 1, label: "Letter" },
+  { num: 1, label: "Card" },
   { num: 2, label: "Envelope" },
   { num: 3, label: "Review" },
 ];
@@ -266,7 +266,7 @@ export default function SendCard() {
                 color: "var(--mm-burgundy)",
               }}
             >
-              Handwritten Letter Service
+              Handwritten Card Service
             </p>
           </FadeIn>
           <FadeIn delay={0.05}>
@@ -281,7 +281,7 @@ export default function SendCard() {
                 color: "var(--mm-forest)",
               }}
             >
-              Send a Letter
+              Send a Card
             </h1>
           </FadeIn>
           <FadeIn delay={0.1}>
@@ -295,7 +295,7 @@ export default function SendCard() {
                 maxWidth: "560px",
               }}
             >
-              Write directly on the card, address the envelope, and review your details before sending.
+              Write your message on the card, address the envelope, and review your details before sending.
             </p>
           </FadeIn>
         </div>
@@ -640,7 +640,7 @@ export default function SendCard() {
                       lineHeight: 1.6,
                     }}
                   >
-                    Tell us where the letter is going and what return address should appear.
+                    Tell us where the card is going and what return address should appear.
                   </p>
                 </div>
 

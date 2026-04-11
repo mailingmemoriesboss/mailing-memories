@@ -117,10 +117,10 @@ export function Navigation() {
   }, []);
 
   const navLinks = [
-    { label: "Send a Letter", href: "/send" },
-    { label: "Find Your Words", href: "/messages" },
+    { label: "Home", href: "/" },
+    { label: "Send a Card", href: "/send" },
     { label: "Plan Ahead", href: "/plan" },
-    { label: "About", href: "/#about" },
+    { label: "Find Your Words", href: "/messages" },
     { label: "FAQ", href: "/faq" },
   ];
 
@@ -196,7 +196,7 @@ export function Navigation() {
                 e.currentTarget.style.color = "var(--mm-forest)";
               }}
             >
-              Start Writing
+              Send a Card
             </Link>
           </li>
         </ul>
@@ -267,7 +267,7 @@ export function Navigation() {
               textTransform: "uppercase",
             }}
           >
-            Start Writing
+            Send a Card
           </Link>
         </div>
       )}

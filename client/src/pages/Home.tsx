@@ -121,30 +121,86 @@ function HeroSection() {
             fontWeight: 500,
             color: "var(--mm-ink-soft)",
           }}>
-            For the moments when digital isn't enough. We write, address, stamp, and mail one full handwritten page on quality cardstock for $15.
+            For the moments when digital isn't enough. We handwrite, address, stamp, and mail one full page on quality cardstock for $15.
           </p>
         </FadeIn>
 
         <FadeIn delay={0.45}>
-          <Link
-            href="/send"
-            className="no-underline inline-flex items-center justify-center transition-all duration-200"
-            style={{
-              minHeight: "56px",
-              padding: "0 36px",
-              borderRadius: "999px",
-              background: "var(--mm-forest)",
-              color: "#f7f2eb",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
-            }}
-          >
-            Send a Letter
-          </Link>
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", alignItems: "center" }}>
+            <Link
+              href="/send"
+              className="no-underline inline-flex items-center justify-center transition-all duration-200"
+              style={{
+                minHeight: "56px",
+                padding: "0 36px",
+                borderRadius: "999px",
+                background: "var(--mm-forest)",
+                color: "#f7f2eb",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
+              }}
+            >
+              Send a Card
+            </Link>
+            <Link
+              href="/plan"
+              className="no-underline inline-flex items-center justify-center transition-all duration-200"
+              style={{
+                minHeight: "56px",
+                padding: "0 36px",
+                borderRadius: "999px",
+                background: "transparent",
+                color: "var(--mm-forest)",
+                border: "1px solid var(--mm-forest)",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--mm-forest)";
+                e.currentTarget.style.color = "#f7f2eb";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = "var(--mm-forest)";
+              }}
+            >
+              Plan Ahead
+            </Link>
+            <Link
+              href="/messages"
+              className="no-underline inline-flex items-center justify-center transition-all duration-200"
+              style={{
+                minHeight: "56px",
+                padding: "0 36px",
+                borderRadius: "999px",
+                background: "transparent",
+                color: "var(--mm-forest)",
+                border: "1px solid var(--mm-forest)",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--mm-forest)";
+                e.currentTarget.style.color = "#f7f2eb";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = "var(--mm-forest)";
+              }}
+            >
+              Find Your Words
+            </Link>
+          </div>
         </FadeIn>
       </div>
     </section>
