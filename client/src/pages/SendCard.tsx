@@ -88,23 +88,12 @@ export default function SendCard() {
     }
   }, []);
 
+  // Initialize content on mount only, to avoid cursor jumping during typing
   useEffect(() => {
-    if (frontRef.current && frontRef.current.textContent !== frontMessage) {
-      frontRef.current.textContent = frontMessage;
-    }
-  }, [frontMessage]);
-
-  useEffect(() => {
-    if (insideRef.current && insideRef.current.textContent !== insideMessage) {
-      insideRef.current.textContent = insideMessage;
-    }
-  }, [insideMessage]);
-
-  useEffect(() => {
-    if (signatureRef.current && signatureRef.current.textContent !== signatureName) {
-      signatureRef.current.textContent = signatureName;
-    }
-  }, [signatureName]);
+    if (frontRef.current) frontRef.current.textContent = frontMessage;
+    if (insideRef.current) insideRef.current.textContent = insideMessage;
+    if (signatureRef.current) signatureRef.current.textContent = signatureName;
+  }, []);
 
   const handleFrontChange = (e: React.FormEvent<HTMLDivElement>) => {
     setFrontMessage(e.currentTarget.textContent || "");
