@@ -10,12 +10,14 @@ import SendCard from "./pages/SendCard";
 import AdminOrders from "./pages/AdminOrders";
 import FAQ from "./pages/FAQ";
 import PlanLetter from "./pages/PlanLetter";
+import Messages from "./pages/Messages";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/send"} component={SendCard} />
+      <Route path={"/messages"} component={Messages} />
       <Route path={"/admin/orders"} component={AdminOrders} />
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/plan"} component={PlanLetter} />
