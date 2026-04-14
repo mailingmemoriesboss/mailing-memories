@@ -10,7 +10,7 @@ const IMAGES = {
 };
 
 const STEPS = [
-  { num: 1, label: "Letter" },
+  { num: 1, label: "Card" },
   { num: 2, label: "Envelope" },
   { num: 3, label: "Review" },
 ];
@@ -247,7 +247,7 @@ export default function SendCard() {
                 color: "var(--mm-burgundy)",
               }}
             >
-              Handwritten Letter Service
+              Handwritten Card Service
             </p>
           </FadeIn>
           <FadeIn delay={0.05}>
@@ -262,7 +262,7 @@ export default function SendCard() {
                 color: "var(--mm-forest)",
               }}
             >
-              Send a Letter
+              Send a Card
             </h1>
           </FadeIn>
           <FadeIn delay={0.1}>
@@ -373,25 +373,26 @@ export default function SendCard() {
                 <div style={{ marginBottom: "32px" }}>
                   <h2
                     style={{
-                      margin: "0 0 8px",
+                      margin: "0 0 12px",
                       fontFamily: "var(--font-serif)",
                       fontSize: "1.8rem",
                       fontWeight: 500,
                       color: "var(--mm-forest)",
                     }}
                   >
-                    Write Your Card
+                    Personalize Your Card
                   </h2>
                   <p
                     style={{
-                      margin: 0,
+                      margin: "0 0 32px",
                       fontFamily: "var(--font-sans)",
                       fontSize: "0.95rem",
-                      color: "var(--mm-ink-soft)",
                       lineHeight: 1.6,
+                      color: "var(--mm-ink-soft)",
+                      maxWidth: "500px",
                     }}
                   >
-                    Click directly on the card to write. The front is optional. The inside message and signature are required to continue.
+                    Click on the dashed areas to write your message. All sections are optional—write as much or as little as you like.
                   </p>
                 </div>
 
@@ -441,7 +442,7 @@ export default function SendCard() {
                       <textarea
                         value={frontMessage}
                         onChange={handleFrontChange}
-                        placeholder="Click to write front message"
+                        placeholder="Write front message here..."
                         style={{
                           fontFamily: handwrittenFont,
                           fontSize: "clamp(24px, 5vw, 30px)",
@@ -454,19 +455,22 @@ export default function SendCard() {
                           letterSpacing: "0.01em",
                           outline: "none",
                           background: "transparent",
-                          border: "none",
+                          border: frontMessage ? "none" : "1px dashed rgba(55, 93, 129, 0.25)",
+                          borderRadius: "4px",
                           resize: "none",
                           overflow: "hidden",
                           minHeight: "80px",
                           cursor: "text",
                           padding: "8px",
-                          transition: "background 0.2s",
+                          transition: "all 0.2s",
                         }}
                         onFocus={(e) => {
                           e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
+                          e.currentTarget.style.borderColor = "rgba(55, 93, 129, 0.4)";
                         }}
                         onBlur={(e) => {
                           e.currentTarget.style.background = "transparent";
+                          if (frontMessage) e.currentTarget.style.border = "none";
                         }}
                       />
                     </div>
@@ -512,7 +516,7 @@ export default function SendCard() {
                         <textarea
                           value={insideMessage}
                           onChange={handleInsideChange}
-                          placeholder="Click to write your message"
+                          placeholder="Write your message inside..."
                           style={{
                             fontFamily: handwrittenFont,
                             fontSize: "clamp(14px, 4vw, 16px)",
@@ -522,26 +526,34 @@ export default function SendCard() {
                             minHeight: "120px",
                             outline: "none",
                             background: "transparent",
-                            border: "none",
+                            border: insideMessage ? "none" : "1px dashed rgba(61, 43, 31, 0.15)",
+                            borderRadius: "4px",
                             resize: "none",
                             cursor: "text",
                             padding: "8px",
-                            transition: "background 0.2s",
-                            marginBottom: "4px",
+                            transition: "all 0.2s",
+                            marginBottom: "8px",
                           }}
                           onFocus={(e) => {
                             e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
+                            e.currentTarget.style.borderColor = "rgba(61, 43, 31, 0.25)";
                           }}
                           onBlur={(e) => {
                             e.currentTarget.style.background = "transparent";
+                            if (insideMessage) e.currentTarget.style.border = "none";
                           }}
                         />
-                        <div className="flex items-center">
+                        <div className="flex items-center" style={{ 
+                          border: signatureName ? "none" : "1px dashed rgba(61, 43, 31, 0.15)",
+                          borderRadius: "4px",
+                          padding: "2px 0",
+                          transition: "all 0.2s"
+                        }}>
                           <span style={{ fontFamily: handwrittenFont, fontSize: "clamp(14px, 4vw, 16px)", color: "var(--mm-pen-blue)", paddingLeft: "8px" }}>—</span>
                           <input
                             value={signatureName}
                             onChange={(e) => setSignatureName(e.target.value)}
-                            placeholder="Your Name"
+                            placeholder="Sign your name"
                             style={{
                               fontFamily: handwrittenFont,
                               fontSize: "clamp(14px, 4vw, 16px)",
@@ -560,23 +572,22 @@ export default function SendCard() {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => canAdvance() && setCurrentStep(2)}
-                  disabled={!canAdvance()}
-                  style={{
-                    marginTop: "32px",
-                    padding: "14px 32px",
-                    background: canAdvance() ? "var(--mm-forest)" : "var(--mm-line)",
-                    color: canAdvance() ? "#f5f1ea" : "var(--mm-ink-muted)",
-                    border: "none",
-                    borderRadius: "3px",
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "0.95rem",
-                    fontWeight: 600,
-                    cursor: canAdvance() ? "pointer" : "not-allowed",
-                    transition: "background 0.2s",
-                    display: "block",
-                    marginInline: "auto",
+                           <button
+                    onClick={() => setCurrentStep(3)}
+                    style={{
+                      padding: "12px 24px",
+                      background: "var(--mm-forest)",
+                      color: "#f5f1ea",
+                      border: "none",
+                      borderRadius: "3px",
+                      fontFamily: "var(--font-sans)",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Continue to Review →
+                  </button>   marginInline: "auto",
                   }}
                 >
                   Continue to Envelope →
@@ -902,21 +913,20 @@ export default function SendCard() {
                     ← Back to Card
                   </button>
                   <button
-                    onClick={() => canAdvance() && setCurrentStep(3)}
-                    disabled={!canAdvance()}
+                    onClick={() => setCurrentStep(2)}
                     style={{
                       padding: "12px 24px",
-                      background: canAdvance() ? "var(--mm-forest)" : "var(--mm-line)",
-                      color: canAdvance() ? "#f5f1ea" : "var(--mm-ink-muted)",
+                      background: "var(--mm-forest)",
+                      color: "#f5f1ea",
                       border: "none",
                       borderRadius: "3px",
                       fontFamily: "var(--font-sans)",
                       fontSize: "0.9rem",
                       fontWeight: 600,
-                      cursor: canAdvance() ? "pointer" : "not-allowed",
+                      cursor: "pointer",
                     }}
                   >
-                    Continue to Review →
+                    Continue to Envelope →
                   </button>
                 </div>
               </motion.div>
@@ -1008,10 +1018,21 @@ export default function SendCard() {
                             Mailing Date
                           </p>
                           <button 
-                            onClick={() => setIsCustomDate(!isCustomDate)}
-                            style={{ background: "none", border: "none", color: "var(--mm-burgundy)", fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", cursor: "pointer", textDecoration: "underline" }}
+                            onClick={() => setIsCustomDate(true)}
+                            style={{ 
+                              display: isCustomDate ? "none" : "block",
+                              background: "none", 
+                              border: "none", 
+                              color: "var(--mm-burgundy)", 
+                              fontSize: "0.65rem", 
+                              fontWeight: 600, 
+                              textTransform: "uppercase", 
+                              letterSpacing: "0.05em", 
+                              cursor: "pointer", 
+                              textDecoration: "underline" 
+                            }}
                           >
-                            {isCustomDate ? "Use Default" : "Select Date"}
+                            Select a specific date
                           </button>
                         </div>
                         
