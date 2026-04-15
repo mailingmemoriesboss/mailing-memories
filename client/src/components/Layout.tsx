@@ -39,63 +39,80 @@ export function RotatingTagline() {
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % ROTATING_PHRASES.length);
         setIsRevealing(true);
-      }, 400);
-    }, 4000);
+      }, 500);
+    }, 4500);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="relative z-50" style={{ background: "#161412", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+    <div className="relative z-50" style={{ 
+      background: "var(--mm-forest)", 
+      borderBottom: "1px solid rgba(255,255,255,0.1)",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
+    }}>
       <style>{`
-        @keyframes paperFlip {
+        @keyframes pageFlipIn {
           0% {
             opacity: 0;
-            transform: rotateY(-90deg) rotateX(0deg);
-          }
-          50% {
-            transform: rotateY(0deg) rotateX(0deg);
+            transform: rotateX(-90deg);
+            transform-origin: top;
           }
           100% {
             opacity: 1;
-            transform: rotateY(0deg) rotateX(0deg);
+            transform: rotateX(0deg);
+            transform-origin: top;
           }
         }
-        @keyframes paperFlipOut {
+        @keyframes pageFlipOut {
           0% {
             opacity: 1;
-            transform: rotateY(0deg);
+            transform: rotateX(0deg);
+            transform-origin: bottom;
           }
           100% {
             opacity: 0;
-            transform: rotateY(90deg);
+            transform: rotateX(90deg);
+            transform-origin: bottom;
           }
         }
       `}</style>
-      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[6px] text-center flex-wrap px-4 md:px-6"
+      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[8px] text-center flex-wrap px-4 md:px-6"
         style={{
-          minHeight: "52px",
-          padding: "12px 24px",
+          minHeight: "64px",
+          padding: "16px 24px",
           fontFamily: "var(--font-sans)",
-          fontSize: "clamp(0.65rem, 2vw, 0.75rem)",
-          fontWeight: 500,
-          letterSpacing: "0.14em",
+          fontSize: "clamp(0.7rem, 2.5vw, 0.85rem)",
+          fontWeight: 600,
+          letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "rgba(255,255,255,0.82)",
+          color: "rgba(255,255,255,0.9)",
         }}>
         <span>Because</span>
-        <span
-          className="inline-block"
+        <div
+          className="inline-block overflow-hidden"
           style={{
-            minWidth: "120px",
-            color: "#f2e9dc",
-            fontWeight: 700,
+            minWidth: "160px",
+            height: "1.4em",
             perspective: "1000px",
-            animation: isRevealing ? "paperFlip 700ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "paperFlipOut 500ms ease-in forwards",
+            verticalAlign: "middle",
+            position: "relative"
           }}
-          key={currentIndex}
         >
-          {ROTATING_PHRASES[currentIndex]}
-        </span>
+          <span
+            className="inline-block w-full"
+            style={{
+              color: "#f2e9dc",
+              fontWeight: 800,
+              position: "absolute",
+              left: 0,
+              top: 0,
+              animation: isRevealing ? "pageFlipIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards" : "pageFlipOut 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+            }}
+            key={currentIndex}
+          >
+            {ROTATING_PHRASES[currentIndex]}
+          </span>
+        </div>
         <span>deserves real paper.</span>
       </div>
     </div>
@@ -117,9 +134,10 @@ export function Navigation() {
   }, []);
 
   const navLinks = [
-    { label: "Send a Letter", href: "/send" },
+    { label: "Home", href: "/" },
+    { label: "Send a Card", href: "/send" },
     { label: "Plan Ahead", href: "/plan" },
-    { label: "About", href: "/#about" },
+    { label: "Find Your Words", href: "/messages" },
     { label: "FAQ", href: "/faq" },
   ];
 
@@ -195,7 +213,7 @@ export function Navigation() {
                 e.currentTarget.style.color = "var(--mm-forest)";
               }}
             >
-              Start Writing
+              Send a Card
             </Link>
           </li>
         </ul>
@@ -266,7 +284,7 @@ export function Navigation() {
               textTransform: "uppercase",
             }}
           >
-            Start Writing
+            Send a Card
           </Link>
         </div>
       )}
@@ -348,7 +366,7 @@ export function Footer() {
               color: "rgba(245, 241, 234, 0.4)",
               maxWidth: "320px",
             }}>
-              Handwritten letter services for the things that deserve more than a text.
+              Handwritten card services for the things that deserve more than a text.
             </p>
           </div>
 
@@ -366,10 +384,12 @@ export function Footer() {
               Navigate
             </p>
             {[
-              { label: "Send a Letter", href: "/send" },
-              { label: "About", href: "/#about" },
+              { label: "Home", href: "/" },
+              { label: "Send a Card", href: "/send" },
+              { label: "Plan Ahead", href: "/plan" },
+              { label: "Find Your Words", href: "/messages" },
               { label: "FAQ", href: "/faq" },
-              { label: "Contact", href: "mailto:hello@mailingmemories.com" },
+              { label: "Contact", href: "mailto:mailingmemoriesboss@gmail.com" },
             ].map((link) => (
               <Link
                 key={link.label}
@@ -403,7 +423,7 @@ export function Footer() {
               Get in touch
             </p>
             <a
-              href="mailto:hello@mailingmemories.com"
+              href="mailto:mailingmemoriesboss@gmail.com"
               className="no-underline transition-colors duration-200"
               style={{
                 fontFamily: "var(--font-sans)",
@@ -413,17 +433,30 @@ export function Footer() {
               onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.55)")}
             >
-              hello@mailingmemories.com
+              mailingmemoriesboss@gmail.com
             </a>
-            <p style={{
-              margin: "12px 0 0",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.78rem",
-              lineHeight: 1.7,
-              color: "rgba(245, 241, 234, 0.35)",
-            }}>
-              Waynesboro, Virginia
-            </p>
+            <div style={{ marginTop: "16px", display: "flex", gap: "16px" }}>
+              <a 
+                href="https://www.facebook.com/share/1H5deSru5W/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: "rgba(245, 241, 234, 0.45)", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.45)")}
+              >
+                Facebook
+              </a>
+              <a 
+                href="https://www.instagram.com/themailingmemories?igsh=MTR4NnhtcDhnaXB5Mg==" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: "rgba(245, 241, 234, 0.45)", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.45)")}
+              >
+                Instagram
+              </a>
+            </div>
           </div>
         </div>
 
