@@ -78,23 +78,22 @@ export function RotatingTagline() {
           }
         }
       `}</style>
-      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[12px] text-center flex-wrap px-4 md:px-6"
+      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[10px] text-center flex-wrap px-4 md:px-6"
         style={{
-          minHeight: "64px",
-          padding: "16px 24px",
+          minHeight: "48px",
+          padding: "12px 24px",
           fontFamily: "var(--font-sans)",
-          fontSize: "clamp(0.65rem, 2vw, 0.8rem)",
-          fontWeight: 600,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
+          fontSize: "clamp(0.6rem, 1.8vw, 0.75rem)",
+          fontWeight: 500,
+          letterSpacing: "0.08em",
           color: "var(--mm-forest)",
         }}>
         <span style={{ whiteSpace: "nowrap" }}>Because</span>
         <div
           className="inline-block overflow-visible"
           style={{
-            minWidth: "clamp(140px, 40vw, 220px)",
-            height: "1.8em",
+            minWidth: "clamp(100px, 35vw, 160px)",
+            height: "1.5em",
             perspective: "1200px",
             verticalAlign: "middle",
             position: "relative",
@@ -109,25 +108,25 @@ export function RotatingTagline() {
               width: "100%",
               height: "100%",
               background: "#fdfcf9",
-              border: "1px solid rgba(29, 41, 33, 0.15)",
-              borderRadius: "2px",
+              border: "1px solid rgba(29, 41, 33, 0.12)",
+              borderRadius: "3px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              padding: "6px 12px",
-              boxShadow: "0 2px 8px rgba(29, 41, 33, 0.08)",
+              padding: "4px 10px",
+              boxShadow: "0 1px 4px rgba(29, 41, 33, 0.06)",
               animation: isRevealing ? "cardSendIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "cardSendOut 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
             }}
           >
             <span
               style={{
                 fontFamily: "var(--font-handwriting)",
-                fontSize: "clamp(0.85rem, 2.5vw, 1.1rem)",
+                fontSize: "clamp(0.7rem, 2vw, 0.9rem)",
                 fontStyle: "italic",
                 fontWeight: 400,
                 color: "var(--mm-pen-blue)",
                 textAlign: "center",
-                lineHeight: 1.2,
+                lineHeight: 1.1,
               }}
               key={currentIndex}
             >
@@ -173,7 +172,7 @@ export function Navigation() {
       }}
     >
       <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-6"
-        style={{ minHeight: "72px", padding: "0 24px" }}>
+        style={{ minHeight: "60px", padding: "0 24px" }}>
         
         {/* Logo */}
         <Link href="/" className="no-underline flex flex-col" style={{ lineHeight: 1 }}>
