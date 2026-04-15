@@ -46,9 +46,9 @@ export function RotatingTagline() {
 
   return (
     <div className="relative z-50" style={{ 
-      background: "var(--mm-forest)", 
-      borderBottom: "1px solid rgba(255,255,255,0.1)",
-      boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
+      background: "linear-gradient(to bottom, rgba(55, 93, 129, 0.85) 0%, rgba(55, 93, 129, 0.75) 100%)", 
+      borderBottom: "1px solid rgba(255,255,255,0.08)",
+      boxShadow: "0 2px 12px rgba(0,0,0,0.08)"
     }}>
       <style>{`
         @keyframes pageFlipIn {
@@ -75,8 +75,13 @@ export function RotatingTagline() {
             transform-origin: bottom;
           }
         }
+        @media (max-width: 768px) {
+          .rotating-tagline-container {
+            flex-wrap: wrap;
+          }
+        }
       `}</style>
-      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[8px] text-center flex-wrap px-4 md:px-6"
+      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[8px] text-center flex-nowrap px-4 md:px-6"
         style={{
           minHeight: "64px",
           padding: "16px 24px",
@@ -85,24 +90,28 @@ export function RotatingTagline() {
           fontWeight: 600,
           letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "rgba(255,255,255,0.9)",
+          color: "rgba(255,255,255,0.92)",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
         }}>
-        <span>Because</span>
+        <span style={{ whiteSpace: "nowrap" }}>Because</span>
         <div
           className="inline-block overflow-hidden"
           style={{
-            minWidth: "160px",
+            minWidth: "180px",
+            maxWidth: "180px",
             height: "1.4em",
             perspective: "1000px",
             verticalAlign: "middle",
-            position: "relative"
+            position: "relative",
+            flexShrink: 0,
           }}
         >
           <span
-            className="inline-block w-full"
+            className="inline-block w-full text-center"
             style={{
               color: "#f2e9dc",
-              fontWeight: 800,
+              fontWeight: 700,
               position: "absolute",
               left: 0,
               top: 0,
@@ -113,7 +122,7 @@ export function RotatingTagline() {
             {ROTATING_PHRASES[currentIndex]}
           </span>
         </div>
-        <span>deserves real paper.</span>
+        <span style={{ whiteSpace: "nowrap" }}>deserves real paper.</span>
       </div>
     </div>
   );
