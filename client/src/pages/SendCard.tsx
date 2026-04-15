@@ -316,21 +316,23 @@ export default function SendCard() {
                             : "var(--mm-line)",
                         color:
                           step.num <= currentStep ? "#f5f1ea" : "var(--mm-ink-muted)",
+                        transition: "all 0.25s",
                       }}
                     >
-                      {step.num < currentStep ? "✓" : step.num}
+                      {step.num}
                     </span>
                     <span
                       style={{
                         fontFamily: "var(--font-sans)",
-                        fontSize: "0.68rem",
-                        fontWeight: 500,
-                        letterSpacing: "0.06em",
+                        fontSize: "0.74rem",
+                        fontWeight: 600,
                         textTransform: "uppercase",
+                        letterSpacing: "0.08em",
                         color:
                           step.num === currentStep
                             ? "var(--mm-forest)"
                             : "var(--mm-ink-muted)",
+                        transition: "all 0.25s",
                       }}
                     >
                       {step.label}
@@ -341,9 +343,8 @@ export default function SendCard() {
                       style={{
                         flex: 1,
                         height: "1px",
+                        background: "var(--mm-line)",
                         margin: "0 12px",
-                        background:
-                          step.num < currentStep ? "var(--mm-burgundy)" : "var(--mm-line)",
                       }}
                     />
                   )}
@@ -351,777 +352,727 @@ export default function SendCard() {
               ))}
             </div>
           </FadeIn>
-        </div>
-      </section>
 
-      <section
-        style={{
-          padding: "0 24px clamp(48px, 6vw, 80px)",
-          background: "var(--mm-cream)",
-        }}
-      >
-        <div className="max-w-[1240px] mx-auto">
-          <AnimatePresence mode="wait">
-            {currentStep === 1 && (
-              <motion.div
-                key="step-card"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.28 }}
-              >
-                <div style={{ marginBottom: "32px" }}>
-                  <h2
-                    style={{
-                      margin: "0 0 12px",
-                      fontFamily: "var(--font-serif)",
-                      fontSize: "1.8rem",
-                      fontWeight: 500,
-                      color: "var(--mm-forest)",
-                    }}
-                  >
-                    Personalize Your Card
-                  </h2>
-                  <p
-                    style={{
-                      margin: "0 0 32px",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.95rem",
-                      lineHeight: 1.6,
-                      color: "var(--mm-ink-soft)",
-                      maxWidth: "500px",
-                    }}
-                  >
-                    Click on the dashed areas to write your message. All sections are optional—write as much or as little as you like.
-                  </p>
-                </div>
-
-                <div
-                  className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-                  style={{ alignItems: "start" }}
+          <div style={{ marginTop: "40px" }}>
+            <AnimatePresence mode="wait">
+              {currentStep === 1 && (
+                <motion.div
+                  key="step-card"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.28 }}
                 >
-                  <div
-                    style={{
-                      backgroundImage: `url("${IMAGES.woodTexture}")`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      padding: "40px 32px",
-                      borderRadius: "4px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      minHeight: "320px",
-                    }}
-                  >
-                    <div
+                  <div style={{ marginBottom: "32px" }}>
+                    <h2
                       style={{
-                        width: "100%",
-                        maxWidth: "100%",
-                        background: "#faf7f2",
-                        padding: "28px 26px",
-                        boxShadow: "0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
-                        border: "1px solid rgba(61,43,31,0.08)",
-                        borderRadius: "3px",
-                        minHeight: "160px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position: "relative",
+                        margin: "0 0 12px",
+                        fontFamily: "var(--font-serif)",
+                        fontSize: "1.8rem",
+                        fontWeight: 500,
+                        color: "var(--mm-forest)",
                       }}
                     >
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "18px",
-                          left: "24px",
-                          right: "24px",
-                          height: "1px",
-                          background: "rgba(55, 93, 129, 0.18)",
-                        }}
-                      />
-                      <textarea
-                        value={frontMessage}
-                        onChange={handleFrontChange}
-                        placeholder="Write front message here..."
-                        style={{
-                          fontFamily: handwrittenFont,
-                          fontSize: "clamp(24px, 5vw, 30px)",
-                          fontWeight: 400,
-                          lineHeight: 1.12,
-                          color: "var(--mm-forest)",
-                          textAlign: "center",
-                          width: "100%",
-                          maxWidth: "260px",
-                          letterSpacing: "0.01em",
-                          outline: "none",
-                          background: "transparent",
-                          border: frontMessage ? "none" : "1px dashed rgba(55, 93, 129, 0.25)",
-                          borderRadius: "4px",
-                          resize: "none",
-                          overflow: "hidden",
-                          minHeight: "80px",
-                          cursor: "text",
-                          padding: "8px",
-                          transition: "all 0.2s",
-                        }}
-                        onFocus={(e) => {
-                          e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
-                          e.currentTarget.style.borderColor = "rgba(55, 93, 129, 0.4)";
-                        }}
-                        onBlur={(e) => {
-                          e.currentTarget.style.background = "transparent";
-                          if (frontMessage) e.currentTarget.style.border = "none";
-                        }}
-                      />
-                    </div>
+                      Personalize Your Card
+                    </h2>
+                    <p
+                      style={{
+                        margin: "0 0 32px",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.95rem",
+                        lineHeight: 1.6,
+                        color: "var(--mm-ink-soft)",
+                        maxWidth: "500px",
+                      }}
+                    >
+                      Click on the dashed areas to write your message. All sections are optional—write as much or as little as you like.
+                    </p>
                   </div>
 
                   <div
-                    style={{
-                      backgroundImage: `url("${IMAGES.woodTexture}")`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      padding: "40px 32px",
-                      borderRadius: "4px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      minHeight: "320px",
-                    }}
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+                    style={{ alignItems: "start" }}
                   >
                     <div
                       style={{
-                        width: "100%",
-                        maxWidth: "100%",
-                        background: "#faf7f2",
-                        padding: "18px 20px 16px",
-                        boxShadow: "0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
-                        border: "1px solid rgba(61,43,31,0.08)",
-                        borderRadius: "3px",
-                        minHeight: "160px",
-                        position: "relative",
+                        backgroundImage: `url("${IMAGES.woodTexture}")`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        padding: "40px 32px",
+                        borderRadius: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "440px",
                       }}
                     >
                       <div
                         style={{
-                          position: "absolute",
-                          top: 0,
-                          left: "18px",
-                          right: "18px",
-                          height: "18px",
-                          borderBottom: "1px solid rgba(61,43,31,0.06)",
+                          width: "100%",
+                          maxWidth: "320px",
+                          aspectRatio: "1.5 / 1",
+                          background: "#fdfcf9",
+                          boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+                          padding: "24px",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          position: "relative",
                         }}
-                      />
-                      <div style={{ paddingTop: "6px" }}>
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                            maxWidth: "240px",
+                            height: "1px",
+                            background: "rgba(55, 93, 129, 0.18)",
+                            marginBottom: "16px",
+                          }}
+                        />
                         <textarea
-                          value={insideMessage}
-                          onChange={handleInsideChange}
-                          placeholder="Write your message inside..."
+                          value={frontMessage}
+                          onChange={handleFrontChange}
+                          placeholder="Write front message here..."
                           style={{
                             fontFamily: handwrittenFont,
-                            fontSize: "clamp(14px, 4vw, 16px)",
-                            lineHeight: 1.34,
-                            color: "var(--mm-pen-blue)",
+                            fontSize: "clamp(24px, 5vw, 30px)",
+                            fontWeight: 400,
+                            lineHeight: 1.12,
+                            color: "var(--mm-forest)",
+                            textAlign: "center",
                             width: "100%",
-                            minHeight: "120px",
+                            maxWidth: "260px",
+                            letterSpacing: "0.01em",
                             outline: "none",
                             background: "transparent",
-                            border: insideMessage ? "none" : "1px dashed rgba(61, 43, 31, 0.15)",
+                            border: frontMessage ? "none" : "1px dashed rgba(55, 93, 129, 0.25)",
                             borderRadius: "4px",
                             resize: "none",
+                            overflow: "hidden",
+                            minHeight: "80px",
                             cursor: "text",
                             padding: "8px",
                             transition: "all 0.2s",
-                            marginBottom: "8px",
                           }}
                           onFocus={(e) => {
                             e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
-                            e.currentTarget.style.borderColor = "rgba(61, 43, 31, 0.25)";
+                            e.currentTarget.style.borderColor = "rgba(55, 93, 129, 0.4)";
                           }}
                           onBlur={(e) => {
                             e.currentTarget.style.background = "transparent";
-                            if (insideMessage) e.currentTarget.style.border = "none";
+                            if (frontMessage) e.currentTarget.style.border = "none";
                           }}
                         />
-                        <div className="flex items-center" style={{ 
-                          border: signatureName ? "none" : "1px dashed rgba(61, 43, 31, 0.15)",
-                          borderRadius: "4px",
-                          padding: "2px 0",
-                          transition: "all 0.2s"
-                        }}>
-                          <span style={{ fontFamily: handwrittenFont, fontSize: "clamp(14px, 4vw, 16px)", color: "var(--mm-pen-blue)", paddingLeft: "8px" }}>—</span>
-                          <input
-                            value={signatureName}
-                            onChange={(e) => setSignatureName(e.target.value)}
-                            placeholder="Sign your name"
+                        <div
+                          style={{
+                            width: "100%",
+                            maxWidth: "240px",
+                            height: "1px",
+                            background: "rgba(55, 93, 129, 0.18)",
+                            marginTop: "16px",
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        backgroundImage: `url("${IMAGES.woodTexture}")`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        padding: "40px 32px",
+                        borderRadius: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "440px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "100%",
+                          maxWidth: "320px",
+                          aspectRatio: "1.5 / 1",
+                          background: "#fdfcf9",
+                          boxShadow: "0 12px 40px rgba(0,0,0,0.15)",
+                          padding: "24px",
+                          display: "flex",
+                          flexDirection: "column",
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          style={{
+                            flex: 1,
+                            borderLeft: "1px solid rgba(61,43,31,0.08)",
+                            paddingLeft: "16px",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "1px",
+                              background: "rgba(61,43,31,0.06)",
+                              marginBottom: "12px",
+                            }}
+                          />
+                          <textarea
+                            value={insideMessage}
+                            onChange={handleInsideChange}
+                            placeholder="Write your message inside..."
                             style={{
                               fontFamily: handwrittenFont,
                               fontSize: "clamp(14px, 4vw, 16px)",
+                              lineHeight: 1.34,
                               color: "var(--mm-pen-blue)",
-                              background: "transparent",
-                              border: "none",
-                              outline: "none",
-                              padding: "8px 4px",
                               width: "100%",
+                              minHeight: "120px",
+                              outline: "none",
+                              background: "transparent",
+                              border: insideMessage ? "none" : "1px dashed rgba(61, 43, 31, 0.15)",
+                              borderRadius: "4px",
+                              resize: "none",
                               cursor: "text",
+                              padding: "8px",
+                              transition: "all 0.2s",
+                              marginBottom: "8px",
+                            }}
+                            onFocus={(e) => {
+                              e.currentTarget.style.background = "rgba(245, 241, 234, 0.5)";
+                              e.currentTarget.style.borderColor = "rgba(61, 43, 31, 0.25)";
+                            }}
+                            onBlur={(e) => {
+                              e.currentTarget.style.background = "transparent";
+                              if (insideMessage) e.currentTarget.style.border = "none";
                             }}
                           />
+                          <div className="flex items-center" style={{ 
+                            border: signatureName ? "none" : "1px dashed rgba(61, 43, 31, 0.15)",
+                            borderRadius: "4px",
+                            padding: "2px 0",
+                            transition: "all 0.2s"
+                          }}>
+                            <span style={{ fontFamily: handwrittenFont, fontSize: "clamp(14px, 4vw, 16px)", color: "var(--mm-pen-blue)", paddingLeft: "8px" }}>—</span>
+                            <input
+                              value={signatureName}
+                              onChange={(e) => setSignatureName(e.target.value)}
+                              placeholder="Sign your name"
+                              style={{
+                                fontFamily: handwrittenFont,
+                                fontSize: "clamp(14px, 4vw, 16px)",
+                                color: "var(--mm-pen-blue)",
+                                background: "transparent",
+                                border: "none",
+                                outline: "none",
+                                padding: "8px 4px",
+                                width: "100%",
+                                cursor: "text",
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                           <button
-                    onClick={() => setCurrentStep(3)}
-                    style={{
-                      padding: "12px 24px",
-                      background: "var(--mm-forest)",
-                      color: "#f5f1ea",
-                      border: "none",
-                      borderRadius: "3px",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.9rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Continue to Review →
-                  </button>   marginInline: "auto",
-                  }}
-                >
-                  Continue to Envelope →
-                </button>
-              </motion.div>
-            )}
-
-            {currentStep === 2 && (
-              <motion.div
-                key="step-envelope"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.28 }}
-              >
-                <div style={{ marginBottom: "32px" }}>
-                  <h2
-                    style={{
-                      margin: "0 0 8px",
-                      fontFamily: "var(--font-serif)",
-                      fontSize: "1.8rem",
-                      fontWeight: 500,
-                      color: "var(--mm-forest)",
-                    }}
-                  >
-                    Address Your Envelope
-                  </h2>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.95rem",
-                      color: "var(--mm-ink-soft)",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Tell us where the letter is going and what return address should appear.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div
-                    style={{
-                      backgroundImage: `url("${IMAGES.woodTexture}")`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      padding: "40px 32px",
-                      borderRadius: "4px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      minHeight: "320px",
-                    }}
-                  >
-                    <div
+                  <div className="flex justify-end mt-8">
+                    <button
+                      onClick={() => setCurrentStep(2)}
                       style={{
-                        width: "100%",
-                        maxWidth: "320px",
-                        height: "200px",
-                        background: "#f0ebe3",
-                        padding: "16px 18px 14px",
-                        boxShadow: "0 12px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
-                        border: "1px solid rgba(61,43,31,0.08)",
-                        position: "relative",
+                        padding: "12px 24px",
+                        background: "var(--mm-forest)",
+                        color: "#f5f1ea",
+                        border: "none",
                         borderRadius: "3px",
-                        overflow: "hidden",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
                       }}
                     >
-                      <img
-                        src={IMAGES.foreverStamp}
-                        alt="Forever stamp"
-                        style={{
-                          position: "absolute",
-                          top: "10px",
-                          right: "12px",
-                          width: "40px",
-                          height: "50px",
-                          objectFit: "contain",
-                          background: "transparent",
-                          borderRadius: "2px",
-                        }}
-                      />
+                      Continue to Envelope →
+                    </button>
+                  </div>
+                </motion.div>
+              )}
 
+              {currentStep === 2 && (
+                <motion.div
+                  key="step-envelope"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.28 }}
+                >
+                  <div style={{ marginBottom: "32px" }}>
+                    <h2
+                      style={{
+                        margin: "0 0 8px",
+                        fontFamily: "var(--font-serif)",
+                        fontSize: "1.8rem",
+                        fontWeight: 500,
+                        color: "var(--mm-forest)",
+                      }}
+                    >
+                      Address Your Envelope
+                    </h2>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.95rem",
+                        color: "var(--mm-ink-soft)",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      Tell us where the letter is going and what return address should appear.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div
+                      style={{
+                        backgroundImage: `url("${IMAGES.woodTexture}")`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        padding: "40px 32px",
+                        borderRadius: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minHeight: "320px",
+                      }}
+                    >
                       <div
                         style={{
-                          position: "absolute",
-                          top: "14px",
-                          left: "16px",
-                          width: "136px",
+                          width: "100%",
+                          maxWidth: "320px",
+                          height: "200px",
+                          background: "#f0ebe3",
+                          boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+                          padding: "16px",
+                          position: "relative",
+                          display: "flex",
+                          flexDirection: "column",
                         }}
                       >
+                        {/* Stamp */}
+                        <div
+                          style={{
+                            position: "absolute",
+                            top: "12px",
+                            right: "12px",
+                            width: "42px",
+                            height: "52px",
+                            background: `url("${IMAGES.foreverStamp}")`,
+                            backgroundSize: "contain",
+                            backgroundRepeat: "no-repeat",
+                          }}
+                        />
+
+                        {/* Return Address */}
+                        <div
+                          style={{
+                            maxWidth: "140px",
+                            fontFamily: handwrittenFont,
+                            fontSize: "10px",
+                            lineHeight: 1.3,
+                            color: "var(--mm-ink)",
+                            opacity: 0.8,
+                          }}
+                        >
+                          <p style={{ margin: 0, fontWeight: 500 }}>{returnNameDisplay}</p>
+                          <p style={{ margin: 0 }}>{returnAddress1}</p>
+                          {returnAddress2 && <p style={{ margin: 0 }}>{returnAddress2}</p>}
+                          <p style={{ margin: 0 }}>
+                            {returnCity && `${returnCity}, `}
+                            {returnState && `${returnState} `}
+                            {returnZip}
+                          </p>
+                        </div>
+
+                        {/* Recipient Address */}
+                        <div
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            paddingTop: "12px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              textAlign: "left",
+                              fontFamily: handwrittenFont,
+                              fontSize: "14px",
+                              lineHeight: 1.4,
+                              color: "var(--mm-ink)",
+                            }}
+                          >
+                            {recipientLines.map((line, idx) => (
+                              <p
+                                key={idx}
+                                style={{
+                                  margin: 0,
+                                  fontSize: idx === 0 ? fitNameFontSize(line) : "13px",
+                                  fontWeight: idx === 0 ? 500 : 400,
+                                }}
+                              >
+                                {line}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-8">
+                      <div>
                         <p
                           style={{
-                            margin: "0 0 6px",
+                            margin: "0 0 12px",
                             fontFamily: "var(--font-sans)",
-                            fontSize: "7px",
+                            fontSize: "0.74rem",
                             fontWeight: 600,
-                            letterSpacing: "0.18em",
                             textTransform: "uppercase",
-                            color: "rgba(55, 93, 129, 0.24)",
+                            letterSpacing: "0.1em",
+                            color: "var(--mm-burgundy)",
+                          }}
+                        >
+                          Who’s receiving this?
+                        </p>
+                        <div className="flex flex-col gap-3">
+                          <input type="text" value={recipientName} onChange={(e) => setRecipientName(e.target.value)} placeholder="Full name" style={inputStyle} />
+                          <input type="text" value={recipientAddress1} onChange={(e) => setRecipientAddress1(e.target.value)} placeholder="Street address" style={inputStyle} />
+                          <input type="text" value={recipientAddress2} onChange={(e) => setRecipientAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
+                          <div className="grid grid-cols-3 gap-3">
+                            <input type="text" value={recipientCity} onChange={(e) => setRecipientCity(e.target.value)} placeholder="City" style={inputStyle} />
+                            <select 
+                              value={recipientState} 
+                              onChange={(e) => setRecipientState(e.target.value)} 
+                              style={{
+                                ...inputStyle, 
+                                appearance: "none", 
+                                color: recipientState ? "var(--mm-ink)" : "rgba(23, 21, 19, 0.4)",
+                                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath fill=\'none\' stroke=\'%23867d72\' stroke-width=\'1.5\' d=\'M1 1l4 4 4-4\'/%3E%3C/svg%3E")',
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "right 12px center",
+                                backgroundSize: "10px 6px",
+                                paddingRight: "30px"
+                              }}
+                            >
+                              <option value="" style={{ background: "white", color: "var(--mm-ink)" }}>ST</option>
+                              {US_STATES.map(st => (
+                                <option key={st} value={st} style={{ background: "white", color: "var(--mm-ink)" }}>
+                                  {st}
+                                </option>
+                              ))}
+                            </select>
+                            <input type="text" value={recipientZip} onChange={(e) => setRecipientZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p
+                          style={{
+                            margin: "0 0 12px",
+                            fontFamily: "var(--font-sans)",
+                            fontSize: "0.74rem",
+                            fontWeight: 600,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.1em",
+                            color: "var(--mm-burgundy)",
                           }}
                         >
                           Return address
                         </p>
-                        <p
-                          style={{
-                            margin: 0,
-                            fontFamily: handwrittenFont,
-                            fontSize: fitNameFontSize(returnNameDisplay),
-                            lineHeight: 1.08,
-                            color: "var(--mm-ink-muted)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            letterSpacing: "0.01em",
-                          }}
-                        >
-                          {returnNameDisplay}
-                        </p>
-                        <p
-                          style={{
-                            margin: "1px 0 0",
-                            fontFamily: handwrittenFont,
-                            fontSize: "12px",
-                            lineHeight: 1.08,
-                            color: "var(--mm-ink-muted)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            letterSpacing: "0.01em",
-                          }}
-                        >
-                          {returnAddress1 || "456 Return Ave"}
-                        </p>
-                        {returnAddress2 && (
-                          <p
-                            style={{
-                              margin: "1px 0 0",
-                              fontFamily: handwrittenFont,
-                              fontSize: "12px",
-                              lineHeight: 1.08,
-                              color: "var(--mm-ink-muted)",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              letterSpacing: "0.01em",
-                            }}
-                          >
-                            {returnAddress2}
-                          </p>
-                        )}
-                        <p
-                          style={{
-                            margin: "1px 0 0",
-                            fontFamily: handwrittenFont,
-                            fontSize: "12px",
-                            lineHeight: 1.08,
-                            color: "var(--mm-ink-muted)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            letterSpacing: "0.01em",
-                          }}
-                        >
-                          {(returnCity || "City")}, {(returnState || "ST")} {returnZip || "00000"}
-                        </p>
-                      </div>
-
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "88px",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          width: "220px",
-                          textAlign: "center",
-                        }}
-                      >
-                        <p
-                          style={{
-                            margin: "0 0 6px",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: "7px",
-                            fontWeight: 600,
-                            letterSpacing: "0.18em",
-                            textTransform: "uppercase",
-                            color: "rgba(55, 93, 129, 0.24)",
-                          }}
-                        >
-                          Recipient
-                        </p>
-                        {recipientLines.map((line, idx) => (
-                          <p
-                            key={idx}
-                            style={{
-                              margin: idx === 0 ? 0 : "2px 0 0",
-                              fontFamily: handwrittenFont,
-                              fontSize: idx === 0 ? "15px" : "13px",
-                              lineHeight: 1.08,
-                              color: "var(--mm-ink)",
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              letterSpacing: "0.01em",
-                            }}
-                          >
-                            {line}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-6">
-                    <div>
-                      <p
-                        style={{
-                          margin: "0 0 12px",
-                          fontFamily: "var(--font-sans)",
-                          fontSize: "0.74rem",
-                          fontWeight: 600,
-                          textTransform: "uppercase",
-                          letterSpacing: "0.1em",
-                          color: "var(--mm-burgundy)",
-                        }}
-                      >
-                        Who’s receiving this?
-                      </p>
-                      <div className="flex flex-col gap-3">
-                        <input type="text" value={recipientName} onChange={(e) => setRecipientName(e.target.value)} placeholder="Full name" style={inputStyle} />
-                        <input type="text" value={recipientAddress1} onChange={(e) => setRecipientAddress1(e.target.value)} placeholder="Street address" style={inputStyle} />
-                        <input type="text" value={recipientAddress2} onChange={(e) => setRecipientAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
-                        <div className="grid grid-cols-3 gap-3">
-                          <input type="text" value={recipientCity} onChange={(e) => setRecipientCity(e.target.value)} placeholder="City" style={inputStyle} />
-                          <select 
-                            value={recipientState} 
-                            onChange={(e) => setRecipientState(e.target.value)} 
-                            style={{
-                              ...inputStyle, 
-                              appearance: "none", 
-                              color: recipientState ? "var(--mm-ink)" : "rgba(23, 21, 19, 0.4)",
-                              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath fill=\'none\' stroke=\'%23867d72\' stroke-width=\'1.5\' d=\'M1 1l4 4 4-4\'/%3E%3C/svg%3E")',
-                              backgroundRepeat: "no-repeat",
-                              backgroundPosition: "right 12px center",
-                              backgroundSize: "10px 6px",
-                              paddingRight: "30px"
-                            }}
-                          >
-                            <option value="" style={{ background: "white", color: "var(--mm-ink)" }}>ST</option>
-                            {US_STATES.map(st => (
-                              <option key={st} value={st} style={{ background: "white", color: "var(--mm-ink)" }}>
-                                {st}
-                              </option>
-                            ))}
-                          </select>
-                          <input type="text" value={recipientZip} onChange={(e) => setRecipientZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <p
-                        style={{
-                          margin: "0 0 12px",
-                          fontFamily: "var(--font-sans)",
-                          fontSize: "0.74rem",
-                          fontWeight: 600,
-                          textTransform: "uppercase",
-                          letterSpacing: "0.1em",
-                          color: "var(--mm-burgundy)",
-                        }}
-                      >
-                        Return address
-                      </p>
-                      <div className="flex flex-col gap-3">
-                        <input type="text" value={returnName} onChange={(e) => setReturnName(e.target.value)} placeholder="Your name" style={inputStyle} />
-                        <input type="text" value={returnAddress1} onChange={(e) => setReturnAddress1(e.target.value)} placeholder="Street address" style={inputStyle} />
-                        <input type="text" value={returnAddress2} onChange={(e) => setReturnAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
-                        <div className="grid grid-cols-3 gap-3">
-                          <input type="text" value={returnCity} onChange={(e) => setReturnCity(e.target.value)} placeholder="City" style={inputStyle} />
-                          <select 
-                            value={returnState} 
-                            onChange={(e) => setReturnState(e.target.value)} 
-                            style={{
-                              ...inputStyle, 
-                              appearance: "none", 
-                              color: returnState ? "var(--mm-ink)" : "rgba(23, 21, 19, 0.4)",
-                              backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath fill=\'none\' stroke=\'%23867d72\' stroke-width=\'1.5\' d=\'M1 1l4 4 4-4\'/%3E%3C/svg%3E")',
-                              backgroundRepeat: "no-repeat",
-                              backgroundPosition: "right 12px center",
-                              backgroundSize: "10px 6px",
-                              paddingRight: "30px"
-                            }}
-                          >
-                            <option value="" style={{ background: "white", color: "var(--mm-ink)" }}>ST</option>
-                            {US_STATES.map(st => (
-                              <option key={st} value={st} style={{ background: "white", color: "var(--mm-ink)" }}>
-                                {st}
-                              </option>
-                            ))}
-                          </select>
-                          <input type="text" value={returnZip} onChange={(e) => setReturnZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
+                        <div className="flex flex-col gap-3">
+                          <input type="text" value={returnName} onChange={(e) => setReturnName(e.target.value)} placeholder="Your name" style={inputStyle} />
+                          <input type="text" value={returnAddress1} onChange={(e) => setReturnAddress1(e.target.value)} placeholder="Street address" style={inputStyle} />
+                          <input type="text" value={returnAddress2} onChange={(e) => setReturnAddress2(e.target.value)} placeholder="Apt, suite, etc. (optional)" style={inputStyle} />
+                          <div className="grid grid-cols-3 gap-3">
+                            <input type="text" value={returnCity} onChange={(e) => setReturnCity(e.target.value)} placeholder="City" style={inputStyle} />
+                            <select 
+                              value={returnState} 
+                              onChange={(e) => setReturnState(e.target.value)} 
+                              style={{
+                                ...inputStyle, 
+                                appearance: "none", 
+                                color: returnState ? "var(--mm-ink)" : "rgba(23, 21, 19, 0.4)",
+                                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath fill=\'none\' stroke=\'%23867d72\' stroke-width=\'1.5\' d=\'M1 1l4 4 4-4\'/%3E%3C/svg%3E")',
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "right 12px center",
+                                backgroundSize: "10px 6px",
+                                paddingRight: "30px"
+                              }}
+                            >
+                              <option value="" style={{ background: "white", color: "var(--mm-ink)" }}>ST</option>
+                              {US_STATES.map(st => (
+                                <option key={st} value={st} style={{ background: "white", color: "var(--mm-ink)" }}>
+                                  {st}
+                                </option>
+                              ))}
+                            </select>
+                            <input type="text" value={returnZip} onChange={(e) => setReturnZip(e.target.value)} placeholder="ZIP" style={inputStyle} />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between mt-8">
-                  <button
-                    onClick={() => setCurrentStep(1)}
-                    className="bg-transparent border-none"
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.8rem",
-                      fontWeight: 500,
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                      color: "var(--mm-ink-muted)",
-                      padding: "10px 0",
-                    }}
-                  >
-                    ← Back to Card
-                  </button>
-                  <button
-                    onClick={() => setCurrentStep(2)}
-                    style={{
-                      padding: "12px 24px",
-                      background: "var(--mm-forest)",
-                      color: "#f5f1ea",
-                      border: "none",
-                      borderRadius: "3px",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.9rem",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Continue to Envelope →
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            {currentStep === 3 && (
-              <motion.div
-                key="step-review"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.28 }}
-              >
-                <div style={{ maxWidth: "760px", margin: "0 auto" }}>
-                  <h2
-                    style={{
-                      margin: "0 0 8px",
-                      fontFamily: "var(--font-serif)",
-                      fontSize: "1.8rem",
-                      fontWeight: 500,
-                      color: "var(--mm-forest)",
-                    }}
-                  >
-                    Review
-                  </h2>
-                  <p
-                    style={{
-                      margin: "0 0 24px",
-                      fontFamily: "var(--font-sans)",
-                      fontSize: "0.95rem",
-                      color: "var(--mm-ink-soft)",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Make sure the card, envelope, and mailing details look right before saving the order.
-                  </p>
-
-                  <div className="flex flex-col gap-4">
-                    <div style={{ padding: "16px 20px", background: "rgba(255,255,255,0.5)", border: "1px solid var(--mm-line)" }}>
-                      <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-ink-muted)" }}>
-                        Card
-                      </p>
-                      <p style={{ margin: "0 0 8px", fontFamily: "var(--font-serif)", fontSize: "1.02rem", color: "var(--mm-forest)" }}>
-                        {frontMessage || "No front message added"}
-                      </p>
-                      <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.86rem", color: "var(--mm-ink-soft)", lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
-                        {insideMessage}
-                      </p>
-                      <p style={{ margin: "8px 0 0", fontFamily: "var(--font-sans)", fontSize: "0.82rem", color: "var(--mm-ink-muted)" }}>
-                        — {signatureName}
-                      </p>
-                    </div>
-
-                    <div style={{ padding: "16px 20px", background: "rgba(255,255,255,0.5)", border: "1px solid var(--mm-line)" }}>
-                      <p style={{ margin: "0 0 8px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-ink-muted)" }}>
-                        Envelope
-                      </p>
-                      <div className="grid md:grid-cols-2 gap-5">
-                        <div>
-                          <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
-                            Recipient
-                          </p>
-                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6, color: "var(--mm-ink-soft)", whiteSpace: "pre-line" }}>
-                            {recipientName}
-                            {"\n"}
-                            {recipientAddress1}
-                            {recipientAddress2 ? `\n${recipientAddress2}` : ""}
-                            {"\n"}
-                            {recipientCity}, {recipientState.toUpperCase()} {recipientZip}
-                          </p>
-                        </div>
-                        <div>
-                          <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
-                            Return address
-                          </p>
-                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6, color: "var(--mm-ink-soft)", whiteSpace: "pre-line" }}>
-                            {returnName}
-                            {"\n"}
-                            {returnAddress1}
-                            {returnAddress2 ? `\n${returnAddress2}` : ""}
-                            {"\n"}
-                            {returnCity}, {returnState.toUpperCase()} {returnZip}
-                          </p>
-                        </div>
-                      </div>
-                      <div style={{ padding: "16px 20px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.15)", marginTop: "16px" }}>
-                        <div className="flex justify-between items-start mb-2">
-                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
-                            Mailing Date
-                          </p>
-                          <button 
-                            onClick={() => setIsCustomDate(true)}
-                            style={{ 
-                              display: isCustomDate ? "none" : "block",
-                              background: "none", 
-                              border: "none", 
-                              color: "var(--mm-burgundy)", 
-                              fontSize: "0.65rem", 
-                              fontWeight: 600, 
-                              textTransform: "uppercase", 
-                              letterSpacing: "0.05em", 
-                              cursor: "pointer", 
-                              textDecoration: "underline" 
-                            }}
-                          >
-                            Select a specific date
-                          </button>
-                        </div>
-                        
-                        {!isCustomDate ? (
-                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.88rem", color: "var(--mm-ink)" }}>
-                            Next 1–2 business days
-                          </p>
-                        ) : (
-                          <input 
-                            type="date" 
-                            value={mailingDate || ""} 
-                            onChange={(e) => setMailingDate(e.target.value)}
-                            min={new Date().toISOString().split("T")[0]}
-                            style={{
-                              width: "100%",
-                              padding: "8px 12px",
-                              fontFamily: "var(--font-sans)",
-                              fontSize: "0.88rem",
-                              background: "white",
-                              border: "1px solid var(--mm-line)",
-                              borderRadius: "3px",
-                              outline: "none"
-                            }}
-                          />
-                        )}
-                        
-                        {mailingDate && isCustomDate && (
-                          <p style={{ margin: "8px 0 0", fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--mm-ink-soft)" }}>
-                            Will be mailed on: {new Date(mailingDate + "T12:00:00").toLocaleDateString("en-US", {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div style={{ padding: "18px 20px", background: "var(--mm-forest)", display: "flex", flexDirection: "column", gap: "10px" }}>
-                      <div className="flex items-end justify-between gap-4 flex-wrap">
-                        <div>
-                          <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,241,234,0.56)" }}>
-                            Handwritten and mailed
-                          </p>
-                          <p style={{ margin: "4px 0 0", fontFamily: "var(--font-serif)", fontSize: "1.55rem", color: "#f5f1ea" }}>
-                            $15
-                          </p>
-                        </div>
-                        <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", lineHeight: 1.5, color: "rgba(245,241,234,0.72)", textAlign: "right" }}>
-                          Ships in 1–2 business days
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <SectionLabel>Your email</SectionLabel>
-                      <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="you@email.com" style={inputStyle} />
-                    </div>
-
-                    <label
+                  <div className="flex items-center justify-between mt-8">
+                    <button
+                      onClick={() => setCurrentStep(1)}
+                      className="bg-transparent border-none"
                       style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "10px",
                         fontFamily: "var(--font-sans)",
-                        fontSize: "0.84rem",
-                        lineHeight: 1.55,
-                        color: "var(--mm-ink-soft)",
+                        fontSize: "0.8rem",
+                        fontWeight: 500,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        color: "var(--mm-ink-muted)",
+                        padding: "10px 0",
+                        cursor: "pointer",
                       }}
                     >
-                      <input type="checkbox" checked={reviewConfirmed} onChange={(e) => setReviewConfirmed(e.target.checked)} style={{ marginTop: "3px" }} />
-                      <span>I’ve reviewed the message and mailing details.</span>
-                    </label>
+                      ← Back to Card
+                    </button>
+                    <button
+                      onClick={() => setCurrentStep(3)}
+                      style={{
+                        padding: "12px 24px",
+                        background: "var(--mm-forest)",
+                        color: "#f5f1ea",
+                        border: "none",
+                        borderRadius: "3px",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.9rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Continue to Review →
+                    </button>
+                  </div>
+                </motion.div>
+              )}
 
-                    {submitError && (
-                      <div style={{ padding: "14px 16px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.16)", color: "var(--mm-ink)", fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6 }}>
-                        {submitError}
+              {currentStep === 3 && (
+                <motion.div
+                  key="step-review"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.28 }}
+                >
+                  <div style={{ maxWidth: "760px", margin: "0 auto" }}>
+                    <h2
+                      style={{
+                        margin: "0 0 8px",
+                        fontFamily: "var(--font-serif)",
+                        fontSize: "1.8rem",
+                        fontWeight: 500,
+                        color: "var(--mm-forest)",
+                      }}
+                    >
+                      Review
+                    </h2>
+                    <p
+                      style={{
+                        margin: "0 0 24px",
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.95rem",
+                        color: "var(--mm-ink-soft)",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      Make sure the card, envelope, and mailing details look right before saving the order.
+                    </p>
+
+                    <div className="flex flex-col gap-4">
+                      <div style={{ padding: "16px 20px", background: "rgba(255,255,255,0.5)", border: "1px solid var(--mm-line)" }}>
+                        <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-ink-muted)" }}>
+                          Card
+                        </p>
+                        <p style={{ margin: "0 0 8px", fontFamily: "var(--font-serif)", fontSize: "1.02rem", color: "var(--mm-forest)" }}>
+                          {frontMessage || "No front message added"}
+                        </p>
+                        <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.86rem", color: "var(--mm-ink-soft)", lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
+                          {insideMessage || "No inside message added"}
+                        </p>
+                        <p style={{ margin: "8px 0 0", fontFamily: "var(--font-sans)", fontSize: "0.82rem", color: "var(--mm-ink-muted)" }}>
+                          — {signatureName || "No signature added"}
+                        </p>
                       </div>
-                    )}
 
-                    {savedOrderId && (
-                      <div style={{ padding: "14px 16px", background: "rgba(62, 92, 67, 0.08)", border: "1px solid rgba(62, 92, 67, 0.18)", color: "var(--mm-ink)", fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6 }}>
-                        Order details saved successfully.
-                        <br />
-                        Order ID: {savedOrderId}
+                      <div style={{ padding: "16px 20px", background: "rgba(255,255,255,0.5)", border: "1px solid var(--mm-line)" }}>
+                        <p style={{ margin: "0 0 8px", fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-ink-muted)" }}>
+                          Envelope
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-5">
+                          <div>
+                            <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+                              Recipient
+                            </p>
+                            <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6, color: "var(--mm-ink-soft)", whiteSpace: "pre-line" }}>
+                              {recipientName || "Not set"}
+                              {"\n"}
+                              {recipientAddress1 || "Not set"}
+                              {recipientAddress2 ? `\n${recipientAddress2}` : ""}
+                              {"\n"}
+                              {recipientCity || "Not set"}, {recipientState.toUpperCase() || "ST"} {recipientZip || "00000"}
+                            </p>
+                          </div>
+                          <div>
+                            <p style={{ margin: "0 0 4px", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+                              Return address
+                            </p>
+                            <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6, color: "var(--mm-ink-soft)", whiteSpace: "pre-line" }}>
+                              {returnName || "Not set"}
+                              {"\n"}
+                              {returnAddress1 || "Not set"}
+                              {returnAddress2 ? `\n${returnAddress2}` : ""}
+                              {"\n"}
+                              {returnCity || "Not set"}, {returnState.toUpperCase() || "ST"} {returnZip || "00000"}
+                            </p>
+                          </div>
+                        </div>
+                        <div style={{ padding: "16px 20px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.15)", marginTop: "16px" }}>
+                          <div className="flex justify-between items-start mb-2">
+                            <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.7rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+                              Mailing Date
+                            </p>
+                            <button 
+                              onClick={() => setIsCustomDate(true)}
+                              style={{ 
+                                display: isCustomDate ? "none" : "block",
+                                background: "none", 
+                                border: "none", 
+                                color: "var(--mm-burgundy)", 
+                                fontSize: "0.65rem", 
+                                fontWeight: 600, 
+                                textTransform: "uppercase", 
+                                letterSpacing: "0.05em", 
+                                cursor: "pointer", 
+                                textDecoration: "underline" 
+                              }}
+                            >
+                              Select a specific date
+                            </button>
+                          </div>
+                          
+                          {!isCustomDate ? (
+                            <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.88rem", color: "var(--mm-ink)" }}>
+                              Next 1–2 business days
+                            </p>
+                          ) : (
+                            <input 
+                              type="date" 
+                              value={mailingDate || ""} 
+                              onChange={(e) => setMailingDate(e.target.value)}
+                              min={new Date().toISOString().split("T")[0]}
+                              style={{
+                                width: "100%",
+                                padding: "8px 12px",
+                                fontFamily: "var(--font-sans)",
+                                fontSize: "0.88rem",
+                                background: "white",
+                                border: "1px solid var(--mm-line)",
+                                borderRadius: "3px",
+                                outline: "none"
+                              }}
+                            />
+                          )}
+                          
+                          {mailingDate && isCustomDate && (
+                            <p style={{ margin: "8px 0 0", fontFamily: "var(--font-sans)", fontSize: "0.75rem", color: "var(--mm-ink-soft)" }}>
+                              Will be mailed on: {new Date(mailingDate + "T12:00:00").toLocaleDateString("en-US", {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                              })}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    )}
 
-                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div style={{ padding: "18px 20px", background: "var(--mm-forest)", display: "flex", flexDirection: "column", gap: "10px" }}>
+                        <div className="flex items-end justify-between gap-4 flex-wrap">
+                          <div>
+                            <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(245,241,234,0.56)" }}>
+                              Handwritten and mailed
+                            </p>
+                            <p style={{ margin: "4px 0 0", fontFamily: "var(--font-serif)", fontSize: "1.55rem", color: "#f5f1ea" }}>
+                              $15
+                            </p>
+                          </div>
+                          <div style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", lineHeight: 1.5, color: "rgba(245,241,234,0.72)", textAlign: "right" }}>
+                            Ships in 1–2 business days
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <SectionLabel>Your email</SectionLabel>
+                        <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="you@email.com" style={inputStyle} />
+                      </div>
+
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "10px",
+                          fontFamily: "var(--font-sans)",
+                          fontSize: "0.84rem",
+                          lineHeight: 1.55,
+                          color: "var(--mm-ink-soft)",
+                        }}
+                      >
+                        <input type="checkbox" checked={reviewConfirmed} onChange={(e) => setReviewConfirmed(e.target.checked)} style={{ marginTop: "3px" }} />
+                        <span>I’ve reviewed the message and mailing details.</span>
+                      </label>
+
+                      {submitError && (
+                        <div style={{ padding: "14px 16px", background: "rgba(139, 58, 58, 0.06)", border: "1px solid rgba(139, 58, 58, 0.16)", color: "var(--mm-ink)", fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6 }}>
+                          {submitError}
+                        </div>
+                      )}
+
+                      {savedOrderId && (
+                        <div style={{ padding: "14px 16px", background: "rgba(62, 92, 67, 0.08)", border: "1px solid rgba(62, 92, 67, 0.18)", color: "var(--mm-ink)", fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6 }}>
+                          Order saved! Order ID: {savedOrderId}
+                        </div>
+                      )}
+
+                      <button
+                        onClick={handleCreateOrder}
+                        disabled={isSubmitting || !canAdvance()}
+                        style={{
+                          width: "100%",
+                          padding: "16px",
+                          background: canAdvance() ? "var(--mm-forest)" : "var(--mm-line)",
+                          color: canAdvance() ? "#f5f1ea" : "var(--mm-ink-muted)",
+                          border: "none",
+                          borderRadius: "3px",
+                          fontFamily: "var(--font-sans)",
+                          fontSize: "1rem",
+                          fontWeight: 600,
+                          cursor: canAdvance() && !isSubmitting ? "pointer" : "not-allowed",
+                          transition: "background 0.2s",
+                          marginTop: "12px",
+                        }}
+                      >
+                        {isSubmitting ? "Saving..." : "Save Order"}
+                      </button>
+                    </div>
+
+                    <div className="flex justify-start mt-8">
                       <button
                         onClick={() => setCurrentStep(2)}
                         className="bg-transparent border-none"
@@ -1133,39 +1084,34 @@ export default function SendCard() {
                           textTransform: "uppercase",
                           color: "var(--mm-ink-muted)",
                           padding: "10px 0",
+                          cursor: "pointer",
                         }}
                       >
                         ← Back to Envelope
                       </button>
-                      <button
-                        className="bg-transparent border-none"
-                        style={{
-                          padding: "14px 28px",
-                          borderRadius: "999px",
-                          background: reviewConfirmed ? "#f5f1ea" : "rgba(245,241,234,0.45)",
-                          color: "var(--mm-forest)",
-                          fontFamily: "var(--font-sans)",
-                          fontSize: "0.76rem",
-                          fontWeight: 600,
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                          transition: "all 0.2s ease",
-                          opacity: isSubmitting ? 0.7 : 1,
-                          cursor: isSubmitting ? "wait" : "pointer",
-                          alignSelf: "flex-start",
-                        }}
-                        disabled={isSubmitting || !canAdvance()}
-                        onClick={handleCreateOrder}
-                      >
-                        {isSubmitting ? "Saving..." : "Save Order Details"}
-                      </button>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "64px 24px", background: "var(--mm-cream)" }}>
+        <div className="max-w-[1240px] mx-auto text-center">
+          <PenStroke color="var(--mm-burgundy)" width="120px" />
+          <p
+            style={{
+              marginTop: "24px",
+              fontFamily: "var(--font-serif)",
+              fontSize: "1.2rem",
+              fontStyle: "italic",
+              color: "var(--mm-forest)",
+            }}
+          >
+            "A card is a hug in an envelope."
+          </p>
         </div>
       </section>
     </PageShell>
