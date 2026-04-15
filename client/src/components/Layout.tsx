@@ -46,81 +46,94 @@ export function RotatingTagline() {
 
   return (
     <div className="relative z-50" style={{ 
-      background: "linear-gradient(to bottom, rgba(55, 93, 129, 0.85) 0%, rgba(55, 93, 129, 0.75) 100%)", 
-      borderBottom: "1px solid rgba(255,255,255,0.08)",
-      boxShadow: "0 2px 12px rgba(0,0,0,0.08)"
+      background: "rgba(29, 41, 33, 0.05)", 
+      borderBottom: "1px solid rgba(29, 41, 33, 0.08)",
+      boxShadow: "0 1px 6px rgba(0,0,0,0.04)"
     }}>
       <style>{`
-        @keyframes pageFlipIn {
+        @keyframes cardSendIn {
           0% {
             opacity: 0;
-            transform: rotateX(-90deg);
-            transform-origin: top;
+            transform: translateX(-20px) rotateY(-25deg);
           }
           100% {
             opacity: 1;
-            transform: rotateX(0deg);
-            transform-origin: top;
+            transform: translateX(0) rotateY(0deg);
           }
         }
-        @keyframes pageFlipOut {
+        @keyframes cardSendOut {
           0% {
             opacity: 1;
-            transform: rotateX(0deg);
-            transform-origin: bottom;
+            transform: translateX(0) rotateY(0deg);
           }
           100% {
             opacity: 0;
-            transform: rotateX(90deg);
-            transform-origin: bottom;
+            transform: translateX(20px) rotateY(25deg);
           }
         }
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
           .rotating-tagline-container {
             flex-wrap: wrap;
+            gap: 8px;
           }
         }
       `}</style>
-      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[8px] text-center flex-nowrap px-4 md:px-6"
+      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[12px] text-center flex-wrap px-4 md:px-6"
         style={{
           minHeight: "64px",
           padding: "16px 24px",
           fontFamily: "var(--font-sans)",
-          fontSize: "clamp(0.7rem, 2.5vw, 0.85rem)",
+          fontSize: "clamp(0.65rem, 2vw, 0.8rem)",
           fontWeight: 600,
           letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "rgba(255,255,255,0.92)",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
+          color: "var(--mm-forest)",
         }}>
         <span style={{ whiteSpace: "nowrap" }}>Because</span>
         <div
-          className="inline-block overflow-hidden"
+          className="inline-block overflow-visible"
           style={{
-            minWidth: "180px",
-            maxWidth: "180px",
-            height: "1.4em",
-            perspective: "1000px",
+            minWidth: "clamp(140px, 40vw, 220px)",
+            height: "1.8em",
+            perspective: "1200px",
             verticalAlign: "middle",
             position: "relative",
             flexShrink: 0,
           }}
         >
-          <span
-            className="inline-block w-full text-center"
+          <div
             style={{
-              color: "#f2e9dc",
-              fontWeight: 700,
               position: "absolute",
               left: 0,
               top: 0,
-              animation: isRevealing ? "pageFlipIn 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards" : "pageFlipOut 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+              width: "100%",
+              height: "100%",
+              background: "#fdfcf9",
+              border: "1px solid rgba(29, 41, 33, 0.15)",
+              borderRadius: "2px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "6px 12px",
+              boxShadow: "0 2px 8px rgba(29, 41, 33, 0.08)",
+              animation: isRevealing ? "cardSendIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "cardSendOut 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
             }}
-            key={currentIndex}
           >
-            {ROTATING_PHRASES[currentIndex]}
-          </span>
+            <span
+              style={{
+                fontFamily: "var(--font-handwriting)",
+                fontSize: "clamp(0.85rem, 2.5vw, 1.1rem)",
+                fontStyle: "italic",
+                fontWeight: 400,
+                color: "var(--mm-pen-blue)",
+                textAlign: "center",
+                lineHeight: 1.2,
+              }}
+              key={currentIndex}
+            >
+              {ROTATING_PHRASES[currentIndex]}
+            </span>
+          </div>
         </div>
         <span style={{ whiteSpace: "nowrap" }}>deserves real paper.</span>
       </div>
