@@ -12,33 +12,7 @@ export default async (req: Request) => {
 
   try {
     const body = await req.json();
-
-    const {
-      orderId,
-      frontMessage,
-      insideMessage,
-      signatureName,
-      recipientName,
-      recipientAddress1,
-      recipientAddress2,
-      recipientCity,
-      recipientState,
-      recipientZip,
-      returnName,
-      returnAddress1,
-      returnAddress2,
-      returnCity,
-      returnState,
-      returnZip,
-      contactEmail,
-    } = body ?? {};
-
-    if (!orderId || typeof orderId !== "string") {
-      return new Response(JSON.stringify({ error: "A valid order ID is required." }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    const { contactEmail } = body ?? {};
 
     if (!contactEmail || typeof contactEmail !== "string") {
       return new Response(JSON.stringify({ error: "A valid customer email is required." }), {
@@ -47,6 +21,7 @@ export default async (req: Request) => {
       });
     }
 
+    const checkoutReference = crypto.randomUUID();
     const origin =
       req.headers.get("origin") || "https://themailingmemories.netlify.app";
 
@@ -59,19 +34,19 @@ export default async (req: Request) => {
           quantity: 1,
         },
       ],
-      customer_email: contactEmail,
-      client_reference_id: orderId,
+      customer_email: contactEmail.trim(),
+      client_reference_id: checkoutReference,
       success_url: `${origin}/send?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/send?payment=cancelled&order_id=${encodeURIComponent(orderId)}`,
+      cancel_url: `${origin}/send?payment=cancelled`,
       metadata: {
-        orderId,
-        contactEmail,
+        checkoutReference,
+        contactEmail: contactEmail.trim(),
         orderType: "send_now",
       },
       payment_intent_data: {
         metadata: {
-          orderId,
-          contactEmail,
+          checkoutReference,
+          contactEmail: contactEmail.trim(),
           orderType: "send_now",
         },
       },
@@ -84,6 +59,7 @@ export default async (req: Request) => {
     return new Response(
       JSON.stringify({
         url: session.url,
+        checkoutReference,
       }),
       {
         status: 200,
