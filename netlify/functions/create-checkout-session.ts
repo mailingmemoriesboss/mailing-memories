@@ -3,10 +3,18 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export default async (req: Request) => {
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const body = await req.json();
 
     const {
+      orderId,
       frontMessage,
       insideMessage,
       signatureName,
@@ -25,6 +33,20 @@ export default async (req: Request) => {
       contactEmail,
     } = body ?? {};
 
+    if (!orderId || typeof orderId !== "string") {
+      return new Response(JSON.stringify({ error: "A valid order ID is required." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    if (!contactEmail || typeof contactEmail !== "string") {
+      return new Response(JSON.stringify({ error: "A valid customer email is required." }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     const origin =
       req.headers.get("origin") || "https://themailingmemories.netlify.app";
 
@@ -37,28 +59,27 @@ export default async (req: Request) => {
           quantity: 1,
         },
       ],
-      customer_email: contactEmail || undefined,
+      customer_email: contactEmail,
+      client_reference_id: orderId,
       success_url: `${origin}/send?payment=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/send?payment=cancelled`,
+      cancel_url: `${origin}/send?payment=cancelled&order_id=${encodeURIComponent(orderId)}`,
       metadata: {
-        frontMessage: frontMessage || "",
-        insideMessage: insideMessage || "",
-        signatureName: signatureName || "",
-        recipientName: recipientName || "",
-        recipientAddress1: recipientAddress1 || "",
-        recipientAddress2: recipientAddress2 || "",
-        recipientCity: recipientCity || "",
-        recipientState: recipientState || "",
-        recipientZip: recipientZip || "",
-        returnName: returnName || "",
-        returnAddress1: returnAddress1 || "",
-        returnAddress2: returnAddress2 || "",
-        returnCity: returnCity || "",
-        returnState: returnState || "",
-        returnZip: returnZip || "",
-        contactEmail: contactEmail || "",
+        orderId,
+        contactEmail,
+        orderType: "send_now",
+      },
+      payment_intent_data: {
+        metadata: {
+          orderId,
+          contactEmail,
+          orderType: "send_now",
+        },
       },
     });
+
+    if (!session.url) {
+      throw new Error("Stripe did not return a checkout URL.");
+    }
 
     return new Response(
       JSON.stringify({
