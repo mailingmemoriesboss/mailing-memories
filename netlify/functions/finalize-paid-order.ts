@@ -41,9 +41,20 @@ function isNonEmpty(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function buildInternalNotes(payload: PaidOrderPayload, sessionId: string) {
+function buildInternalNotes(
+  payload: PaidOrderPayload,
+  session: Stripe.Checkout.Session
+) {
+  const discountCents = Math.max(
+    0,
+    (session.amount_subtotal ?? 1500) - (session.amount_total ?? 0)
+  );
+
   const lines = [
-    `Stripe checkout session: ${sessionId}`,
+    `Stripe checkout session: ${session.id}`,
+    `Stripe subtotal: $${((session.amount_subtotal ?? 1500) / 100).toFixed(2)}`,
+    `Stripe discount: $${(discountCents / 100).toFixed(2)}`,
+    `Stripe total: $${((session.amount_total ?? 0) / 100).toFixed(2)}`,
     payload.front_message ? `Front of card: ${payload.front_message}` : "",
     payload.return_name ? `Return name: ${payload.return_name}` : "",
     payload.return_address_line1
@@ -106,13 +117,32 @@ export default async (req: Request) => {
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
-    if (session.payment_status !== "paid" || session.status !== "complete") {
-      return jsonResponse(402, { error: "Stripe payment is not complete." });
+    if (session.status !== "complete") {
+      return jsonResponse(402, { error: "Stripe Checkout is not complete." });
     }
 
-    if (session.amount_total !== 1500 || session.currency !== "usd") {
+    const subtotal = session.amount_subtotal;
+    const total = session.amount_total;
+
+    if (
+      subtotal !== 1500 ||
+      total === null ||
+      total < 0 ||
+      total > subtotal ||
+      session.currency !== "usd"
+    ) {
       return jsonResponse(400, {
         error: "Stripe payment amount does not match this order.",
+      });
+    }
+
+    const paymentIsValid =
+      (total > 0 && session.payment_status === "paid") ||
+      (total === 0 && session.payment_status === "no_payment_required");
+
+    if (!paymentIsValid) {
+      return jsonResponse(402, {
+        error: "Stripe payment or discount has not been completed.",
       });
     }
 
@@ -157,7 +187,7 @@ export default async (req: Request) => {
     if (!existingResponse.ok) {
       const details = await existingResponse.text();
       return jsonResponse(500, {
-        error: "Unable to check for an existing paid order.",
+        error: "Unable to check for an existing completed order.",
         details,
       });
     }
@@ -192,9 +222,9 @@ export default async (req: Request) => {
       requested_ship_date: payload.requested_ship_date || null,
       reminder_enabled: false,
       reminder_send_at: null,
-      amount_cents: 1500,
+      amount_cents: total,
       currency: "usd",
-      internal_notes: buildInternalNotes(payload, session.id),
+      internal_notes: buildInternalNotes(payload, session),
     };
 
     const insertResponse = await fetch(`${baseUrl}/rest/v1/orders`, {
@@ -224,7 +254,7 @@ export default async (req: Request) => {
       error:
         error instanceof Error
           ? error.message
-          : "Unable to finalize the paid order.",
+          : "Unable to finalize the completed order.",
     });
   }
 };
