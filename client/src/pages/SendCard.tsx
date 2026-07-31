@@ -85,7 +85,128 @@ export default function SendCard() {
       setIsCustomDate(true);
     }
   }, []);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get("payment");
+    const sessionId = params.get("session_id");
 
+    if (paymentStatus === "cancelled") {
+      const storedPendingOrder = localStorage.getItem(
+        "mailingMemoriesPendingOrder"
+      );
+
+      if (storedPendingOrder) {
+        try {
+          const pending = JSON.parse(storedPendingOrder);
+          const order = pending?.order;
+
+          if (order) {
+            setFrontMessage(order.front_message || "");
+            setInsideMessage(order.message_text || "");
+            setSignatureName(order.signature_name || "");
+
+            setRecipientName(order.recipient_name || "");
+            setRecipientAddress1(order.address_line1 || "");
+            setRecipientAddress2(order.address_line2 || "");
+            setRecipientCity(order.city || "");
+            setRecipientState(order.state_region || "");
+            setRecipientZip(order.postal_code || "");
+
+            setReturnName(order.return_name || "");
+            setReturnAddress1(order.return_address_line1 || "");
+            setReturnAddress2(order.return_address_line2 || "");
+            setReturnCity(order.return_city || "");
+            setReturnState(order.return_state || "");
+            setReturnZip(order.return_postal_code || "");
+
+            setContactEmail(order.sender_email || "");
+            setMailingDate(order.requested_ship_date || "");
+            setIsCustomDate(Boolean(order.requested_ship_date));
+            setReviewConfirmed(true);
+            setCurrentStep(3);
+          }
+        } catch {
+          localStorage.removeItem("mailingMemoriesPendingOrder");
+        }
+      }
+
+      setSubmitError(
+        "Payment was canceled. Your letter has not been submitted, and you have not been charged."
+      );
+
+      window.history.replaceState({}, "", "/send");
+      return;
+    }
+
+    if (paymentStatus !== "success" || !sessionId) {
+      return;
+    }
+
+    async function finalizePaidOrder() {
+      setCurrentStep(3);
+      setIsSubmitting(true);
+      setSubmitError("");
+
+      try {
+        const storedPendingOrder = localStorage.getItem(
+          "mailingMemoriesPendingOrder"
+        );
+
+        if (!storedPendingOrder) {
+          throw new Error(
+            "Payment was received, but the letter details could not be found in this browser. Please contact Mailing Memories with your payment email."
+          );
+        }
+
+        const pending = JSON.parse(storedPendingOrder);
+
+        if (!pending?.order || !pending?.checkoutReference) {
+          throw new Error(
+            "The saved letter information is incomplete. Please contact Mailing Memories."
+          );
+        }
+
+        const response = await fetch("/api/finalize-paid-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sessionId,
+            checkoutReference: pending.checkoutReference,
+            order: pending.order,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data?.error ||
+              "Payment succeeded, but the order could not be finalized."
+          );
+        }
+
+        localStorage.removeItem("mailingMemoriesPendingOrder");
+
+        setSavedOrderId(data?.order?.id || "");
+        setSubmitError("");
+
+        window.history.replaceState({}, "", "/send");
+      } catch (error) {
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : "Payment succeeded, but the order could not be finalized."
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+
+    finalizePaidOrder();
+  }, []);
+  
   const handleFrontChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFrontMessage(e.target.value);
   };
