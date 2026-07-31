@@ -1104,7 +1104,7 @@ Make sure the card, envelope, and mailing details look right before continuing t
 
                       {savedOrderId && (
                         <div style={{ padding: "14px 16px", background: "rgba(62, 92, 67, 0.08)", border: "1px solid rgba(62, 92, 67, 0.18)", color: "var(--mm-ink)", fontFamily: "var(--font-sans)", fontSize: "0.84rem", lineHeight: 1.6 }}>
-                          Order saved! Order ID: {savedOrderId}
+Payment received. Your letter has been submitted successfully. Order ID: {savedOrderId}
                         </div>
                       )}
 
