@@ -147,19 +147,23 @@ export default function SendCard() {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
   ];
 
-  async function handleCreateOrder() {
+    async function handleCreateOrder() {
     setSubmitError("");
     setSavedOrderId("");
 
     if (!canAdvance()) {
-      setSubmitError("Please complete the review details before saving.");
+      setSubmitError(
+        "Please complete the review details before continuing to payment."
+      );
       return;
     }
+
+    if (isSubmitting) return;
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/create-order", {
+      const orderResponse = await fetch("/api/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -193,20 +197,74 @@ export default function SendCard() {
         }),
       });
 
-      const data = await response.json();
+      const orderData = await orderResponse.json();
 
-      if (!response.ok) {
-        throw new Error(data?.error || "Unable to create order.");
+      if (!orderResponse.ok) {
+        throw new Error(orderData?.error || "Unable to create order.");
       }
 
-      setSavedOrderId(data?.order?.id || "");
+      const orderId = orderData?.order?.id;
+
+      if (!orderId) {
+        throw new Error(
+          "The order was saved, but no order ID was returned."
+        );
+      }
+
+      setSavedOrderId(orderId);
+
+      const checkoutResponse = await fetch(
+        "/api/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderId,
+            contactEmail,
+            frontMessage,
+            insideMessage,
+            signatureName,
+            recipientName,
+            recipientAddress1,
+            recipientAddress2,
+            recipientCity,
+            recipientState: recipientState.toUpperCase(),
+            recipientZip,
+            returnName,
+            returnAddress1,
+            returnAddress2,
+            returnCity,
+            returnState: returnState.toUpperCase(),
+            returnZip,
+          }),
+        }
+      );
+
+      const checkoutData = await checkoutResponse.json();
+
+      if (!checkoutResponse.ok) {
+        throw new Error(
+          checkoutData?.error ||
+            "Your order was saved, but secure payment could not be started. Please try again."
+        );
+      }
+
+      if (!checkoutData?.url) {
+        throw new Error(
+          "Your order was saved, but Stripe did not return a payment link. Please try again."
+        );
+      }
+
+      window.location.assign(checkoutData.url);
     } catch (error) {
       setSubmitError(
         error instanceof Error
           ? error.message
-          : "Something went wrong while saving your order."
+          : "Something went wrong while preparing secure payment."
       );
-    } finally {
+
       setIsSubmitting(false);
     }
   }
@@ -892,7 +950,7 @@ export default function SendCard() {
                         lineHeight: 1.6,
                       }}
                     >
-                      Make sure the card, envelope, and mailing details look right before saving the order.
+Make sure the card, envelope, and mailing details look right before continuing to secure payment.
                     </p>
 
                     <div className="flex flex-col gap-4">
@@ -1068,7 +1126,9 @@ export default function SendCard() {
                           marginTop: "12px",
                         }}
                       >
-                        {isSubmitting ? "Saving..." : "Save Order"}
+{isSubmitting
+  ? "Preparing Secure Checkout..."
+  : "Continue to Secure Payment — $15"}
                       </button>
                     </div>
 
