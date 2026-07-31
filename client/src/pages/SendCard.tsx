@@ -147,7 +147,7 @@ export default function SendCard() {
     "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
   ];
 
-    async function handleCreateOrder() {
+   async function handleCreateOrder() {
     setSubmitError("");
     setSavedOrderId("");
 
@@ -163,55 +163,33 @@ export default function SendCard() {
     setIsSubmitting(true);
 
     try {
-      const orderResponse = await fetch("/api/create-order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          order_type: "send_now",
-          occasion: "send-page",
-          message_mode: "exact_words",
-          message_text: insideMessage,
-          message_brief: frontMessage,
-          signature_name: signatureName,
-          sender_name: signatureName,
-          sender_email: contactEmail,
-          recipient_name: recipientName,
-          address_line1: recipientAddress1,
-          address_line2: recipientAddress2 || null,
-          city: recipientCity,
-          state_region: recipientState.toUpperCase(),
-          postal_code: recipientZip,
-          country: "US",
-          amount_cents: 1500,
-          currency: "usd",
-          front_message: frontMessage,
-          return_name: returnName,
-          return_address_line1: returnAddress1,
-          return_address_line2: returnAddress2 || null,
-          return_city: returnCity,
-          return_state: returnState.toUpperCase(),
-          return_postal_code: returnZip,
-          requested_ship_date: mailingDate || null,
-        }),
-      });
-
-      const orderData = await orderResponse.json();
-
-      if (!orderResponse.ok) {
-        throw new Error(orderData?.error || "Unable to create order.");
-      }
-
-      const orderId = orderData?.order?.id;
-
-      if (!orderId) {
-        throw new Error(
-          "The order was saved, but no order ID was returned."
-        );
-      }
-
-      setSavedOrderId(orderId);
+      const pendingOrder = {
+        order_type: "send_now",
+        occasion: "send-page",
+        message_mode: "exact_words",
+        message_text: insideMessage,
+        message_brief: frontMessage,
+        signature_name: signatureName,
+        sender_name: signatureName,
+        sender_email: contactEmail,
+        recipient_name: recipientName,
+        address_line1: recipientAddress1,
+        address_line2: recipientAddress2 || null,
+        city: recipientCity,
+        state_region: recipientState.toUpperCase(),
+        postal_code: recipientZip,
+        country: "US",
+        amount_cents: 1500,
+        currency: "usd",
+        front_message: frontMessage,
+        return_name: returnName,
+        return_address_line1: returnAddress1,
+        return_address_line2: returnAddress2 || null,
+        return_city: returnCity,
+        return_state: returnState.toUpperCase(),
+        return_postal_code: returnZip,
+        requested_ship_date: mailingDate || null,
+      };
 
       const checkoutResponse = await fetch(
         "/api/create-checkout-session",
@@ -221,23 +199,7 @@ export default function SendCard() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            orderId,
             contactEmail,
-            frontMessage,
-            insideMessage,
-            signatureName,
-            recipientName,
-            recipientAddress1,
-            recipientAddress2,
-            recipientCity,
-            recipientState: recipientState.toUpperCase(),
-            recipientZip,
-            returnName,
-            returnAddress1,
-            returnAddress2,
-            returnCity,
-            returnState: returnState.toUpperCase(),
-            returnZip,
           }),
         }
       );
@@ -247,15 +209,23 @@ export default function SendCard() {
       if (!checkoutResponse.ok) {
         throw new Error(
           checkoutData?.error ||
-            "Your order was saved, but secure payment could not be started. Please try again."
+            "Secure payment could not be started. Please try again."
         );
       }
 
-      if (!checkoutData?.url) {
+      if (!checkoutData?.url || !checkoutData?.checkoutReference) {
         throw new Error(
-          "Your order was saved, but Stripe did not return a payment link. Please try again."
+          "Stripe did not return the information needed to continue."
         );
       }
+
+      localStorage.setItem(
+        "mailingMemoriesPendingOrder",
+        JSON.stringify({
+          checkoutReference: checkoutData.checkoutReference,
+          order: pendingOrder,
+        })
+      );
 
       window.location.assign(checkoutData.url);
     } catch (error) {
@@ -268,7 +238,7 @@ export default function SendCard() {
       setIsSubmitting(false);
     }
   }
-
+  
   const frontDisplay = frontMessage.trim() || "Click to write front message";
   const insideDisplay = insideMessage.trim() || "Click to write your message";
   const signatureDisplay = signatureName.trim() || "Click to sign";
