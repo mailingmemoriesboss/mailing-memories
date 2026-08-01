@@ -322,7 +322,7 @@ export default function AdminOrders() {
           <CardHeader>
             <CardTitle>Order Queue</CardTitle>
             <CardDescription>
-              Manage and fulfill your customer orders.
+              Tap a recipient to open the full fulfillment view.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -395,7 +395,13 @@ export default function AdminOrders() {
                         <div className="font-medium">{order.sender_name}</div>
                         <div className="text-xs text-muted-foreground">{order.sender_email}</div>
                       </TableCell>
-                      <TableCell>{order.recipient_name}</TableCell>
+                      <TableCell>
+                        <Link href={`/admin/order?id=${encodeURIComponent(order.id)}`}>
+                          <a style={{ color: "var(--mm-forest)", fontWeight: 600, textDecoration: "underline" }}>
+                            {order.recipient_name}
+                          </a>
+                        </Link>
+                      </TableCell>
                       <TableCell>
                         {order.city}, {order.state_region}
                       </TableCell>
