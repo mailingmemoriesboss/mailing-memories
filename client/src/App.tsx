@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import SendCard from "./pages/SendCard";
 import OrderConfirmed from "./pages/OrderConfirmed";
 import AdminOrders from "./pages/AdminOrders";
+import AdminOrderDetail from "./pages/AdminOrderDetail";
 import FAQ from "./pages/FAQ";
 import PlanLetter from "./pages/PlanLetter";
 import Messages from "./pages/Messages";
@@ -21,6 +22,7 @@ function Router() {
       <Route path={"/order-confirmed"} component={OrderConfirmed} />
       <Route path={"/messages"} component={Messages} />
       <Route path={"/admin/orders"} component={AdminOrders} />
+      <Route path={"/admin/order"} component={AdminOrderDetail} />
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/plan"} component={PlanLetter} />
       <Route path={"/404"} component={NotFound} />
