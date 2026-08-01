@@ -139,12 +139,12 @@ export default async (req: Request) => {
     }
 
     const paymentIsValid =
-      (total > 0 && session.payment_status === "paid") ||
+      session.payment_status === "paid" ||
       (total === 0 && session.payment_status === "no_payment_required");
 
     if (!paymentIsValid) {
       return jsonResponse(402, {
-        error: "Stripe payment or discount has not been completed.",
+        error: `Stripe checkout completed but payment status was ${session.payment_status}.`,
       });
     }
 
@@ -207,7 +207,7 @@ export default async (req: Request) => {
 
     const insertBody = {
       order_type: "send_now",
-      status: "draft",
+      status: "paid",
       occasion: payload.occasion?.trim() || "send-page",
       occasion_custom: checkoutReference,
       message_mode: "exact_words",
