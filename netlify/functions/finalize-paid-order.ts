@@ -51,7 +51,9 @@ function buildInternalNotes(
   );
 
   const lines = [
+    "STRIPE CHECKOUT VERIFIED — order completed",
     `Stripe checkout session: ${session.id}`,
+    `Stripe payment status: ${session.payment_status}`,
     `Stripe subtotal: $${((session.amount_subtotal ?? 1500) / 100).toFixed(2)}`,
     `Stripe discount: $${(discountCents / 100).toFixed(2)}`,
     `Stripe total: $${((session.amount_total ?? 0) / 100).toFixed(2)}`,
@@ -180,7 +182,7 @@ export default async (req: Request) => {
     const existingResponse = await fetch(
       `${baseUrl}/rest/v1/orders?occasion_custom=eq.${encodeURIComponent(
         checkoutReference
-      )}&select=id,status&limit=1`,
+      )}&select=*&limit=1`,
       { headers }
     );
 
@@ -196,6 +198,8 @@ export default async (req: Request) => {
     if (Array.isArray(existingRows) && existingRows.length > 0) {
       return jsonResponse(200, {
         ok: true,
+        paymentVerified: true,
+        amountPaidCents: total,
         order: existingRows[0],
         duplicate: true,
       });
@@ -203,7 +207,7 @@ export default async (req: Request) => {
 
     const insertBody = {
       order_type: "send_now",
-      status: "paid",
+      status: "draft",
       occasion: payload.occasion?.trim() || "send-page",
       occasion_custom: checkoutReference,
       message_mode: "exact_words",
@@ -248,7 +252,12 @@ export default async (req: Request) => {
     const rows = JSON.parse(insertText);
     const order = Array.isArray(rows) ? rows[0] : rows;
 
-    return jsonResponse(200, { ok: true, order });
+    return jsonResponse(200, {
+      ok: true,
+      paymentVerified: true,
+      amountPaidCents: total,
+      order,
+    });
   } catch (error) {
     return jsonResponse(500, {
       error:
