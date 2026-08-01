@@ -7,6 +7,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import SendCard from "./pages/SendCard";
+import OrderConfirmed from "./pages/OrderConfirmed";
 import AdminOrders from "./pages/AdminOrders";
 import FAQ from "./pages/FAQ";
 import PlanLetter from "./pages/PlanLetter";
@@ -17,6 +18,7 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/send"} component={SendCard} />
+      <Route path={"/order-confirmed"} component={OrderConfirmed} />
       <Route path={"/messages"} component={Messages} />
       <Route path={"/admin/orders"} component={AdminOrders} />
       <Route path={"/faq"} component={FAQ} />
