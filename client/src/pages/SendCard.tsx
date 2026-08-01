@@ -187,12 +187,22 @@ export default function SendCard() {
           );
         }
 
-        localStorage.removeItem("mailingMemoriesPendingOrder");
+sessionStorage.setItem(
+  "mailingMemoriesConfirmation",
+  JSON.stringify({
+    orderId: data?.order?.id || "",
+    recipientName: pending.order.recipient_name || "",
+    recipientCity: pending.order.city || "",
+    recipientState: pending.order.state_region || "",
+    mailingDate: pending.order.requested_ship_date || null,
+    email: pending.order.sender_email || "",
+    amountPaidCents: data?.amountPaidCents ?? 0,
+  })
+);
 
-        setSavedOrderId(data?.order?.id || "");
-        setSubmitError("");
-
-        window.history.replaceState({}, "", "/send");
+localStorage.removeItem("mailingMemoriesPendingOrder");
+setSubmitError("");
+setLocation("/order-confirmed");
       } catch (error) {
         setSubmitError(
           error instanceof Error
