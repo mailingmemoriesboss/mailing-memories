@@ -1,25 +1,24 @@
 /**
  * MAILING MEMORIES — "The Writing Desk" Landing Page
- * 
- * Design Philosophy: Wabi-sabi meets editorial stationery.
- * Every element feels placed by hand. Texture over flatness.
- * Horizontal flow over vertical stacking. Restraint as luxury.
+ *
+ * Conversion goal: make the current live handwritten-letter service
+ * immediately understandable and easy to buy while keeping writing help
+ * available as support rather than a competing offer.
  */
 
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "wouter";
+import { useEffect, useState } from "react";
+import { Link } from "wouter";
 import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
 
-/* ─── CDN Image URLs ─── */
 const IMAGES = {
-  letterPenDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/letter-pen-desk_49ca7681.png",
-  handEnvelopeCard: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-envelope-card_d47e65e0.png",
-  handWritingToday: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
-  heroDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hero-desk-atmosphere-P8UMTNZD3BSYLVuuy22JRa.webp",
-  paperTexture: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/paper-texture-bg-TLD2xmpcBsfnmyqpjpBz6a.webp",
+  handEnvelopeCard:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-envelope-card_d47e65e0.png",
+  handWritingToday:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
+  heroDesk:
+    "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hero-desk-atmosphere-P8UMTNZD3BSYLVuuy22JRa.webp",
 };
 
-/* ─── Quote Data ─── */
 const QUOTES = [
   {
     deck: "In the Hard Season",
@@ -45,31 +44,15 @@ const QUOTES = [
     deck: "The Caregiver",
     line: "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention.",
   },
-  {
-    deck: "Admiration & Character",
-    line: "You did the right thing when the easier thing was sitting right there. I want to say that I noticed.",
-  },
-  {
-    deck: "Growth & Pride",
-    line: "I can see the difference. It is not subtle anymore and I want to say something about it.",
-  },
-  {
-    deck: "Legacy",
-    line: "You made something real. Not everyone does. I want to say that clearly.",
-  },
-  {
-    deck: "Letters I Never Sent",
-    line: "You were gone before I found the words. I have found them now.",
-  },
 ];
 
-/* ═══════════════════════════════════════════════════════
-   HERO SECTION
-   ═══════════════════════════════════════════════════════ */
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: "clamp(600px, 85vh, 900px)" }}>
-      <div 
+    <section
+      className="relative overflow-hidden"
+      style={{ minHeight: "clamp(620px, 88vh, 900px)" }}
+    >
+      <div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url("${IMAGES.heroDesk}")`,
@@ -77,47 +60,95 @@ function HeroSection() {
           backgroundPosition: "center",
         }}
       />
-      <div className="absolute inset-0 z-10" style={{ 
-        background: "linear-gradient(to bottom, rgba(245, 241, 234, 0.4) 0%, rgba(245, 241, 234, 0.85) 60%, var(--mm-cream) 100%)" 
-      }} />
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(245, 241, 234, 0.45) 0%, rgba(245, 241, 234, 0.88) 62%, var(--mm-cream) 100%)",
+        }}
+      />
 
-      <div className="relative z-20 max-w-[1240px] mx-auto px-6 pt-32 pb-16 flex flex-col items-center text-center">
+      <div className="relative z-20 max-w-[1240px] mx-auto px-6 pt-28 pb-16 flex flex-col items-center text-center">
+        <FadeIn delay={0.08}>
+          <p
+            style={{
+              margin: "0 0 18px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.7rem",
+              fontWeight: 600,
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color: "var(--mm-burgundy)",
+            }}
+          >
+            Personal Correspondence Concierge
+          </p>
+        </FadeIn>
+
         <FadeIn delay={0.15}>
-          <h1 style={{
-            margin: "0 0 24px",
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
-            fontWeight: 500,
-            lineHeight: 0.95,
-            letterSpacing: "-0.03em",
-            color: "var(--mm-forest)",
-          }}>
+          <h1
+            style={{
+              margin: "0 0 24px",
+              maxWidth: "980px",
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
+              fontWeight: 500,
+              lineHeight: 0.98,
+              letterSpacing: "-0.03em",
+              color: "var(--mm-forest)",
+            }}
+          >
             The message you’ve been meaning to send.
           </h1>
         </FadeIn>
 
-        <FadeIn delay={0.3}>
-          <p style={{
-            margin: "0 auto 48px",
-            maxWidth: "600px",
-            fontFamily: "var(--font-sans)",
-            fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
-            lineHeight: 1.8,
-            fontWeight: 500,
-            color: "var(--mm-ink-soft)",
-          }}>
-            For the moments a text is not enough. We handwrite your words on a quality card, address it, stamp it, and mail it for you.
+        <FadeIn delay={0.24}>
+          <p
+            style={{
+              margin: "0 auto 24px",
+              maxWidth: "660px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
+              lineHeight: 1.8,
+              fontWeight: 500,
+              color: "var(--mm-ink-soft)",
+            }}
+          >
+            You provide the words. We handwrite them on quality cardstock,
+            address the envelope, add the stamp, and mail the letter for you.
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.45}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px", alignItems: "center" }}>
+        <FadeIn delay={0.3}>
+          <p
+            style={{
+              margin: "0 auto 32px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+              color: "var(--mm-ink-muted)",
+            }}
+          >
+            One full handwritten page · envelope &amp; U.S. postage included · $15
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.38}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+              alignItems: "center",
+            }}
+          >
             <Link
               href="/send"
               className="no-underline inline-flex items-center justify-center transition-all duration-200"
               style={{
-                minHeight: "56px",
-                padding: "0 36px",
+                minHeight: "58px",
+                padding: "0 38px",
                 borderRadius: "999px",
                 background: "var(--mm-forest)",
                 color: "#f7f2eb",
@@ -129,61 +160,22 @@ function HeroSection() {
                 boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
               }}
             >
-              Send a Card
+              Send Your Letter — $15
             </Link>
-            <Link
-              href="/plan"
-              className="no-underline inline-flex items-center justify-center transition-all duration-200"
-              style={{
-                minHeight: "56px",
-                padding: "0 36px",
-                borderRadius: "999px",
-                background: "transparent",
-                color: "var(--mm-forest)",
-                border: "1px solid var(--mm-forest)",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--mm-forest)";
-                e.currentTarget.style.color = "#f7f2eb";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "var(--mm-forest)";
-              }}
-            >
-              Plan Ahead
-            </Link>
+
             <Link
               href="/messages"
-              className="no-underline inline-flex items-center justify-center transition-all duration-200"
+              className="no-underline transition-all duration-200"
               style={{
-                minHeight: "56px",
-                padding: "0 36px",
-                borderRadius: "999px",
-                background: "transparent",
                 color: "var(--mm-forest)",
-                border: "1px solid var(--mm-forest)",
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.8rem",
+                fontSize: "0.84rem",
                 fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--mm-forest)";
-                e.currentTarget.style.color = "#f7f2eb";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "var(--mm-forest)";
+                borderBottom: "1px solid rgba(29, 41, 33, 0.35)",
+                paddingBottom: "3px",
               }}
             >
-              Find Your Words
+              Not sure what to say? Find your words →
             </Link>
           </div>
         </FadeIn>
@@ -192,173 +184,31 @@ function HeroSection() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   ROTATING QUOTES CAROUSEL
-   ═══════════════════════════════════════════════════════ */
-function QuotesCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isRevealing, setIsRevealing] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsRevealing(false);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % QUOTES.length);
-        setIsRevealing(true);
-      }, 500);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const currentQuote = QUOTES[currentIndex];
+function HowItWorks() {
+  const steps = [
+    {
+      number: "01",
+      title: "Write what you mean",
+      text: "Type the message you want them to receive. If the words are hard to find, use our guided message ideas first.",
+    },
+    {
+      number: "02",
+      title: "Tell us where it goes",
+      text: "Add the recipient address, your return address, and choose a future mailing date if you want to plan ahead.",
+    },
+    {
+      number: "03",
+      title: "We put it on real paper",
+      text: "We handwrite your message, address the envelope, stamp it, and place it in the mail. No printer pretending to be a pen.",
+    },
+  ];
 
   return (
-    <section style={{
-      background: "var(--mm-walnut)",
-      padding: "clamp(48px, 6vw, 80px) 24px",
-    }}>
-      <div className="max-w-[900px] mx-auto">
-        <FadeIn>
-          <div style={{
-            textAlign: "center",
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.02)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-          }}
-          >
-            <p style={{
-              margin: "0 0 16px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(245, 241, 234, 0.65)",
-            }}>
-              From {currentQuote.deck}
-            </p>
-
-            <blockquote
-              style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)",
-                fontWeight: 400,
-                fontStyle: "italic",
-                lineHeight: 1.6,
-                color: "rgba(245, 241, 234, 0.95)",
-                maxWidth: "800px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                animation: isRevealing ? "fadeInUp 700ms ease-out forwards" : "fadeOutDown 500ms ease-in forwards",
-              }}
-              key={currentIndex}
-            >
-              "{currentQuote.line}"
-            </blockquote>
-
-            <Link
-              href={`/send?message=${encodeURIComponent(currentQuote.line)}&deck=${encodeURIComponent(currentQuote.deck)}`}
-              className="no-underline inline-flex items-center justify-center transition-all duration-200 mt-8"
-              style={{
-                minHeight: "48px",
-                padding: "0 28px",
-                borderRadius: "999px",
-                border: "1px solid rgba(245, 241, 234, 0.4)",
-                background: "transparent",
-                color: "rgba(245, 241, 234, 0.9)",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(245, 241, 234, 0.1)";
-                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.6)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.4)";
-              }}
-            >
-              Use This Quote
-            </Link>
-          </div>
-        </FadeIn>
-
-        {/* Carousel indicators */}
-        <div style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "8px",
-          marginTop: "32px",
-        }}>
-          {QUOTES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setIsRevealing(false);
-                setTimeout(() => {
-                  setCurrentIndex(i);
-                  setIsRevealing(true);
-                }, 300);
-              }}
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                border: "none",
-                background: i === currentIndex ? "rgba(245, 241, 234, 0.8)" : "rgba(245, 241, 234, 0.2)",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              aria-label={`Go to quote ${i + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(12px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes fadeOutDown {
-          from {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateY(-12px);
-          }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   HOW IT WORKS (with background imagery)
-   ═══════════════════════════════════════════════════════ */
-function WhatWeDo() {
-  return (
-    <section id="about" className="relative overflow-hidden" style={{
-      padding: "clamp(64px, 8vw, 100px) 24px",
-    }}>
-      {/* Background image with overlay */}
+    <section
+      id="about"
+      className="relative overflow-hidden"
+      style={{ padding: "clamp(72px, 8vw, 104px) 24px" }}
+    >
       <div
         className="absolute inset-0 z-0"
         style={{
@@ -368,69 +218,125 @@ function WhatWeDo() {
           backgroundAttachment: "fixed",
         }}
       />
-      <div className="absolute inset-0 z-[1]" style={{
-        background: "linear-gradient(to right, rgba(245, 241, 234, 0.98) 0%, rgba(245, 241, 234, 0.85) 40%, rgba(245, 241, 234, 0.4) 100%)",
-      }} />
+      <div
+        className="absolute inset-0 z-[1]"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(245, 241, 234, 0.99) 0%, rgba(245, 241, 234, 0.94) 56%, rgba(245, 241, 234, 0.55) 100%)",
+        }}
+      />
 
       <div className="max-w-[1240px] mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
-          <div className="lg:col-span-5">
-            <FadeIn>
-              <p style={{
-                margin: "0 0 14px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.68rem",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--mm-burgundy)",
-              }}>
-                How it works
-              </p>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <h2 style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                fontWeight: 500,
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-                color: "var(--mm-forest)",
-              }}>
-                Turn intention into<br />
-                <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>mailed follow-through.</em>
-              </h2>
-            </FadeIn>
-            <PenStroke className="my-6 max-w-[80px]" color="var(--mm-burgundy)" />
-            <FadeIn delay={0.2}>
-              <p style={{
-                margin: 0,
-                fontFamily: "var(--font-sans)",
-                fontSize: "1rem",
-                lineHeight: 1.85,
-                color: "var(--mm-ink-soft)",
-                maxWidth: "440px",
-              }}>
-                Mailing Memories helps you follow through on meaningful written connection. 
-                We write, stamp, and mail one full handwritten page on quality cardstock for $15. 
-                If you feel stuck on the wording, light help getting started is available.
-              </p>
-            </FadeIn>
-          </div>
+        <FadeIn>
+          <p
+            style={{
+              margin: "0 0 12px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.68rem",
+              fontWeight: 600,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--mm-burgundy)",
+            }}
+          >
+            How it works
+          </p>
+          <h2
+            style={{
+              margin: 0,
+              maxWidth: "650px",
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(2rem, 3.5vw, 3.2rem)",
+              fontWeight: 500,
+              lineHeight: 1.1,
+              color: "var(--mm-forest)",
+            }}
+          >
+            From “I should write them” to
+            <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>
+              {" "}actually mailed.
+            </em>
+          </h2>
+        </FadeIn>
+        <PenStroke className="my-7 max-w-[80px]" color="var(--mm-burgundy)" />
 
-          <div className="lg:col-span-7 relative hidden lg:block">
-            {/* Background image is shown via CSS on desktop */}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-[980px]">
+          {steps.map((step, index) => (
+            <FadeIn key={step.number} delay={0.08 * (index + 1)}>
+              <div
+                style={{
+                  height: "100%",
+                  padding: "28px",
+                  background: "rgba(255,255,255,0.64)",
+                  border: "1px solid var(--mm-line)",
+                }}
+              >
+                <p
+                  style={{
+                    margin: "0 0 18px",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.66rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.14em",
+                    color: "var(--mm-burgundy)",
+                  }}
+                >
+                  {step.number}
+                </p>
+                <h3
+                  style={{
+                    margin: "0 0 12px",
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "1.35rem",
+                    fontWeight: 500,
+                    color: "var(--mm-forest)",
+                  }}
+                >
+                  {step.title}
+                </h3>
+                <p
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.7,
+                    color: "var(--mm-ink-soft)",
+                  }}
+                >
+                  {step.text}
+                </p>
+              </div>
+            </FadeIn>
+          ))}
         </div>
+
+        <FadeIn delay={0.36}>
+          <div style={{ marginTop: "34px" }}>
+            <Link
+              href="/send"
+              className="no-underline inline-flex items-center justify-center"
+              style={{
+                minHeight: "50px",
+                padding: "0 28px",
+                borderRadius: "999px",
+                background: "var(--mm-forest)",
+                color: "#f7f2eb",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                letterSpacing: "0.09em",
+                textTransform: "uppercase",
+              }}
+            >
+              Start Your Letter
+            </Link>
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   VISUAL PROOF
-   ═══════════════════════════════════════════════════════ */
 function VisualProof() {
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "480px" }}>
@@ -442,39 +348,59 @@ function VisualProof() {
           backgroundPosition: "center",
         }}
       />
-      <div className="absolute inset-0" style={{
-        background: "linear-gradient(to right, rgba(29, 41, 33, 0.88) 0%, rgba(29, 41, 33, 0.65) 50%, rgba(29, 41, 33, 0.3) 100%)",
-      }} />
-      <div className="relative z-10 max-w-[1240px] mx-auto flex items-center" style={{
-        minHeight: "480px",
-        padding: "60px 24px",
-      }}>
-        <div style={{ maxWidth: "520px" }}>
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(29, 41, 33, 0.9) 0%, rgba(29, 41, 33, 0.68) 52%, rgba(29, 41, 33, 0.28) 100%)",
+        }}
+      />
+      <div
+        className="relative z-10 max-w-[1240px] mx-auto flex items-center"
+        style={{ minHeight: "480px", padding: "60px 24px" }}
+      >
+        <div style={{ maxWidth: "540px" }}>
           <FadeIn>
-            <h2 style={{
-              margin: "0 0 20px",
-              fontFamily: "var(--font-serif)",
-              fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
-              fontWeight: 500,
-              lineHeight: 1.2,
-              color: "#f5f1ea",
-            }}>
-              Not a sympathy card.<br />
-              Not a text message.<br />
-              <em style={{ fontStyle: "italic", color: "rgba(245, 241, 234, 0.7)" }}>A real letter, in their hands.</em>
+            <p
+              style={{
+                margin: "0 0 14px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.68rem",
+                fontWeight: 600,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "rgba(245, 241, 234, 0.7)",
+              }}
+            >
+              Human, on purpose
+            </p>
+            <h2
+              style={{
+                margin: "0 0 20px",
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(1.9rem, 3vw, 2.8rem)",
+                fontWeight: 500,
+                lineHeight: 1.2,
+                color: "#f5f1ea",
+              }}
+            >
+              A real message deserves to feel like one.
             </h2>
           </FadeIn>
-          <FadeIn delay={0.15}>
-            <p style={{
-              margin: "0 0 28px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.95rem",
-              lineHeight: 1.85,
-              color: "rgba(245, 241, 234, 0.72)",
-            }}>
-              Every letter is written on premium cotton stationery, hand-addressed, stamped, 
-              and mailed. The person who receives it knows — this was not automated. 
-              Someone sat down and meant this.
+          <FadeIn delay={0.12}>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.96rem",
+                lineHeight: 1.85,
+                color: "rgba(245, 241, 234, 0.76)",
+              }}
+            >
+              Every order is handwritten by Mailing Memories, placed in a
+              hand-addressed envelope, stamped, and mailed. The technology stays
+              behind the scenes. What arrives is simply a personal piece of paper
+              from one person to another.
             </p>
           </FadeIn>
         </div>
@@ -483,72 +409,205 @@ function VisualProof() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   COMING SOON: CARD DECKS
-   ═══════════════════════════════════════════════════════ */
+function QuotesCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isRevealing, setIsRevealing] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsRevealing(false);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % QUOTES.length);
+        setIsRevealing(true);
+      }, 450);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentQuote = QUOTES[currentIndex];
+
+  return (
+    <section
+      style={{
+        background: "var(--mm-walnut)",
+        padding: "clamp(56px, 7vw, 86px) 24px",
+      }}
+    >
+      <div className="max-w-[900px] mx-auto text-center">
+        <FadeIn>
+          <p
+            style={{
+              margin: "0 0 14px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.68rem",
+              fontWeight: 600,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(245, 241, 234, 0.62)",
+            }}
+          >
+            Need a starting point? · From {currentQuote.deck}
+          </p>
+          <blockquote
+            key={currentIndex}
+            style={{
+              margin: "0 auto",
+              maxWidth: "820px",
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(1.55rem, 3.5vw, 2.55rem)",
+              fontStyle: "italic",
+              lineHeight: 1.55,
+              color: "rgba(245, 241, 234, 0.96)",
+              animation: isRevealing
+                ? "fadeInUp 650ms ease-out forwards"
+                : "fadeOutDown 400ms ease-in forwards",
+            }}
+          >
+            “{currentQuote.line}”
+          </blockquote>
+          <Link
+            href={`/send?message=${encodeURIComponent(currentQuote.line)}&deck=${encodeURIComponent(currentQuote.deck)}`}
+            className="no-underline inline-flex items-center justify-center mt-8"
+            style={{
+              minHeight: "46px",
+              padding: "0 26px",
+              borderRadius: "999px",
+              border: "1px solid rgba(245, 241, 234, 0.42)",
+              color: "rgba(245, 241, 234, 0.94)",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.72rem",
+              fontWeight: 600,
+              letterSpacing: "0.09em",
+              textTransform: "uppercase",
+            }}
+          >
+            Start With These Words
+          </Link>
+        </FadeIn>
+
+        <div className="flex justify-center gap-2 mt-7">
+          {QUOTES.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              aria-label={`Go to message idea ${index + 1}`}
+              style={{
+                width: "8px",
+                height: "8px",
+                padding: 0,
+                border: "none",
+                borderRadius: "50%",
+                cursor: "pointer",
+                background:
+                  index === currentIndex
+                    ? "rgba(245, 241, 234, 0.82)"
+                    : "rgba(245, 241, 234, 0.22)",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOutDown {
+          from { opacity: 1; transform: translateY(0); }
+          to { opacity: 0; transform: translateY(-10px); }
+        }
+      `}</style>
+    </section>
+  );
+}
+
 function DecksSection() {
   return (
-    <section style={{
-      background: "var(--mm-cream)",
-      padding: "clamp(80px, 10vw, 120px) 24px",
-      borderTop: "1px solid var(--mm-line)",
-    }}>
+    <section
+      style={{
+        background: "var(--mm-cream)",
+        padding: "clamp(72px, 9vw, 110px) 24px",
+        borderTop: "1px solid var(--mm-line)",
+      }}
+    >
       <div className="max-w-[1240px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-          <div className="max-w-[500px]">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-5">
+          <div className="max-w-[560px]">
             <FadeIn>
-              <p style={{
-                margin: "0 0 12px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.68rem",
-                fontWeight: 600,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--mm-burgundy)",
-              }}>
-                In Development
+              <p
+                style={{
+                  margin: "0 0 12px",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.68rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "var(--mm-burgundy)",
+                }}
+              >
+                In development
               </p>
-              <h2 style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                fontWeight: 500,
-                lineHeight: 1.1,
-                color: "var(--mm-forest)",
-              }}>
-                Guided Card Decks
+              <h2
+                style={{
+                  margin: 0,
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "clamp(2rem, 3.5vw, 3rem)",
+                  fontWeight: 500,
+                  color: "var(--mm-forest)",
+                }}
+              >
+                Guided Writing Decks
               </h2>
-              <p style={{
-                marginTop: "16px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "1rem",
-                lineHeight: 1.7,
-                color: "var(--mm-ink-soft)",
-              }}>
-                Gentle structure for the moments when words are hard to find. 
-                Our themed decks provide the prompts you need to say what you mean.
+              <p
+                style={{
+                  margin: "16px 0 0",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.96rem",
+                  lineHeight: 1.7,
+                  color: "var(--mm-ink-soft)",
+                }}
+              >
+                A future way to find the words yourself. The handwritten mailing
+                service above is available now.
               </p>
             </FadeIn>
           </div>
-          <FadeIn delay={0.1}>
-            <div className="px-5 py-2 rounded-full border border-mm-line font-sans text-[0.7rem] font-semibold tracking-widest uppercase text-mm-ink-muted">
-              Coming Soon
-            </div>
-          </FadeIn>
+          <div className="px-5 py-2 rounded-full border border-mm-line font-sans text-[0.7rem] font-semibold tracking-widest uppercase text-mm-ink-muted">
+            Coming Soon
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: "Grief & Hard Seasons", desc: "For when there are no words, but you want to stay close." },
-            { title: "Milestones & Gratitude", desc: "For naming the specific things that matter most." },
-            { title: "Apology & Repair", desc: "For finding a clean starting point for reconciliation." },
-          ].map((deck, i) => (
-            <FadeIn key={i} delay={0.1 * (i + 1)}>
-              <div className="group relative bg-white/40 border border-mm-line p-8 transition-all hover:bg-white/60">
-                <h3 className="font-serif text-xl mb-3 text-mm-forest">{deck.title}</h3>
-                <p className="font-sans text-sm text-mm-ink-soft leading-relaxed">{deck.desc}</p>
-              </div>
-            </FadeIn>
+            {
+              title: "Grief & Hard Seasons",
+              desc: "For when there are no perfect words, but you still want to stay close.",
+            },
+            {
+              title: "Milestones & Gratitude",
+              desc: "For naming the specific things that deserve to be said out loud.",
+            },
+            {
+              title: "Apology & Repair",
+              desc: "For finding a clean, honest starting point when a relationship needs care.",
+            },
+          ].map((deck) => (
+            <div
+              key={deck.title}
+              style={{
+                padding: "28px",
+                background: "rgba(255,255,255,0.42)",
+                border: "1px solid var(--mm-line)",
+              }}
+            >
+              <h3 className="font-serif text-xl mb-3 text-mm-forest">
+                {deck.title}
+              </h3>
+              <p className="font-sans text-sm text-mm-ink-soft leading-relaxed">
+                {deck.desc}
+              </p>
+            </div>
           ))}
         </div>
       </div>
@@ -556,47 +615,45 @@ function DecksSection() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   FINAL CTA
-   ═══════════════════════════════════════════════════════ */
 function FinalCTA() {
   return (
-    <section id="send" style={{
-      background: "var(--mm-forest)",
-      padding: "clamp(64px, 8vw, 96px) 24px",
-      position: "relative",
-    }}>
-      <div className="relative z-10 max-w-[680px] mx-auto text-center">
+    <section
+      id="send"
+      style={{
+        background: "var(--mm-forest)",
+        padding: "clamp(64px, 8vw, 96px) 24px",
+      }}
+    >
+      <div className="max-w-[700px] mx-auto text-center">
         <FadeIn>
-          <h2 style={{
-            margin: "0 0 24px",
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
-            fontWeight: 500,
-            lineHeight: 1.15,
-            color: "#f5f1ea",
-          }}>
-            Someone came to mind<br />
-            just now, didn't they?
+          <h2
+            style={{
+              margin: "0 0 20px",
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
+              fontWeight: 500,
+              lineHeight: 1.15,
+              color: "#f5f1ea",
+            }}
+          >
+            Someone came to mind just now, didn’t they?
           </h2>
-        </FadeIn>
-        <FadeIn delay={0.2}>
-          <p style={{
-            margin: "0 auto 36px",
-            maxWidth: "480px",
-            fontFamily: "var(--font-sans)",
-            fontSize: "1rem",
-            lineHeight: 1.85,
-            color: "rgba(245, 241, 234, 0.68)",
-          }}>
-            That thought is worth something. Don't let it pass. Say what you mean on real paper — 
-            and put it in their hands.
+          <p
+            style={{
+              margin: "0 auto 30px",
+              maxWidth: "520px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "1rem",
+              lineHeight: 1.8,
+              color: "rgba(245, 241, 234, 0.7)",
+            }}
+          >
+            Give us the words and address. We’ll take care of the handwriting,
+            envelope, stamp, and mailing.
           </p>
-        </FadeIn>
-        <FadeIn delay={0.3}>
           <Link
             href="/send"
-            className="no-underline inline-flex items-center justify-center transition-all duration-200"
+            className="no-underline inline-flex items-center justify-center"
             style={{
               minHeight: "54px",
               padding: "0 32px",
@@ -610,8 +667,18 @@ function FinalCTA() {
               textTransform: "uppercase",
             }}
           >
-            Send a Letter — $15
+            Send Your Letter — $15
           </Link>
+          <p
+            style={{
+              margin: "16px 0 0",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.74rem",
+              color: "rgba(245, 241, 234, 0.58)",
+            }}
+          >
+            One full handwritten page · U.S. mailing included
+          </p>
         </FadeIn>
       </div>
     </section>
@@ -622,9 +689,9 @@ export default function Home() {
   return (
     <PageShell>
       <HeroSection />
-      <QuotesCarousel />
-      <WhatWeDo />
+      <HowItWorks />
       <VisualProof />
+      <QuotesCarousel />
       <DecksSection />
       <FinalCTA />
     </PageShell>
