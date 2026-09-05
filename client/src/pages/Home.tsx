@@ -351,28 +351,15 @@ function QuotesCarousel() {
 }
 
 /* ═══════════════════════════════════════════════════════
-   HOW IT WORKS (with background imagery)
+   HOW IT WORKS
    ═══════════════════════════════════════════════════════ */
 function WhatWeDo() {
   return (
-    <section id="about" className="relative overflow-hidden" style={{
+    <section id="about" style={{
+      background: "var(--mm-cream)",
       padding: "clamp(64px, 8vw, 100px) 24px",
     }}>
-      {/* Background image with overlay */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url("${IMAGES.handWritingToday}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center right",
-          backgroundAttachment: "fixed",
-        }}
-      />
-      <div className="absolute inset-0 z-[1]" style={{
-        background: "linear-gradient(to right, rgba(245, 241, 234, 0.98) 0%, rgba(245, 241, 234, 0.85) 40%, rgba(245, 241, 234, 0.4) 100%)",
-      }} />
-
-      <div className="max-w-[1240px] mx-auto relative z-10">
+      <div className="max-w-[1240px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           <div className="lg:col-span-5">
             <FadeIn>
@@ -419,8 +406,20 @@ function WhatWeDo() {
             </FadeIn>
           </div>
 
-          <div className="lg:col-span-7 relative hidden lg:block">
-            {/* Background image is shown via CSS on desktop */}
+          <div className="lg:col-span-7 relative">
+            <FadeIn delay={0.2}>
+              <div className="relative">
+                <img
+                  src={IMAGES.handWritingToday}
+                  alt="A hand writing 'I wanted to write you something today' on cream stationery"
+                  className="w-full"
+                  style={{
+                    borderRadius: "2px",
+                    boxShadow: "0 24px 60px rgba(61, 43, 31, 0.15)",
+                  }}
+                />
+              </div>
+            </FadeIn>
           </div>
         </div>
       </div>
