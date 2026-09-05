@@ -31,5 +31,5 @@ export default async () => {
 };
 
 export const config = {
-  schedule: "0 0 */5 * *", // Runs at 00:00 UTC every 5 days
+  schedule: "0 0 */5 * *", // Runs at 00:00 UTC every 5 days; retained during Sep 3 site restore.
 };
