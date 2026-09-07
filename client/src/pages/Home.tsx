@@ -1,559 +1,259 @@
-/**
- * MAILING MEMORIES — "The Writing Desk" Landing Page
- *
- * Design Philosophy: Wabi-sabi meets editorial stationery.
- * Every element feels placed by hand. Texture over flatness.
- * Horizontal flow over vertical stacking. Restraint as luxury.
- */
-
-import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { PageShell, FadeIn, PenStroke } from "@/components/Layout";
+import { FadeIn, PageShell } from "@/components/Layout";
 
-/* ─── CDN Image URLs ─── */
 const IMAGES = {
-  letterPenDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/letter-pen-desk_49ca7681.png",
-  handEnvelopeCard: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-envelope-card_d47e65e0.png",
-  handWritingToday: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
-  heroDesk: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hero-desk-atmosphere-P8UMTNZD3BSYLVuuy22JRa.webp",
-  paperTexture: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/paper-texture-bg-TLD2xmpcBsfnmyqpjpBz6a.webp",
+  handwriting: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-writing-today_baf52ba5.png",
+  envelope: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/hand-envelope-card_d47e65e0.png",
 };
 
-/* ─── Starter-line data ───
- * These lines may originate in product-development material, but the live
- * homepage intentionally presents them only as free message starters. Future
- * deck/set names are not exposed as if they were current products.
- */
-const QUOTES = [
-  { line: "I am not going to tell you it will pass. I am just going to stay close while it is here." },
-  { line: "Most of what we have built together happened in ordinary moments that did not announce themselves as important." },
-  { line: "The world is easier to be in because people like you exist in it." },
-  { line: "I do not say this enough, and when I do say it, it does not come out the way I mean it. So I am writing it instead." },
-  { line: "You were in my mind today and I did not want to just let that pass." },
-  { line: "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention." },
-  { line: "You did the right thing when the easier thing was sitting right there. I want to say that I noticed." },
-  { line: "I can see the difference. It is not subtle anymore and I want to say something about it." },
-  { line: "You made something real. Not everyone does. I want to say that clearly." },
-  { line: "You were gone before I found the words. I have found them now." },
-];
+const primaryButton: React.CSSProperties = {
+  minHeight: "52px",
+  padding: "0 24px",
+  borderRadius: "4px",
+  background: "var(--mm-forest)",
+  color: "#f7f2eb",
+  fontFamily: "var(--font-sans)",
+  fontSize: "0.82rem",
+  fontWeight: 700,
+  letterSpacing: "0.025em",
+  textDecoration: "none",
+};
 
-/* ═══════════════════════════════════════════════════════
-   HERO SECTION
-   ═══════════════════════════════════════════════════════ */
-function HeroSection() {
-  return (
-    <section className="relative overflow-hidden" style={{ minHeight: "clamp(600px, 85vh, 900px)" }}>
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url("${IMAGES.heroDesk}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <div
-        className="absolute inset-0 z-10"
-        style={{
-          background: "linear-gradient(to bottom, rgba(245, 241, 234, 0.4) 0%, rgba(245, 241, 234, 0.85) 60%, var(--mm-cream) 100%)",
-        }}
-      />
+const secondaryButton: React.CSSProperties = {
+  minHeight: "52px",
+  padding: "0 24px",
+  borderRadius: "4px",
+  border: "1px solid var(--mm-line-strong)",
+  background: "rgba(255,255,255,0.42)",
+  color: "var(--mm-forest)",
+  fontFamily: "var(--font-sans)",
+  fontSize: "0.82rem",
+  fontWeight: 700,
+  letterSpacing: "0.025em",
+  textDecoration: "none",
+};
 
-      <div className="relative z-20 max-w-[1240px] mx-auto px-6 pt-32 pb-16 flex flex-col items-center text-center">
-        <FadeIn delay={0.15}>
-          <h1
-            style={{
-              margin: "0 0 24px",
-              fontFamily: "var(--font-serif)",
-              fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
-              fontWeight: 500,
-              lineHeight: 0.95,
-              letterSpacing: "-0.03em",
-              color: "var(--mm-forest)",
-            }}
-          >
-            The message you’ve been meaning to send.
-          </h1>
-        </FadeIn>
-
-        <FadeIn delay={0.3}>
-          <p
-            style={{
-              margin: "0 auto 48px",
-              maxWidth: "600px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "clamp(1rem, 1.2vw, 1.2rem)",
-              lineHeight: 1.8,
-              fontWeight: 500,
-              color: "var(--mm-ink-soft)",
-            }}
-          >
-            For the moments a text is not enough. We handwrite your words on a quality card, address it, stamp it, and mail it for you.
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={0.45}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px", alignItems: "center" }}>
-            <Link
-              href="/send"
-              className="no-underline inline-flex items-center justify-center transition-all duration-200"
-              style={{
-                minHeight: "56px",
-                padding: "0 36px",
-                borderRadius: "999px",
-                background: "var(--mm-forest)",
-                color: "#f7f2eb",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                boxShadow: "0 12px 32px rgba(29, 41, 33, 0.15)",
-              }}
-            >
-              Send a Card
-            </Link>
-            <Link
-              href="/plan"
-              className="no-underline inline-flex items-center justify-center transition-all duration-200"
-              style={{
-                minHeight: "56px",
-                padding: "0 36px",
-                borderRadius: "999px",
-                background: "transparent",
-                color: "var(--mm-forest)",
-                border: "1px solid var(--mm-forest)",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--mm-forest)";
-                e.currentTarget.style.color = "#f7f2eb";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "var(--mm-forest)";
-              }}
-            >
-              Plan Ahead
-            </Link>
-            <Link
-              href="/messages"
-              className="no-underline inline-flex items-center justify-center transition-all duration-200"
-              style={{
-                minHeight: "56px",
-                padding: "0 36px",
-                borderRadius: "999px",
-                background: "transparent",
-                color: "var(--mm-forest)",
-                border: "1px solid var(--mm-forest)",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.8rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--mm-forest)";
-                e.currentTarget.style.color = "#f7f2eb";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "var(--mm-forest)";
-              }}
-            >
-              Find Your Words
-            </Link>
-          </div>
-        </FadeIn>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   ROTATING STARTER-LINE CAROUSEL
-   ═══════════════════════════════════════════════════════ */
-function QuotesCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isRevealing, setIsRevealing] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsRevealing(false);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % QUOTES.length);
-        setIsRevealing(true);
-      }, 500);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const currentQuote = QUOTES[currentIndex];
-
+function Hero() {
   return (
     <section
       style={{
-        background: "var(--mm-walnut)",
-        padding: "clamp(48px, 6vw, 80px) 24px",
+        padding: "clamp(56px, 8vw, 108px) 24px clamp(64px, 8vw, 96px)",
+        background: "var(--mm-cream-soft)",
       }}
     >
-      <div className="max-w-[900px] mx-auto">
-        <FadeIn>
-          <div
-            style={{
-              textAlign: "center",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "scale(1.02)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-            }}
-          >
-            <p
-              style={{
-                margin: "0 0 16px",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.7rem",
-                fontWeight: 600,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "rgba(245, 241, 234, 0.65)",
-              }}
-            >
-              A starting line
-            </p>
-
-            <blockquote
-              style={{
-                margin: 0,
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)",
-                fontWeight: 400,
-                fontStyle: "italic",
-                lineHeight: 1.6,
-                color: "rgba(245, 241, 234, 0.95)",
-                maxWidth: "800px",
-                marginLeft: "auto",
-                marginRight: "auto",
-                animation: isRevealing ? "fadeInUp 700ms ease-out forwards" : "fadeOutDown 500ms ease-in forwards",
-              }}
-              key={currentIndex}
-            >
-              "{currentQuote.line}"
-            </blockquote>
-
-            <Link
-              href={`/send?message=${encodeURIComponent(currentQuote.line)}`}
-              className="no-underline inline-flex items-center justify-center transition-all duration-200 mt-8"
-              style={{
-                minHeight: "48px",
-                padding: "0 28px",
-                borderRadius: "999px",
-                border: "1px solid rgba(245, 241, 234, 0.4)",
-                background: "transparent",
-                color: "rgba(245, 241, 234, 0.9)",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.75rem",
-                fontWeight: 600,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(245, 241, 234, 0.1)";
-                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.6)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "rgba(245, 241, 234, 0.4)";
-              }}
-            >
-              Use This Starting Line
-            </Link>
-          </div>
-        </FadeIn>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "8px",
-            marginTop: "32px",
-          }}
-        >
-          {QUOTES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setIsRevealing(false);
-                setTimeout(() => {
-                  setCurrentIndex(i);
-                  setIsRevealing(true);
-                }, 300);
-              }}
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                border: "none",
-                background: i === currentIndex ? "rgba(245, 241, 234, 0.8)" : "rgba(245, 241, 234, 0.2)",
-                cursor: "pointer",
-                transition: "all 0.3s ease",
-              }}
-              aria-label={`Go to starter line ${i + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(12px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes fadeOutDown {
-          from {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          to {
-            opacity: 0;
-            transform: translateY(-12px);
-          }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   HOW IT WORKS
-   ═══════════════════════════════════════════════════════ */
-function WhatWeDo() {
-  return (
-    <section
-      id="about"
-      style={{
-        background: "var(--mm-cream)",
-        padding: "clamp(64px, 8vw, 100px) 24px",
-      }}
-    >
-      <div className="max-w-[1240px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
-          <div className="lg:col-span-5">
-            <FadeIn>
-              <p
-                style={{
-                  margin: "0 0 14px",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.68rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-burgundy)",
-                }}
-              >
-                How it works
-              </p>
-            </FadeIn>
-            <FadeIn delay={0.1}>
-              <h2
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-serif)",
-                  fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                  fontWeight: 500,
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.02em",
-                  color: "var(--mm-forest)",
-                }}
-              >
-                Turn intention into<br />
-                <em style={{ fontStyle: "italic", color: "var(--mm-burgundy)" }}>mailed follow-through.</em>
-              </h2>
-            </FadeIn>
-            <PenStroke className="my-6 max-w-[80px]" color="var(--mm-burgundy)" />
-            <FadeIn delay={0.2}>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "1rem",
-                  lineHeight: 1.85,
-                  color: "var(--mm-ink-soft)",
-                  maxWidth: "440px",
-                }}
-              >
-                Mailing Memories helps you follow through on meaningful written connection. We handwrite your message on a folded cardstock card, prepare and address the envelope, stamp it, and mail it for $15. If you feel stuck on the wording, light help getting started is available.
-              </p>
-            </FadeIn>
-          </div>
-
-          <div className="lg:col-span-7 relative">
-            <FadeIn delay={0.2}>
-              <div className="relative">
-                <img
-                  src={IMAGES.handWritingToday}
-                  alt="A hand writing 'I wanted to write you something today' on cream stationery"
-                  className="w-full"
-                  style={{
-                    borderRadius: "2px",
-                    boxShadow: "0 24px 60px rgba(61, 43, 31, 0.15)",
-                  }}
-                />
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════
-   VISUAL PROOF
-   ═══════════════════════════════════════════════════════ */
-function VisualProof() {
-  return (
-    <section className="relative overflow-hidden" style={{ minHeight: "480px" }}>
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `url("${IMAGES.handEnvelopeCard}")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(to right, rgba(29, 41, 33, 0.88) 0%, rgba(29, 41, 33, 0.65) 50%, rgba(29, 41, 33, 0.3) 100%)",
-        }}
-      />
-      <div
-        className="relative z-10 max-w-[1240px] mx-auto flex items-center"
-        style={{
-          minHeight: "480px",
-          padding: "60px 24px",
-        }}
-      >
-        <div style={{ maxWidth: "520px" }}>
+      <div className="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="lg:col-span-7">
           <FadeIn>
-            <h2
-              style={{
-                margin: "0 0 20px",
-                fontFamily: "var(--font-serif)",
-                fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
-                fontWeight: 500,
-                lineHeight: 1.2,
-                color: "#f5f1ea",
-              }}
-            >
-              Not another quick text.<br />
-              <em style={{ fontStyle: "italic", color: "rgba(245, 241, 234, 0.7)" }}>A handwritten card, in their hands.</em>
-            </h2>
-          </FadeIn>
-          <FadeIn delay={0.15}>
             <p
               style={{
-                margin: "0 0 28px",
+                margin: "0 0 18px",
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.95rem",
-                lineHeight: 1.85,
-                color: "rgba(245, 241, 234, 0.72)",
+                fontSize: "0.73rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--mm-burgundy)",
               }}
             >
-              Every card is handwritten on quality cardstock, placed in a clean white envelope, addressed with the details you provide, stamped, and mailed. Standard orders are mailed within 1–2 business days in the United States.
+              Handwritten card service · $15
             </p>
           </FadeIn>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ═══════════════════════════════════════════════════════
-   COMING SOON: CARD DECKS
-   ═══════════════════════════════════════════════════════ */
-function DecksSection() {
-  return (
-    <section
-      style={{
-        background: "var(--mm-cream)",
-        padding: "clamp(80px, 10vw, 120px) 24px",
-        borderTop: "1px solid var(--mm-line)",
-      }}
-    >
-      <div className="max-w-[1240px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-          <div className="max-w-[500px]">
-            <FadeIn>
-              <p
-                style={{
-                  margin: "0 0 12px",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.68rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "var(--mm-burgundy)",
-                }}
-              >
-                In Development
-              </p>
-              <h2
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-serif)",
-                  fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                  fontWeight: 500,
-                  lineHeight: 1.1,
-                  color: "var(--mm-forest)",
-                }}
-              >
-                Guided Card Decks
-              </h2>
-              <p
-                style={{
-                  marginTop: "16px",
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "1rem",
-                  lineHeight: 1.7,
-                  color: "var(--mm-ink-soft)",
-                }}
-              >
-                Gentle structure for the moments when words are hard to find. Our themed decks provide prompts designed to help you find a starting point. They are in development and are not currently for sale.
-              </p>
-            </FadeIn>
-          </div>
+          <FadeIn delay={0.05}>
+            <h1
+              style={{
+                margin: "0 0 24px",
+                maxWidth: "760px",
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(3rem, 7vw, 5.4rem)",
+                fontWeight: 600,
+                lineHeight: 0.98,
+                letterSpacing: "-0.035em",
+                color: "var(--mm-forest)",
+              }}
+            >
+              Your words. Handwritten and mailed for you.
+            </h1>
+          </FadeIn>
+
           <FadeIn delay={0.1}>
-            <div className="px-5 py-2 rounded-full border border-mm-line font-sans text-[0.7rem] font-semibold tracking-widest uppercase text-mm-ink-muted">
-              Coming Soon
+            <p
+              style={{
+                margin: "0 0 30px",
+                maxWidth: "650px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "clamp(1rem, 2vw, 1.16rem)",
+                lineHeight: 1.8,
+                color: "var(--mm-ink-soft)",
+              }}
+            >
+              You write the message. I handwrite it on quality cardstock, address a clean white envelope, add postage, and mail it anywhere in the U.S.
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+              <Link href="/send" className="inline-flex items-center justify-center" style={primaryButton}>
+                Send a Card — $15
+              </Link>
+              <Link href="/messages" className="inline-flex items-center justify-center" style={secondaryButton}>
+                I need help with the words
+              </Link>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.2}>
+            <div
+              className="flex flex-wrap gap-x-5 gap-y-2"
+              style={{
+                marginTop: "26px",
+                paddingTop: "22px",
+                borderTop: "1px solid var(--mm-line)",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.78rem",
+                fontWeight: 600,
+                color: "var(--mm-ink-muted)",
+              }}
+            >
+              <span>Mailed in 1–2 business days</span>
+              <span>U.S. mailing</span>
+              <span>Secure Stripe checkout</span>
             </div>
           </FadeIn>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            { title: "Grief & Hard Seasons", desc: "For when there are no words, but you want to stay close." },
-            { title: "Milestones & Gratitude", desc: "For naming the specific things that matter most." },
-            { title: "Apology & Repair", desc: "For finding a clean starting point for reconciliation." },
-          ].map((deck, i) => (
-            <FadeIn key={i} delay={0.1 * (i + 1)}>
-              <div className="group relative bg-white/40 border border-mm-line p-8 transition-all hover:bg-white/60">
-                <h3 className="font-serif text-xl mb-3 text-mm-forest">{deck.title}</h3>
-                <p className="font-sans text-sm text-mm-ink-soft leading-relaxed">{deck.desc}</p>
+        <div className="lg:col-span-5">
+          <FadeIn delay={0.08}>
+            <figure style={{ margin: 0 }}>
+              <div
+                style={{
+                  padding: "10px",
+                  background: "#fffdf9",
+                  border: "1px solid var(--mm-line)",
+                  boxShadow: "0 22px 55px rgba(34, 29, 24, 0.09)",
+                }}
+              >
+                <img
+                  src={IMAGES.handwriting}
+                  alt="A handwritten card being prepared on cream cardstock"
+                  style={{ display: "block", width: "100%", height: "auto" }}
+                />
+              </div>
+              <figcaption
+                style={{
+                  marginTop: "12px",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.74rem",
+                  lineHeight: 1.5,
+                  color: "var(--mm-ink-muted)",
+                }}
+              >
+                Every order is prepared one card at a time — not printed from a handwriting font or written by a robot.
+              </figcaption>
+            </figure>
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HowItWorks() {
+  const steps = [
+    {
+      number: "01",
+      title: "Write your message",
+      text: "Use your own exact words, or start with the free Find Your Words library if you are stuck.",
+    },
+    {
+      number: "02",
+      title: "Tell me where it goes",
+      text: "Add the recipient address, your return address, and review everything before checkout.",
+    },
+    {
+      number: "03",
+      title: "I handwrite and mail it",
+      text: "After secure payment, I prepare the card and envelope and mail standard orders within 1–2 business days.",
+    },
+  ];
+
+  return (
+    <section id="how-it-works" style={{ padding: "clamp(64px, 8vw, 96px) 24px", background: "#ffffff" }}>
+      <div className="max-w-[1180px] mx-auto">
+        <FadeIn>
+          <div style={{ maxWidth: "700px", marginBottom: "38px" }}>
+            <p
+              style={{
+                margin: "0 0 10px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.72rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--mm-burgundy)",
+              }}
+            >
+              How it works
+            </p>
+            <h2
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2.2rem, 5vw, 3.6rem)",
+                fontWeight: 600,
+                lineHeight: 1.05,
+                color: "var(--mm-forest)",
+              }}
+            >
+              Simple enough to finish in a few minutes.
+            </h2>
+          </div>
+        </FadeIn>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {steps.map((step, index) => (
+            <FadeIn key={step.number} delay={0.05 * index}>
+              <div
+                style={{
+                  height: "100%",
+                  padding: "28px",
+                  background: "var(--mm-cream-soft)",
+                  border: "1px solid var(--mm-line)",
+                }}
+              >
+                <p
+                  style={{
+                    margin: "0 0 34px",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    color: "var(--mm-burgundy)",
+                  }}
+                >
+                  {step.number}
+                </p>
+                <h3
+                  style={{
+                    margin: "0 0 10px",
+                    fontFamily: "var(--font-serif)",
+                    fontSize: "1.55rem",
+                    fontWeight: 600,
+                    color: "var(--mm-forest)",
+                  }}
+                >
+                  {step.title}
+                </h3>
+                <p
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.7,
+                    color: "var(--mm-ink-soft)",
+                  }}
+                >
+                  {step.text}
+                </p>
               </div>
             </FadeIn>
           ))}
@@ -563,67 +263,271 @@ function DecksSection() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   FINAL CTA
-   ═══════════════════════════════════════════════════════ */
-function FinalCTA() {
+function WhatYouReceive() {
+  const included = [
+    "One handwritten folded cardstock card",
+    "Your message written by hand",
+    "A clean white envelope",
+    "Recipient and return address written on the envelope",
+    "Postage and U.S. mailing",
+    "Standard mailing within 1–2 business days",
+  ];
+
   return (
-    <section
-      id="send"
-      style={{
-        background: "var(--mm-forest)",
-        padding: "clamp(64px, 8vw, 96px) 24px",
-        position: "relative",
-      }}
-    >
-      <div className="relative z-10 max-w-[680px] mx-auto text-center">
+    <section style={{ padding: "clamp(64px, 8vw, 104px) 24px", background: "var(--mm-cream-deep)" }}>
+      <div className="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="lg:col-span-6 order-2 lg:order-1">
+          <FadeIn>
+            <div
+              style={{
+                padding: "10px",
+                background: "#fffdf9",
+                border: "1px solid rgba(23,21,19,0.12)",
+                boxShadow: "0 18px 48px rgba(34, 29, 24, 0.08)",
+              }}
+            >
+              <img
+                src={IMAGES.envelope}
+                alt="A handwritten card and addressed envelope"
+                style={{ display: "block", width: "100%", height: "auto" }}
+              />
+            </div>
+          </FadeIn>
+        </div>
+
+        <div className="lg:col-span-6 order-1 lg:order-2">
+          <FadeIn>
+            <p
+              style={{
+                margin: "0 0 10px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.72rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--mm-burgundy)",
+              }}
+            >
+              What $15 includes
+            </p>
+            <h2
+              style={{
+                margin: "0 0 22px",
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
+                fontWeight: 600,
+                lineHeight: 1.06,
+                color: "var(--mm-forest)",
+              }}
+            >
+              No hidden package. No complicated options.
+            </h2>
+            <p
+              style={{
+                margin: "0 0 24px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.98rem",
+                lineHeight: 1.75,
+                color: "var(--mm-ink-soft)",
+              }}
+            >
+              Mailing Memories is intentionally simple. You provide the words and mailing details; I handle the physical follow-through.
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.06}>
+            <div style={{ borderTop: "1px solid rgba(23,21,19,0.15)" }}>
+              {included.map((item) => (
+                <div
+                  key={item}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "22px 1fr",
+                    gap: "10px",
+                    padding: "12px 0",
+                    borderBottom: "1px solid rgba(23,21,19,0.12)",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.9rem",
+                    lineHeight: 1.55,
+                    color: "var(--mm-ink)",
+                  }}
+                >
+                  <span aria-hidden="true" style={{ color: "var(--mm-burgundy)", fontWeight: 700 }}>✓</span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HumanSection() {
+  return (
+    <section style={{ padding: "clamp(64px, 8vw, 98px) 24px", background: "var(--mm-forest)" }}>
+      <div className="max-w-[900px] mx-auto text-center">
         <FadeIn>
-          <h2
-            style={{
-              margin: "0 0 24px",
-              fontFamily: "var(--font-serif)",
-              fontSize: "clamp(2.2rem, 4vw, 3.4rem)",
-              fontWeight: 500,
-              lineHeight: 1.15,
-              color: "#f5f1ea",
-            }}
-          >
-            Someone came to mind<br />
-            just now, didn't they?
-          </h2>
-        </FadeIn>
-        <FadeIn delay={0.2}>
           <p
             style={{
-              margin: "0 auto 36px",
-              maxWidth: "480px",
+              margin: "0 0 12px",
               fontFamily: "var(--font-sans)",
-              fontSize: "1rem",
-              lineHeight: 1.85,
-              color: "rgba(245, 241, 234, 0.68)",
-            }}
-          >
-            That thought is worth something. Don't let it pass. Say what you mean on real paper — and put it in their hands.
-          </p>
-        </FadeIn>
-        <FadeIn delay={0.3}>
-          <Link
-            href="/send"
-            className="no-underline inline-flex items-center justify-center transition-all duration-200"
-            style={{
-              minHeight: "54px",
-              padding: "0 32px",
-              borderRadius: "999px",
-              background: "#f5f1ea",
-              color: "var(--mm-forest)",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.78rem",
-              fontWeight: 600,
+              fontSize: "0.72rem",
+              fontWeight: 700,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
+              color: "rgba(247,242,235,0.58)",
             }}
           >
-            Send a Card — $15
+            A real handwritten card
+          </p>
+          <h2
+            style={{
+              margin: "0 auto 22px",
+              maxWidth: "780px",
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(2.35rem, 5vw, 4.2rem)",
+              fontWeight: 600,
+              lineHeight: 1.05,
+              color: "#f7f2eb",
+            }}
+          >
+            The message is yours. The handwriting is human.
+          </h2>
+          <p
+            style={{
+              margin: "0 auto",
+              maxWidth: "720px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "1rem",
+              lineHeight: 1.8,
+              color: "rgba(247,242,235,0.72)",
+            }}
+          >
+            Mailing Memories is a small, hands-on service. I personally handwrite each order from the message you provide. The point is not to imitate handwriting — it is to put your actual words onto real paper and get them into the mail.
+          </p>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function HelpfulExtras() {
+  return (
+    <section style={{ padding: "clamp(64px, 8vw, 96px) 24px", background: "#ffffff" }}>
+      <div className="max-w-[1180px] mx-auto">
+        <FadeIn>
+          <div style={{ maxWidth: "680px", marginBottom: "34px" }}>
+            <p
+              style={{
+                margin: "0 0 10px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.72rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--mm-burgundy)",
+              }}
+            >
+              Built for follow-through
+            </p>
+            <h2
+              style={{
+                margin: 0,
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(2.1rem, 5vw, 3.4rem)",
+                fontWeight: 600,
+                lineHeight: 1.08,
+                color: "var(--mm-forest)",
+              }}
+            >
+              A little help when you need it. No extra clutter when you don’t.
+            </h2>
+          </div>
+        </FadeIn>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FadeIn delay={0.05}>
+            <div style={{ height: "100%", padding: "30px", border: "1px solid var(--mm-line)", background: "var(--mm-cream-soft)" }}>
+              <p style={{ margin: "0 0 8px", fontFamily: "var(--font-serif)", fontSize: "1.65rem", fontWeight: 600, color: "var(--mm-forest)" }}>
+                Find Your Words
+              </p>
+              <p style={{ margin: "0 0 20px", fontFamily: "var(--font-sans)", fontSize: "0.9rem", lineHeight: 1.7, color: "var(--mm-ink-soft)" }}>
+                Browse free opening lines and message starters when you know who you want to reach but do not know how to begin.
+              </p>
+              <Link href="/messages" style={{ fontFamily: "var(--font-sans)", fontSize: "0.84rem", fontWeight: 700, color: "var(--mm-forest)", textDecoration: "underline", textUnderlineOffset: "4px" }}>
+                Browse message starters
+              </Link>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.08}>
+            <div style={{ height: "100%", padding: "30px", border: "1px solid var(--mm-line)", background: "var(--mm-cream-soft)" }}>
+              <p style={{ margin: "0 0 8px", fontFamily: "var(--font-serif)", fontSize: "1.65rem", fontWeight: 600, color: "var(--mm-forest)" }}>
+                Plan Ahead
+              </p>
+              <p style={{ margin: "0 0 20px", fontFamily: "var(--font-sans)", fontSize: "0.9rem", lineHeight: 1.7, color: "var(--mm-ink-soft)" }}>
+                Prepare the card now and choose a future USPS mailing date at least three days ahead. There is no scheduling fee.
+              </p>
+              <Link href="/plan" style={{ fontFamily: "var(--font-sans)", fontSize: "0.84rem", fontWeight: 700, color: "var(--mm-forest)", textDecoration: "underline", textUnderlineOffset: "4px" }}>
+                Plan a card
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TrustAndPolicies() {
+  return (
+    <section style={{ padding: "58px 24px", background: "var(--mm-cream-soft)", borderTop: "1px solid var(--mm-line)" }}>
+      <div className="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="lg:col-span-8">
+          <FadeIn>
+            <h2 style={{ margin: "0 0 10px", fontFamily: "var(--font-serif)", fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 600, color: "var(--mm-forest)" }}>
+              Know what happens before you pay.
+            </h2>
+            <p style={{ margin: 0, maxWidth: "760px", fontFamily: "var(--font-sans)", fontSize: "0.9rem", lineHeight: 1.7, color: "var(--mm-ink-soft)" }}>
+              Pricing, mailing timing, cancellation limits, USPS issues, and privacy handling are documented publicly. Questions can also be sent to hello@mailingmemories.com.
+            </p>
+          </FadeIn>
+        </div>
+        <div className="lg:col-span-4 lg:text-right">
+          <FadeIn delay={0.05}>
+            <div className="flex flex-col sm:flex-row lg:justify-end gap-3">
+              <Link href="/policies" className="inline-flex items-center justify-center" style={secondaryButton}>
+                Customer Policies
+              </Link>
+              <Link href="/faq" className="inline-flex items-center justify-center" style={secondaryButton}>
+                FAQ
+              </Link>
+            </div>
+          </FadeIn>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCTA() {
+  return (
+    <section style={{ padding: "clamp(70px, 9vw, 110px) 24px", background: "var(--mm-cream-deep)" }}>
+      <div className="max-w-[780px] mx-auto text-center">
+        <FadeIn>
+          <p style={{ margin: "0 0 10px", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--mm-burgundy)" }}>
+            $15 · postage included
+          </p>
+          <h2 style={{ margin: "0 0 18px", fontFamily: "var(--font-serif)", fontSize: "clamp(2.35rem, 6vw, 4.2rem)", fontWeight: 600, lineHeight: 1.04, color: "var(--mm-forest)" }}>
+            Send the message you keep meaning to send.
+          </h2>
+          <p style={{ margin: "0 auto 28px", maxWidth: "620px", fontFamily: "var(--font-sans)", fontSize: "0.98rem", lineHeight: 1.75, color: "var(--mm-ink-soft)" }}>
+            Write it now. I’ll handle the handwriting, envelope, postage, and mailing.
+          </p>
+          <Link href="/send" className="inline-flex items-center justify-center" style={primaryButton}>
+            Start Your Card — $15
           </Link>
         </FadeIn>
       </div>
@@ -634,11 +538,12 @@ function FinalCTA() {
 export default function Home() {
   return (
     <PageShell>
-      <HeroSection />
-      <QuotesCarousel />
-      <WhatWeDo />
-      <VisualProof />
-      <DecksSection />
+      <Hero />
+      <HowItWorks />
+      <WhatYouReceive />
+      <HumanSection />
+      <HelpfulExtras />
+      <TrustAndPolicies />
       <FinalCTA />
     </PageShell>
   );
