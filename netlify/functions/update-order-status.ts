@@ -1,3 +1,8 @@
+import {
+  readAdminSessionCookie,
+  verifyAdminSessionToken,
+} from "./_lib/adminAuth";
+
 const ALLOWED_STATUSES = new Set([
   "paid",
   "queued",
@@ -21,6 +26,16 @@ export default async (req: Request) => {
   }
 
   try {
+    const sessionSecret = Netlify.env.get("ADMIN_SESSION_SECRET");
+    if (!sessionSecret) {
+      return jsonResponse(500, { error: "Missing admin session configuration." });
+    }
+
+    const token = readAdminSessionCookie(req);
+    if (!verifyAdminSessionToken(token, sessionSecret)) {
+      return jsonResponse(401, { error: "Admin authentication required." });
+    }
+
     const body = await req.json();
     const id = body?.id;
     const status = body?.status;
