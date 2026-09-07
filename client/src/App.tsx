@@ -11,6 +11,7 @@ import OrderConfirmed from "./pages/OrderConfirmed";
 import AdminOrders from "./pages/AdminOrders";
 import AdminOrderDetail from "./pages/AdminOrderDetail";
 import FAQ from "./pages/FAQ";
+import Policies from "./pages/Policies";
 import PlanLetter from "./pages/PlanLetter";
 import Messages from "./pages/Messages";
 
@@ -24,6 +25,7 @@ function Router() {
       <Route path={"/admin/orders"} component={AdminOrders} />
       <Route path={"/admin/order"} component={AdminOrderDetail} />
       <Route path={"/faq"} component={FAQ} />
+      <Route path={"/policies"} component={Policies} />
       <Route path={"/plan"} component={PlanLetter} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
