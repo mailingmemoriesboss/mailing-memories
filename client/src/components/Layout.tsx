@@ -1,162 +1,42 @@
-/**
- * MAILING MEMORIES — Shared Layout Components
- * 
- * Navigation + Footer extracted from Home for reuse across all pages.
- * Design: "The Writing Desk" — warm cream, pen-stroke accents, editorial serif.
- */
-
-import { useState, useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import { Link, useLocation } from "wouter";
 
-/* ─── CDN Image URLs ─── */
-const IMAGES = {
-  paperTexture: "https://d2xsxph8kpxj0f.cloudfront.net/310519663484498190/ifTVcC46pxwbsRUrB4cX6i/paper-texture-bg-TLD2xmpcBsfnmyqpjpBz6a.webp",
-};
-
-/* ─── Rotating tagline phrases ─── */
-const ROTATING_PHRASES = [
-  "meaningful written connection",
-  "saying what you mean",
-  "hard seasons",
-  "following through",
-  "a legacy of care",
-  "an unprompted thought",
-  "showing up when words are hard",
-  "being seen on real paper",
-];
-
-/* ═══════════════════════════════════════════════════════
-   ROTATING TAGLINE BAR
-   ═══════════════════════════════════════════════════════ */
-export function RotatingTagline() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isRevealing, setIsRevealing] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsRevealing(false);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % ROTATING_PHRASES.length);
-        setIsRevealing(true);
-      }, 500);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, []);
-
+export function TrustBar() {
   return (
-    <div className="relative z-50" style={{ 
-      background: "rgba(29, 41, 33, 0.05)", 
-      borderBottom: "1px solid rgba(29, 41, 33, 0.08)",
-      boxShadow: "0 1px 6px rgba(0,0,0,0.04)"
-    }}>
-      <style>{`
-        @keyframes cardSendIn {
-          0% {
-            opacity: 0;
-            transform: translateX(-20px) rotateY(-25deg);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(0) rotateY(0deg);
-          }
-        }
-        @keyframes cardSendOut {
-          0% {
-            opacity: 1;
-            transform: translateX(0) rotateY(0deg);
-          }
-          100% {
-            opacity: 0;
-            transform: translateX(20px) rotateY(25deg);
-          }
-        }
-        @media (max-width: 640px) {
-          .rotating-tagline-container {
-            flex-wrap: wrap;
-            gap: 8px;
-          }
-        }
-      `}</style>
-      <div className="max-w-[1240px] mx-auto flex items-center justify-center gap-[10px] text-center flex-wrap px-4 md:px-6"
+    <div
+      style={{
+        background: "var(--mm-forest)",
+        color: "#f7f2eb",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
+      <div
+        className="max-w-[1180px] mx-auto flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-center"
         style={{
-          minHeight: "48px",
-          padding: "12px 24px",
+          minHeight: "38px",
+          padding: "9px 20px",
           fontFamily: "var(--font-sans)",
-          fontSize: "clamp(0.6rem, 1.8vw, 0.75rem)",
-          fontWeight: 500,
-          letterSpacing: "0.08em",
-          color: "var(--mm-forest)",
-        }}>
-        <span style={{ whiteSpace: "nowrap" }}>Because</span>
-        <div
-          className="inline-block overflow-visible"
-          style={{
-            minWidth: "clamp(100px, 35vw, 160px)",
-            height: "1.5em",
-            perspective: "1200px",
-            verticalAlign: "middle",
-            position: "relative",
-            flexShrink: 0,
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              width: "100%",
-              height: "100%",
-              background: "#fdfcf9",
-              border: "1px solid rgba(29, 41, 33, 0.12)",
-              borderRadius: "3px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "4px 10px",
-              boxShadow: "0 1px 4px rgba(29, 41, 33, 0.06)",
-              animation: isRevealing ? "cardSendIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards" : "cardSendOut 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "var(--font-handwriting)",
-                fontSize: "clamp(0.7rem, 2vw, 0.9rem)",
-                fontStyle: "italic",
-                fontWeight: 400,
-                color: "var(--mm-pen-blue)",
-                textAlign: "center",
-                lineHeight: 1.1,
-              }}
-              key={currentIndex}
-            >
-              {ROTATING_PHRASES[currentIndex]}
-            </span>
-          </div>
-        </div>
-        <span style={{ whiteSpace: "nowrap" }}>deserves real paper.</span>
+          fontSize: "0.72rem",
+          fontWeight: 600,
+          letterSpacing: "0.03em",
+        }}
+      >
+        <span>Handwritten by a real person</span>
+        <span aria-hidden="true" style={{ opacity: 0.45 }}>•</span>
+        <span>Mailed in 1–2 business days</span>
+        <span aria-hidden="true" style={{ opacity: 0.45 }}>•</span>
+        <span>Secure checkout with Stripe</span>
       </div>
     </div>
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   NAVIGATION
-   ═══════════════════════════════════════════════════════ */
 export function Navigation() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   const navLinks = [
-    { label: "Home", href: "/" },
-    { label: "Send a Card", href: "/send" },
     { label: "Plan Ahead", href: "/plan" },
     { label: "Find Your Words", href: "/messages" },
     { label: "FAQ", href: "/faq" },
@@ -164,44 +44,57 @@ export function Navigation() {
 
   return (
     <nav
-      className="sticky top-0 z-40 transition-all duration-300"
+      className="sticky top-0 z-40"
       style={{
-        background: scrolled ? "rgba(245, 241, 234, 0.92)" : "rgba(245, 241, 234, 0.7)",
-        backdropFilter: "blur(20px)",
-        borderBottom: scrolled ? "1px solid rgba(23, 21, 19, 0.08)" : "1px solid transparent",
+        background: "rgba(250, 247, 242, 0.96)",
+        backdropFilter: "blur(14px)",
+        borderBottom: "1px solid var(--mm-line)",
       }}
     >
-      <div className="max-w-[1240px] mx-auto flex items-center justify-between gap-6"
-        style={{ minHeight: "60px", padding: "0 24px" }}>
-        
-        {/* Logo */}
-        <Link href="/" className="no-underline flex flex-col" style={{ lineHeight: 1 }}>
-          <span style={{
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(1.2rem, 3vw, 1.5rem)",
-            fontWeight: 600,
-            color: "var(--mm-forest)",
-            letterSpacing: "0.01em",
-          }}>
+      <div
+        className="max-w-[1180px] mx-auto flex items-center justify-between gap-6"
+        style={{ minHeight: "70px", padding: "0 24px" }}
+      >
+        <Link href="/" className="no-underline flex flex-col" style={{ lineHeight: 1.08 }}>
+          <span
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(1.35rem, 3vw, 1.7rem)",
+              fontWeight: 600,
+              color: "var(--mm-forest)",
+              letterSpacing: "-0.01em",
+            }}
+          >
             Mailing Memories
+          </span>
+          <span
+            className="hidden sm:block"
+            style={{
+              marginTop: "4px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.65rem",
+              fontWeight: 500,
+              letterSpacing: "0.05em",
+              color: "var(--mm-ink-muted)",
+            }}
+          >
+            Handwritten cards, mailed for you.
           </span>
         </Link>
 
-        {/* Desktop Nav */}
         <ul className="hidden lg:flex items-center gap-1 list-none m-0 p-0">
           {navLinks.map((item) => (
             <li key={item.label}>
               <Link
                 href={item.href}
-                className="no-underline inline-flex items-center transition-colors duration-200"
+                className="no-underline inline-flex items-center"
                 style={{
                   minHeight: "40px",
-                  padding: "0 14px",
+                  padding: "0 13px",
                   fontFamily: "var(--font-sans)",
-                  fontSize: "0.72rem",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
+                  fontSize: "0.74rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.04em",
                   color: location === item.href ? "var(--mm-forest)" : "var(--mm-ink-soft)",
                 }}
               >
@@ -212,64 +105,59 @@ export function Navigation() {
           <li className="ml-2">
             <Link
               href="/send"
-              className="no-underline inline-flex items-center justify-center transition-all duration-200"
+              className="no-underline inline-flex items-center justify-center"
               style={{
-                minHeight: "40px",
+                minHeight: "42px",
                 padding: "0 18px",
-                borderRadius: "999px",
-                border: "1px solid var(--mm-forest)",
+                borderRadius: "4px",
+                background: "var(--mm-forest)",
+                color: "#f7f2eb",
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.72rem",
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--mm-forest)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--mm-forest)";
-                e.currentTarget.style.color = "#f7f2eb";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "var(--mm-forest)";
+                fontSize: "0.74rem",
+                fontWeight: 700,
+                letterSpacing: "0.04em",
               }}
             >
-              Send a Card
+              Send a Card — $15
             </Link>
           </li>
         </ul>
 
-        {/* Mobile hamburger */}
         <button
-          className="lg:hidden flex flex-col gap-[5px] bg-transparent border-none p-1"
+          className="lg:hidden flex flex-col gap-[5px] bg-transparent border-none p-2"
           onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Menu"
+          aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
         >
-          <span className="block w-[22px] h-[1.5px] transition-all duration-200"
-            style={{
-              background: "var(--mm-ink)",
-              transform: mobileOpen ? "rotate(45deg) translateY(6.5px)" : "none",
-            }} />
-          <span className="block w-[22px] h-[1.5px] transition-all duration-200"
-            style={{
-              background: "var(--mm-ink)",
-              opacity: mobileOpen ? 0 : 1,
-            }} />
-          <span className="block w-[22px] h-[1.5px] transition-all duration-200"
-            style={{
-              background: "var(--mm-ink)",
-              transform: mobileOpen ? "rotate(-45deg) translateY(-6.5px)" : "none",
-            }} />
+          <span className="block w-[22px] h-[1.5px]" style={{ background: "var(--mm-ink)" }} />
+          <span className="block w-[22px] h-[1.5px]" style={{ background: "var(--mm-ink)" }} />
+          <span className="block w-[22px] h-[1.5px]" style={{ background: "var(--mm-ink)" }} />
         </button>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden" style={{
-          padding: "16px 24px 32px",
-          borderTop: "1px solid var(--mm-line)",
-          background: "rgba(245, 241, 234, 0.98)",
-        }}>
+        <div
+          className="lg:hidden"
+          style={{
+            padding: "4px 24px 24px",
+            borderTop: "1px solid var(--mm-line)",
+            background: "var(--mm-cream-soft)",
+          }}
+        >
+          <Link
+            href="/"
+            className="block no-underline py-4"
+            onClick={() => setMobileOpen(false)}
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              color: "var(--mm-forest)",
+              borderBottom: "1px solid var(--mm-line)",
+            }}
+          >
+            Home
+          </Link>
           {navLinks.map((item) => (
             <Link
               key={item.label}
@@ -278,10 +166,8 @@ export function Navigation() {
               onClick={() => setMobileOpen(false)}
               style={{
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.85rem",
+                fontSize: "0.9rem",
                 fontWeight: 600,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
                 color: "var(--mm-forest)",
                 borderBottom: "1px solid var(--mm-line)",
               }}
@@ -292,20 +178,18 @@ export function Navigation() {
           <Link
             href="/send"
             onClick={() => setMobileOpen(false)}
-            className="no-underline inline-flex items-center justify-center mt-6 w-full"
+            className="no-underline inline-flex items-center justify-center mt-5 w-full"
             style={{
-              minHeight: "52px",
-              borderRadius: "999px",
+              minHeight: "50px",
+              borderRadius: "4px",
               background: "var(--mm-forest)",
               color: "#f7f2eb",
               fontFamily: "var(--font-sans)",
-              fontSize: "0.8rem",
+              fontSize: "0.82rem",
               fontWeight: 700,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
             }}
           >
-            Send a Card
+            Send a Card — $15
           </Link>
         </div>
       )}
@@ -313,12 +197,9 @@ export function Navigation() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   FADE-IN WRAPPER (shared)
-   ═══════════════════════════════════════════════════════ */
 export function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
 
   return (
     <div
@@ -326,8 +207,8 @@ export function FadeIn({ children, delay = 0, className = "" }: { children: Reac
       className={className}
       style={{
         opacity: isInView ? 1 : 0,
-        transform: isInView ? "translateY(0)" : "translateY(20px)",
-        transition: `opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
+        transform: isInView ? "translateY(0)" : "translateY(12px)",
+        transition: `opacity 0.55s ease ${delay}s, transform 0.55s ease ${delay}s`,
       }}
     >
       {children}
@@ -335,9 +216,6 @@ export function FadeIn({ children, delay = 0, className = "" }: { children: Reac
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   PEN STROKE DIVIDER
-   ═══════════════════════════════════════════════════════ */
 export function PenStroke({ className = "", color = "var(--mm-line-strong)" }: { className?: string; color?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-40px" });
@@ -350,190 +228,162 @@ export function PenStroke({ className = "", color = "var(--mm-line-strong)" }: {
           background: color,
           transformOrigin: "left",
           transform: isInView ? "scaleX(1)" : "scaleX(0)",
-          transition: "transform 1s cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "transform 0.7s ease",
         }}
       />
     </div>
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   FOOTER
-   ═══════════════════════════════════════════════════════ */
 export function Footer() {
   return (
-    <footer style={{
-      background: "#161412",
-      padding: "48px 24px 36px",
-    }}>
-      <div className="max-w-[1240px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          {/* Brand */}
+    <footer
+      style={{
+        background: "var(--mm-forest)",
+        color: "#f7f2eb",
+        padding: "52px 24px 30px",
+      }}
+    >
+      <div className="max-w-[1180px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
           <div className="md:col-span-5">
-            <p style={{
-              margin: "0 0 10px",
-              fontFamily: "var(--font-serif)",
-              fontSize: "1.4rem",
-              fontWeight: 500,
-              color: "rgba(245, 241, 234, 0.85)",
-            }}>
+            <p
+              style={{
+                margin: "0 0 10px",
+                fontFamily: "var(--font-serif)",
+                fontSize: "1.65rem",
+                fontWeight: 600,
+              }}
+            >
               Mailing Memories
             </p>
-            <p style={{
-              margin: 0,
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.82rem",
-              lineHeight: 1.7,
-              color: "rgba(245, 241, 234, 0.4)",
-              maxWidth: "320px",
-            }}>
-              Handwritten card services for the things that deserve more than a text.
+            <p
+              style={{
+                margin: 0,
+                maxWidth: "390px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.88rem",
+                lineHeight: 1.75,
+                color: "rgba(247,242,235,0.72)",
+              }}
+            >
+              You write the message. I handwrite it on quality cardstock, address the envelope, add postage, and mail it for you.
             </p>
           </div>
 
-          {/* Links */}
           <div className="md:col-span-3">
-            <p style={{
-              margin: "0 0 14px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.65rem",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(245, 241, 234, 0.35)",
-            }}>
-              Navigate
+            <p
+              style={{
+                margin: "0 0 14px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.68rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(247,242,235,0.5)",
+              }}
+            >
+              Information
             </p>
-            {[
-              { label: "Home", href: "/" },
-              { label: "Send a Card", href: "/send" },
-              { label: "Plan Ahead", href: "/plan" },
-              { label: "Find Your Words", href: "/messages" },
-              { label: "FAQ", href: "/faq" },
-              { label: "Contact", href: "mailto:mailingmemoriesboss@gmail.com" },
-            ].map((link) => (
+            {[{ label: "Send a Card", href: "/send" }, { label: "Plan Ahead", href: "/plan" }, { label: "Find Your Words", href: "/messages" }, { label: "FAQ", href: "/faq" }, { label: "Customer & Privacy Policies", href: "/policies" }].map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="block no-underline transition-colors duration-200"
+                className="block no-underline"
                 style={{
-                  padding: "4px 0",
+                  padding: "5px 0",
                   fontFamily: "var(--font-sans)",
-                  fontSize: "0.82rem",
-                  color: "rgba(245, 241, 234, 0.55)",
+                  fontSize: "0.84rem",
+                  color: "rgba(247,242,235,0.76)",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.55)")}
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* Contact */}
           <div className="md:col-span-4">
-            <p style={{
-              margin: "0 0 14px",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.65rem",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(245, 241, 234, 0.35)",
-            }}>
-              Get in touch
+            <p
+              style={{
+                margin: "0 0 14px",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.68rem",
+                fontWeight: 700,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(247,242,235,0.5)",
+              }}
+            >
+              Questions
             </p>
             <a
-              href="mailto:mailingmemoriesboss@gmail.com"
-              className="no-underline transition-colors duration-200"
+              href="mailto:hello@mailingmemories.com"
               style={{
                 fontFamily: "var(--font-sans)",
-                fontSize: "0.82rem",
-                color: "rgba(245, 241, 234, 0.55)",
+                fontSize: "0.9rem",
+                color: "#f7f2eb",
+                textDecoration: "none",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.55)")}
             >
-              mailingmemoriesboss@gmail.com
+              hello@mailingmemories.com
             </a>
-            <div style={{ marginTop: "16px", display: "flex", gap: "16px" }}>
-              <a 
-                href="https://www.facebook.com/share/1H5deSru5W/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={{ color: "rgba(245, 241, 234, 0.45)", transition: "color 0.2s" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.45)")}
-              >
-                Facebook
-              </a>
-              <a 
-                href="https://www.instagram.com/themailingmemories?igsh=MTR4NnhtcDhnaXB5Mg==" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={{ color: "rgba(245, 241, 234, 0.45)", transition: "color 0.2s" }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.85)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.45)")}
-              >
-                Instagram
-              </a>
-            </div>
+            <p
+              style={{
+                margin: "12px 0 0",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.8rem",
+                lineHeight: 1.65,
+                color: "rgba(247,242,235,0.58)",
+              }}
+            >
+              U.S. mailing only. Standard orders are mailed within 1–2 business days.
+            </p>
           </div>
         </div>
 
-        <div style={{
-          marginTop: "40px",
-          paddingTop: "24px",
-          borderTop: "1px solid rgba(245, 241, 234, 0.08)",
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          gap: "12px",
-        }}>
-          <p style={{
-            margin: 0,
-            fontFamily: "var(--font-sans)",
-            fontSize: "0.72rem",
-            color: "rgba(245, 241, 234, 0.3)",
-          }}>
+        <div
+          style={{
+            marginTop: "42px",
+            paddingTop: "22px",
+            borderTop: "1px solid rgba(247,242,235,0.14)",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            gap: "12px",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.72rem",
+              color: "rgba(247,242,235,0.46)",
+            }}
+          >
             &copy; {new Date().getFullYear()} Mailing Memories. All rights reserved.
           </p>
-          <div className="flex gap-5">
-            {["Privacy", "Terms"].map((link) => (
-              <a
-                key={link}
-                href="#"
-                className="no-underline transition-colors duration-200"
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "0.72rem",
-                  color: "rgba(245, 241, 234, 0.3)",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.6)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245, 241, 234, 0.3)")}
-                onClick={(e) => e.preventDefault()}
-              >
-                {link}
-              </a>
-            ))}
-          </div>
+          <p
+            style={{
+              margin: 0,
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.72rem",
+              color: "rgba(247,242,235,0.46)",
+            }}
+          >
+            Secure checkout provided by Stripe.
+          </p>
         </div>
       </div>
     </footer>
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   PAGE SHELL — wraps every page with tagline + nav + footer
-   ═══════════════════════════════════════════════════════ */
 export function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "var(--mm-cream)" }}>
-      <RotatingTagline />
+    <div className="min-h-screen flex flex-col" style={{ background: "var(--mm-cream-soft)" }}>
+      <TrustBar />
       <Navigation />
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
       <Footer />
     </div>
   );
