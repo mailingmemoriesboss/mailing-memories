@@ -1,3 +1,8 @@
+import {
+  readAdminSessionCookie,
+  verifyAdminSessionToken,
+} from "./_lib/adminAuth";
+
 type OrderRow = {
   id: string;
   created_at: string;
@@ -15,25 +20,40 @@ type OrderRow = {
   amount_cents: number;
 };
 
-export default async () => {
+function jsonResponse(status: number, body: Record<string, unknown>) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export default async (req: Request) => {
+  if (req.method !== "GET") {
+    return jsonResponse(405, { error: "Method not allowed" });
+  }
+
   try {
+    const sessionSecret = Netlify.env.get("ADMIN_SESSION_SECRET");
+    if (!sessionSecret) {
+      return jsonResponse(500, { error: "Missing admin session configuration." });
+    }
+
+    const token = readAdminSessionCookie(req);
+    if (!verifyAdminSessionToken(token, sessionSecret)) {
+      return jsonResponse(401, { error: "Admin authentication required." });
+    }
+
     const supabaseUrl = Netlify.env.get("SUPABASE_URL");
     const supabaseKey = Netlify.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
     if (!supabaseUrl || !supabaseKey) {
-      return new Response(
-        JSON.stringify({
-          error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
-        }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return jsonResponse(500, {
+        error: "Missing Supabase server configuration.",
+      });
     }
 
     const query =
-      "select=id,created_at,updated_at,order_type,status,occasion,occasion_custom,sender_name,sender_email,recipient_name,city,state_region,requested_ship_date,amount_cents&order=created_at.desc";
+      "select=id,created_at,updated_at,order_type,status,occasion,occasion_custom,sender_name,sender_email,recipient_name,city,state_region,requested_ship_date,amount_cents,anonymized_at,privacy_hold&order=created_at.desc";
 
     const response = await fetch(
       `${supabaseUrl.replace(/\/$/, "")}/rest/v1/orders?${query}`,
@@ -50,35 +70,19 @@ export default async () => {
     const text = await response.text();
 
     if (!response.ok) {
-      return new Response(
-        JSON.stringify({
-          error: `Supabase request failed (${response.status})`,
-          details: text,
-        }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return jsonResponse(500, {
+        error: `Supabase request failed (${response.status})`,
+        details: text,
+      });
     }
 
     const orders = JSON.parse(text) as OrderRow[];
 
-    return new Response(JSON.stringify({ orders }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return jsonResponse(200, { orders });
   } catch (error) {
-    return new Response(
-      JSON.stringify({
-        error:
-          error instanceof Error ? error.message : "Unknown function error",
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    return jsonResponse(500, {
+      error: error instanceof Error ? error.message : "Unknown function error",
+    });
   }
 };
 
