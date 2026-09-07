@@ -140,37 +140,6 @@ export default function OrderConfirmed() {
                 </div>
               )}
 
-              <div
-                style={{
-                  padding: "20px",
-                  background: "rgba(62, 92, 67, 0.08)",
-                  border: "1px solid rgba(62, 92, 67, 0.18)",
-                  marginBottom: "26px",
-                }}
-              >
-                <p
-                  style={{
-                    margin: "0 0 6px",
-                    fontFamily: "var(--font-serif)",
-                    fontSize: "1.15rem",
-                    color: "var(--mm-forest)",
-                  }}
-                >
-                  One more thing before it goes in the mail.
-                </p>
-                <p
-                  style={{
-                    margin: 0,
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "0.92rem",
-                    lineHeight: 1.7,
-                    color: "var(--mm-ink-soft)",
-                  }}
-                >
-                  On the day your card is mailed, I’ll send a photo preview of the completed card and addressed envelope to the email you provided.
-                </p>
-              </div>
-
               <p
                 style={{
                   margin: "0 0 24px",
