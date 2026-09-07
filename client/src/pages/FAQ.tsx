@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { PageShell, FadeIn } from "@/components/Layout";
 import {
   Accordion,
@@ -166,6 +167,25 @@ export default function FAQ() {
             </FadeIn>
           ))}
         </div>
+
+        <FadeIn delay={0.1}>
+          <div
+            style={{
+              marginTop: "20px",
+              paddingTop: "28px",
+              borderTop: "1px solid var(--mm-line)",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.92rem",
+              lineHeight: 1.7,
+              color: "var(--mm-ink-soft)",
+            }}
+          >
+            For the full current cancellation, remake/resend, USPS, and privacy standards, see our{" "}
+            <Link href="/policies" style={{ color: "var(--mm-forest)", fontWeight: 600 }}>
+              Customer & Privacy Policies
+            </Link>.
+          </div>
+        </FadeIn>
       </section>
     </PageShell>
   );
