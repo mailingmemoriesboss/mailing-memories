@@ -41,38 +41,28 @@ function isNonEmpty(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function buildInternalNotes(
-  payload: PaidOrderPayload,
-  session: Stripe.Checkout.Session
-) {
+function trimOrNull(value?: string | null) {
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function getPaymentIntentId(session: Stripe.Checkout.Session) {
+  if (typeof session.payment_intent === "string") return session.payment_intent;
+  return session.payment_intent?.id ?? null;
+}
+
+function buildInternalNotes(session: Stripe.Checkout.Session) {
   const discountCents = Math.max(
     0,
     (session.amount_subtotal ?? 1500) - (session.amount_total ?? 0)
   );
 
-  const lines = [
+  return [
     "STRIPE CHECKOUT VERIFIED — order completed",
-    `Stripe checkout session: ${session.id}`,
     `Stripe payment status: ${session.payment_status}`,
     `Stripe subtotal: $${((session.amount_subtotal ?? 1500) / 100).toFixed(2)}`,
     `Stripe discount: $${(discountCents / 100).toFixed(2)}`,
     `Stripe total: $${((session.amount_total ?? 0) / 100).toFixed(2)}`,
-    payload.front_message ? `Front of card: ${payload.front_message}` : "",
-    payload.return_name ? `Return name: ${payload.return_name}` : "",
-    payload.return_address_line1
-      ? `Return address 1: ${payload.return_address_line1}`
-      : "",
-    payload.return_address_line2
-      ? `Return address 2: ${payload.return_address_line2}`
-      : "",
-    payload.return_city || payload.return_state || payload.return_postal_code
-      ? `Return city/state/zip: ${payload.return_city || ""}, ${
-          payload.return_state || ""
-        } ${payload.return_postal_code || ""}`.trim()
-      : "",
-  ].filter(Boolean);
-
-  return lines.join("\n");
+  ].join("\n");
 }
 
 export default async (req: Request) => {
@@ -110,7 +100,12 @@ export default async (req: Request) => {
       !isNonEmpty(payload.address_line1) ||
       !isNonEmpty(payload.city) ||
       !isNonEmpty(payload.state_region) ||
-      !isNonEmpty(payload.postal_code)
+      !isNonEmpty(payload.postal_code) ||
+      !isNonEmpty(payload.return_name) ||
+      !isNonEmpty(payload.return_address_line1) ||
+      !isNonEmpty(payload.return_city) ||
+      !isNonEmpty(payload.return_state) ||
+      !isNonEmpty(payload.return_postal_code)
     ) {
       return jsonResponse(400, {
         error: "Required order details are incomplete.",
@@ -212,13 +207,13 @@ export default async (req: Request) => {
       occasion_custom: checkoutReference,
       message_mode: "exact_words",
       message_text: payload.message_text.trim(),
-      message_brief: payload.message_brief?.trim() || null,
-      signature_name: payload.signature_name?.trim() || null,
+      message_brief: trimOrNull(payload.message_brief),
+      signature_name: trimOrNull(payload.signature_name),
       sender_name: payload.sender_name.trim(),
       sender_email: payload.sender_email.trim(),
       recipient_name: payload.recipient_name.trim(),
       address_line1: payload.address_line1.trim(),
-      address_line2: payload.address_line2?.trim() || null,
+      address_line2: trimOrNull(payload.address_line2),
       city: payload.city.trim(),
       state_region: payload.state_region.trim().toUpperCase(),
       postal_code: payload.postal_code.trim(),
@@ -228,7 +223,17 @@ export default async (req: Request) => {
       reminder_send_at: null,
       amount_cents: total,
       currency: "usd",
-      internal_notes: buildInternalNotes(payload, session),
+      front_message: trimOrNull(payload.front_message),
+      return_name: payload.return_name.trim(),
+      return_address_line1: payload.return_address_line1.trim(),
+      return_address_line2: trimOrNull(payload.return_address_line2),
+      return_city: payload.return_city.trim(),
+      return_state: payload.return_state.trim().toUpperCase(),
+      return_postal_code: payload.return_postal_code.trim(),
+      stripe_checkout_session_id: session.id,
+      stripe_payment_intent_id: getPaymentIntentId(session),
+      paid_at: new Date().toISOString(),
+      internal_notes: buildInternalNotes(session),
     };
 
     const insertResponse = await fetch(`${baseUrl}/rest/v1/orders`, {
