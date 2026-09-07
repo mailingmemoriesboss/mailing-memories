@@ -78,7 +78,8 @@ export default function AdminOrderDetail() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data?.error || "Unable to update status.");
-      setOrder((current) => current ? { ...current, status } : current);
+      setOrder(data.order || ((current: Order | null) => current ? { ...current, status } : current));
+      await loadOrder();
       toast.success(`Order marked ${status.replaceAll("_", " ")}`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Unable to update status.");
@@ -109,11 +110,13 @@ export default function AdminOrderDetail() {
   }
 
   const notes = order.internal_notes || "";
-  const frontMessage = extractNote(notes, "Front of card:");
-  const returnName = extractNote(notes, "Return name:");
-  const returnAddress1 = extractNote(notes, "Return address 1:");
-  const returnAddress2 = extractNote(notes, "Return address 2:");
-  const returnCityStateZip = extractNote(notes, "Return city/state/zip:");
+  const frontMessage = order.front_message || extractNote(notes, "Front of card:");
+  const returnName = order.return_name || extractNote(notes, "Return name:");
+  const returnAddress1 = order.return_address_line1 || extractNote(notes, "Return address 1:");
+  const returnAddress2 = order.return_address_line2 || extractNote(notes, "Return address 2:");
+  const returnCityStateZip = order.return_city
+    ? `${order.return_city}, ${order.return_state || ""} ${order.return_postal_code || ""}`.trim()
+    : extractNote(notes, "Return city/state/zip:");
 
   return (
     <PageShell>
@@ -196,6 +199,7 @@ export default function AdminOrderDetail() {
               <div><strong>Name:</strong> {order.sender_name}</div>
               <div><strong>Email:</strong> {order.sender_email}</div>
               <div><strong>Paid:</strong> {formatMoney(order.amount_cents)}</div>
+              {order.paid_at && <div><strong>Paid at:</strong> {new Date(order.paid_at).toLocaleString()}</div>}
             </CardContent>
           </Card>
 
@@ -221,6 +225,11 @@ export default function AdminOrderDetail() {
               <div className="mt-5 p-4 border rounded-md text-sm" style={{ lineHeight: 1.6 }}>
                 On mailing day, send the customer a photo preview of the completed card and addressed envelope at <strong>{order.sender_email}</strong>.
               </div>
+              {order.privacy_hold && (
+                <div className="mt-3 text-sm text-muted-foreground">
+                  Privacy hold is active; automatic 30-day anonymization will be deferred until the hold is cleared.
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
