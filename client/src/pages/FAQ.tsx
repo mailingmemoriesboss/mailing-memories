@@ -12,53 +12,69 @@ const faqData = [
     questions: [
       {
         q: "What is Mailing Memories?",
-        a: "Mailing Memories is a thoughtful correspondence brand. The current live offer is a handwritten letter service that helps you send a real, personal message on paper."
+        a: "Mailing Memories is a thoughtful correspondence brand. The current live offer is a handwritten card service that helps you send a real, personal message on paper."
       },
       {
         q: "What can I buy right now?",
-        a: "Right now, you can order the handwritten letter service. For $15, we handwrite, stamp, and mail one full page on quality cardstock for you."
+        a: "Right now, you can order a handwritten card for $15. We handwrite your message on a folded cardstock card, place it in a clean white envelope, stamp it, and mail it anywhere in the United States."
       },
       {
-        q: "Who writes the letters?",
-        a: "Every letter is handwritten by Mailing Memories to ensure a personal, human touch."
+        q: "Who writes the cards?",
+        a: "Every card is handwritten by Mailing Memories for a personal, human result."
       },
       {
         q: "How long can my message be?",
-        a: "The current service includes one full handwritten page on quality cardstock."
+        a: "The current service includes one full handwritten card. The send page will guide you through the message and signature before checkout."
+      },
+      {
+        q: "What if I’m not sure what to write?",
+        a: "Use Find Your Words for free starter wording and selectable phrases, or use the light writing help built into the service."
       }
     ]
   },
   {
-    category: "Shipping & Delivery",
+    category: "Mailing & Timing",
     questions: [
       {
-        q: "Where do you ship?",
-        a: "Currently, we mail letters within the United States only."
+        q: "Where do you mail cards?",
+        a: "Currently, Mailing Memories mails within the United States only."
       },
       {
-        q: "How quickly will my letter ship?",
-        a: "Your letter will be handwritten and shipped within 1–2 business days of your order."
+        q: "How quickly will my card be mailed?",
+        a: "Standard orders are handwritten and mailed within 1–2 business days. If you choose Plan Ahead, we mail on the future mailing date you select instead."
+      },
+      {
+        q: "How does Plan Ahead work?",
+        a: "Plan Ahead is included at no extra charge. You can choose a USPS mailing date at least 3 days in advance. The selected date is the planned mailing date, not a guaranteed delivery date."
       },
       {
         q: "How long does delivery take?",
-        a: "Delivery timing depends on USPS after your letter has been mailed."
+        a: "Delivery timing is controlled by USPS after the card has been mailed, so Mailing Memories does not guarantee an arrival date."
       }
     ]
   },
   {
-    category: "Help & Support",
+    category: "Changes, Cancellations & Delivery Issues",
     questions: [
       {
-        q: "What if I’m not sure what to write?",
-        a: "If you feel stuck on the wording, light help getting started is available to help you turn your intention into action."
+        q: "Can I change or cancel my order?",
+        a: "Contact us as soon as possible. An order may be canceled before it has been handed to USPS. Once the card has been mailed, it can no longer be canceled."
       },
       {
-        q: "Can I change or cancel my order?",
-        a: "If you need help with an existing order, email hello@mailingmemories.com as soon as possible so we can review what stage it is in."
+        q: "What if Mailing Memories makes a mistake?",
+        a: "If we make a handwriting, addressing, or fulfillment mistake, contact us so we can review it and make the order right under our current remake or resend policy."
+      },
+      {
+        q: "What if USPS appears to lose the card?",
+        a: "If a correctly addressed card appears to be lost in the mail, Mailing Memories may provide one goodwill remake and re-mail after reviewing the situation."
+      },
+      {
+        q: "What if a correctly addressed card is returned to sender?",
+        a: "If the address supplied was correct and the card is returned by USPS, Mailing Memories may provide one goodwill resend after reviewing the return."
       },
       {
         q: "How can I contact support?",
-        a: "You can reach us at hello@mailingmemories.com for any questions regarding your order."
+        a: "Email hello@mailingmemories.com with your order details and the issue you need help with."
       }
     ]
   }
@@ -94,7 +110,7 @@ export default function FAQ() {
                 margin: "0 auto",
               }}
             >
-              Everything you need to know about the current handwritten letter service.
+              Everything you need to know about the current handwritten card service.
             </p>
           </div>
         </FadeIn>
