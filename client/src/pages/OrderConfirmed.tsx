@@ -118,7 +118,7 @@ export default function OrderConfirmed() {
                     }
                   />
                   <SummaryRow label="Mailing" value={mailingDateText} />
-                  <SummaryRow label="Confirmation email" value={confirmation.email || "Provided at checkout"} />
+                  <SummaryRow label="Contact email" value={confirmation.email || "Provided at checkout"} />
                   <SummaryRow
                     label="Amount paid"
                     value={confirmation.amountPaidCents === 0 ? `${amountText} — Complimentary` : amountText}
