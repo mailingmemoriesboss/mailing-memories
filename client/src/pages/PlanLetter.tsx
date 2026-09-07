@@ -11,17 +11,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
 import { PageShell, FadeIn } from "@/components/Layout";
 
+/* Free starter lines for the live helper experience. Future set/deck names are
+ * intentionally not exposed here as current products. */
 const STARTER_PHRASES = [
-  { deck: "In the Hard Season", line: "I am not going to tell you it will pass. I am just going to stay close while it is here." },
-  { deck: "The Long Friendship", line: "Most of what we have built together happened in ordinary moments that did not announce themselves as important." },
-  { deck: "Gratitude", line: "The world is easier to be in because people like you exist in it." },
-  { deck: "Love That Isn't Romantic", line: "I do not say this enough, and when I do say it, it does not come out the way I mean it. So I am writing it instead." },
-  { deck: "Just Because", line: "You were in my mind today and I did not want to just let that pass." },
-  { deck: "The Caregiver", line: "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention." },
-  { deck: "Admiration & Character", line: "You did the right thing when the easier thing was sitting right there. I want to say that I noticed." },
-  { deck: "Growth & Pride", line: "I can see the difference. It is not subtle anymore and I want to say something about it." },
-  { deck: "Legacy", line: "You made something real. Not everyone does. I want to say that clearly." },
-  { deck: "Letters I Never Sent", line: "You were gone before I found the words. I have found them now." },
+  "I am not going to tell you it will pass. I am just going to stay close while it is here.",
+  "Most of what we have built together happened in ordinary moments that did not announce themselves as important.",
+  "The world is easier to be in because people like you exist in it.",
+  "I do not say this enough, and when I do say it, it does not come out the way I mean it. So I am writing it instead.",
+  "You were in my mind today and I did not want to just let that pass.",
+  "Most of what you do is not visible to anyone but you. I want you to know I have been paying attention.",
+  "You did the right thing when the easier thing was sitting right there. I want to say that I noticed.",
+  "I can see the difference. It is not subtle anymore and I want to say something about it.",
+  "You made something real. Not everyone does. I want to say that clearly.",
+  "You were gone before I found the words. I have found them now.",
 ];
 
 const inputStyle: React.CSSProperties = {
@@ -377,7 +379,7 @@ export default function PlanLetter() {
                             color: "var(--mm-ink-soft)",
                           }}
                         >
-                          Browse some of our starter phrases to find the right words.
+                          Browse some starter lines to find a direction, then make the message yours.
                         </p>
                       </div>
                       <div
@@ -391,7 +393,7 @@ export default function PlanLetter() {
                           color: "var(--mm-burgundy)",
                         }}
                       >
-                        {showPhrases ? "Close phrases ↑" : "Browse phrases ↓"}
+                        {showPhrases ? "Close starters ↑" : "Browse starters ↓"}
                       </div>
                     </div>
                   </div>
@@ -415,7 +417,7 @@ export default function PlanLetter() {
                             {STARTER_PHRASES.map((phrase, idx) => (
                               <div
                                 key={idx}
-                                onClick={() => handleUsePhraseClick(phrase.line)}
+                                onClick={() => handleUsePhraseClick(phrase)}
                                 className="p-4 cursor-pointer transition-colors hover:bg-mm-cream-soft border border-transparent hover:border-mm-line"
                               >
                                 <p
@@ -429,7 +431,7 @@ export default function PlanLetter() {
                                     color: "var(--mm-burgundy)",
                                   }}
                                 >
-                                  {phrase.deck}
+                                  Starter line
                                 </p>
                                 <p
                                   style={{
@@ -441,7 +443,7 @@ export default function PlanLetter() {
                                     lineHeight: 1.5,
                                   }}
                                 >
-                                  “{phrase.line}”
+                                  “{phrase}”
                                 </p>
                               </div>
                             ))}
@@ -492,7 +494,7 @@ export default function PlanLetter() {
                 marginRight: "auto",
               }}
             >
-              Life gets busy. Important dates slip past. This service exists so the people who matter to you know they haven’t been forgotten — even when your schedule says otherwise.
+              Life gets busy. Important dates slip past. Plan Ahead lets you prepare the card now and choose a future USPS mailing date without adding a scheduling fee.
             </p>
           </FadeIn>
         </div>
