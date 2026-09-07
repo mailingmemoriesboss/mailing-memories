@@ -77,7 +77,7 @@ export default function OrderConfirmed() {
                   color: "var(--mm-forest)",
                 }}
               >
-                Your letter is confirmed.
+                Your card is confirmed.
               </h1>
 
               <p
@@ -167,7 +167,7 @@ export default function OrderConfirmed() {
                     color: "var(--mm-ink-soft)",
                   }}
                 >
-                  On the day your letter is mailed, I’ll send a photo preview of the completed card and addressed envelope to the email you provided.
+                  On the day your card is mailed, I’ll send a photo preview of the completed card and addressed envelope to the email you provided.
                 </p>
               </div>
 
@@ -180,7 +180,7 @@ export default function OrderConfirmed() {
                   color: "var(--mm-ink-muted)",
                 }}
               >
-                For privacy, your full letter message is not repeated on this confirmation page.
+                For privacy, your full card message is not repeated on this confirmation page.
               </p>
 
               <button
