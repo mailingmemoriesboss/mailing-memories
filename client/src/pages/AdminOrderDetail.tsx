@@ -222,9 +222,6 @@ export default function AdminOrderDetail() {
                   </Button>
                 ))}
               </div>
-              <div className="mt-5 p-4 border rounded-md text-sm" style={{ lineHeight: 1.6 }}>
-                On mailing day, send the customer a photo preview of the completed card and addressed envelope at <strong>{order.sender_email}</strong>.
-              </div>
               {order.privacy_hold && (
                 <div className="mt-3 text-sm text-muted-foreground">
                   Privacy hold is active; automatic 30-day anonymization will be deferred until the hold is cleared.
