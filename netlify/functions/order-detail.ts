@@ -1,3 +1,8 @@
+import {
+  readAdminSessionCookie,
+  verifyAdminSessionToken,
+} from "./_lib/adminAuth";
+
 function jsonResponse(status: number, body: Record<string, unknown>) {
   return new Response(JSON.stringify(body), {
     status,
@@ -6,7 +11,21 @@ function jsonResponse(status: number, body: Record<string, unknown>) {
 }
 
 export default async (req: Request) => {
+  if (req.method !== "GET") {
+    return jsonResponse(405, { error: "Method not allowed" });
+  }
+
   try {
+    const sessionSecret = Netlify.env.get("ADMIN_SESSION_SECRET");
+    if (!sessionSecret) {
+      return jsonResponse(500, { error: "Missing admin session configuration." });
+    }
+
+    const token = readAdminSessionCookie(req);
+    if (!verifyAdminSessionToken(token, sessionSecret)) {
+      return jsonResponse(401, { error: "Admin authentication required." });
+    }
+
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
 
