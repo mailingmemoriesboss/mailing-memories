@@ -1,6 +1,11 @@
 /* Mailing Memories send-flow progress labels.
-   Keeps the concise Card · Envelope · Review language from the original live flow,
-   including on smaller screens. */
+   Keeps the concise Card · Envelope · Review language and uses the row as a
+   progress indicator rather than a shortcut around required fields. */
+
+main .grid.grid-cols-3.gap-2 > button {
+  pointer-events: none;
+  cursor: default !important;
+}
 
 main .grid.grid-cols-3.gap-2 > button > span.hidden {
   display: block !important;
