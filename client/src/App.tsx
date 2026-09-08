@@ -14,6 +14,7 @@ import FAQ from "./pages/FAQ";
 import Policies from "./pages/Policies";
 import PlanLetter from "./pages/PlanLetter";
 import Messages from "./pages/Messages";
+import "./send-progress-labels.css";
 
 function Router() {
   return (
