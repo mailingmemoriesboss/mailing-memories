@@ -6,7 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import ScrollToTop from "./components/ScrollToTop";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import SendCard from "./pages/SendCard";
+import SendCard from "./pages/SendCardPreview";
 import OrderConfirmed from "./pages/OrderConfirmed";
 import AdminOrders from "./pages/AdminOrders";
 import AdminOrderDetail from "./pages/AdminOrderDetail";
