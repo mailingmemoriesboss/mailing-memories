@@ -1,0 +1,38 @@
+/* Mailing Memories send-flow progress labels.
+   Keeps the concise Card · Envelope · Review language from the original live flow,
+   including on smaller screens. */
+
+main .grid.grid-cols-3.gap-2 > button > span.hidden {
+  display: block !important;
+  font-size: 0 !important;
+  white-space: nowrap;
+}
+
+main .grid.grid-cols-3.gap-2 > button:nth-child(1) > span.hidden::after {
+  content: "Card";
+  font-size: 0.74rem;
+}
+
+main .grid.grid-cols-3.gap-2 > button:nth-child(2) > span.hidden::after {
+  content: "Envelope";
+  font-size: 0.74rem;
+}
+
+main .grid.grid-cols-3.gap-2 > button:nth-child(3) > span.hidden::after {
+  content: "Review";
+  font-size: 0.74rem;
+}
+
+@media (max-width: 480px) {
+  main .grid.grid-cols-3.gap-2 > button {
+    gap: 6px !important;
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+  }
+
+  main .grid.grid-cols-3.gap-2 > button:nth-child(1) > span.hidden::after,
+  main .grid.grid-cols-3.gap-2 > button:nth-child(2) > span.hidden::after,
+  main .grid.grid-cols-3.gap-2 > button:nth-child(3) > span.hidden::after {
+    font-size: 0.66rem;
+  }
+}
