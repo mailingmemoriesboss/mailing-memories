@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+:root {
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-serif-secondary: 'Instrument Serif', Georgia, serif;
+
+  --mm-cream: #f1f3ed;
+  --mm-cream-soft: #fafbf7;
+  --mm-cream-deep: #e4ebe1;
+  --mm-paper: #fffefb;
+  --mm-paper-warm: #f8f5ed;
+  --mm-sage: #dbe5d8;
+  --mm-sage-soft: #eef3ec;
+  --mm-sage-deep: #cbd8c8;
+  --mm-ink: #1d1c19;
+  --mm-ink-soft: #555951;
+  --mm-ink-muted: #788078;
+  --mm-burgundy: #80504d;
+  --mm-burgundy-soft: #9b6864;
+  --mm-forest: #25382e;
+  --mm-forest-soft: #41564a;
+  --mm-line: rgba(37, 56, 46, 0.12);
+  --mm-line-strong: rgba(37, 56, 46, 0.22);
+}
+
+body {
+  background: var(--mm-cream-soft);
+}
+
+/* Freshen the shared shell without weakening the forest anchor color. */
+.min-h-screen.flex.flex-col > div:first-child {
+  background: var(--mm-sage-soft) !important;
+  border-bottom-color: rgba(37, 56, 46, 0.11) !important;
+}
+
+nav.sticky {
+  background: rgba(250, 251, 247, 0.97) !important;
+  border-bottom-color: rgba(37, 56, 46, 0.12) !important;
+}
+
+.mm-refined-hero {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(203, 216, 200, 0.42), transparent 34%),
+    linear-gradient(180deg, #fafbf7 0%, #f3f6f0 100%);
+}
+
+.mm-sage-panel {
+  background: linear-gradient(145deg, #edf3eb 0%, #e4ebe1 100%);
+  border: 1px solid rgba(37, 56, 46, 0.13);
+}
+
+.mm-paper-panel {
+  background: rgba(255, 254, 251, 0.92);
+  border: 1px solid rgba(37, 56, 46, 0.12);
+  box-shadow: 0 14px 34px rgba(42, 54, 46, 0.07);
+}
+
+.mm-eyebrow {
+  color: var(--mm-burgundy);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.mm-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.mm-small-rule {
+  border-top: 1px solid rgba(37, 56, 46, 0.13);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
