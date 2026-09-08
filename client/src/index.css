@@ -168,3 +168,92 @@
   background: rgba(125, 63, 63, 0.16);
   color: var(--mm-ink);
 }
+
+/* Preview refinement: Mailing Memories cards fold across the horizontal axis. */
+div:has(> div > textarea[aria-label="Front of card message"]) {
+  aspect-ratio: 7 / 5 !important;
+  max-width: 340px !important;
+  border-radius: 5px 5px 2px 2px !important;
+  transform: rotate(-0.8deg) !important;
+  box-shadow: 0 16px 30px rgba(67,48,32,0.17), 0 3px 7px rgba(67,48,32,0.08) !important;
+}
+
+div:has(> div > textarea[aria-label="Front of card message"]) > div:first-child {
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: auto !important;
+  width: auto !important;
+  height: 9px !important;
+  background: linear-gradient(to bottom, rgba(90,67,43,0.11), rgba(255,255,255,0)) !important;
+}
+
+/* Open horizontal-fold card: blank upper panel, handwritten lower panel. */
+div:has(> div > textarea[aria-label="Inside card message"]) {
+  aspect-ratio: 7 / 10 !important;
+  max-width: 470px !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: 1fr 1fr !important;
+  transform: rotate(0.18deg) !important;
+}
+
+div:has(> div > textarea[aria-label="Inside card message"]) > div:first-child {
+  left: 0 !important;
+  right: 0 !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: 100% !important;
+  height: 1px !important;
+  box-shadow: 0 -5px 10px rgba(75,55,35,0.05), 0 5px 10px rgba(75,55,35,0.04) !important;
+}
+
+div:has(> div > textarea[aria-label="Inside card message"]) > div:nth-child(2) {
+  background: linear-gradient(180deg, #fbf7ed 0%, #fffdf8 88%) !important;
+}
+
+div:has(> div > textarea[aria-label="Inside card message"]) > div:nth-child(2) > div:last-child {
+  display: none !important;
+}
+
+div:has(> div > textarea[aria-label="Inside card message"]) > div:nth-child(3) {
+  background: linear-gradient(180deg, #fffdf8 0%, #fcf7ec 100%) !important;
+}
+
+/* Envelope spacing: keep the return address compact and give the recipient block clear territory. */
+div:has(> div > img[alt="Forever stamp"]) > div:nth-child(2) {
+  top: 14px !important;
+  left: 16px !important;
+  max-width: 29% !important;
+  font-size: clamp(0.5rem, 1.25vw, 0.68rem) !important;
+  line-height: 1.25 !important;
+  overflow-wrap: anywhere;
+}
+
+div:has(> div > img[alt="Forever stamp"]) > div:nth-child(4) {
+  left: 58% !important;
+  top: 55% !important;
+  transform: translate(-42%, -50%) !important;
+  width: 50% !important;
+  font-size: clamp(0.78rem, 2vw, 1rem) !important;
+  line-height: 1.38 !important;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 520px) {
+  div:has(> div > textarea[aria-label="Inside card message"]) {
+    max-width: 390px !important;
+  }
+
+  div:has(> div > img[alt="Forever stamp"]) > div:nth-child(2) {
+    left: 12px !important;
+    max-width: 30% !important;
+    font-size: 0.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  div:has(> div > img[alt="Forever stamp"]) > div:nth-child(4) {
+    left: 59% !important;
+    width: 51% !important;
+    font-size: 0.76rem !important;
+  }
+}
