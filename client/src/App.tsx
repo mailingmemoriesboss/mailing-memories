@@ -6,7 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import ScrollToTop from "./components/ScrollToTop";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/HomeRefined";
-import SendCard from "./pages/SendCardPreview";
+import SendCard from "./pages/SendCardRefined";
 import OrderConfirmed from "./pages/OrderConfirmed";
 import AdminOrders from "./pages/AdminOrders";
 import AdminOrderDetail from "./pages/AdminOrderDetail";
@@ -15,6 +15,7 @@ import Policies from "./pages/Policies";
 import PlanLetter from "./pages/PlanAheadRefined";
 import Messages from "./pages/Messages";
 import "./send-progress-labels.css";
+import "./refined-typography.css";
 
 function Router() {
   return (
