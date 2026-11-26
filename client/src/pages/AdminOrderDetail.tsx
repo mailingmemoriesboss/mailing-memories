@@ -253,7 +253,7 @@ export default function AdminOrderDetail() {
                   <Button
                     key={status}
                     variant={order.status === status ? "default" : "outline"}
-                    disabled={Boolean(savingStatus)}
+                    disabled={photoBusy||Boolean(savingStatus)}
                     onClick={() => updateStatus(status)}
                   >
                     {savingStatus === status && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -266,11 +266,11 @@ export default function AdminOrderDetail() {
                   <h3 className="font-semibold">Customer mailing confirmation</h3>
                   <p className="text-sm">Confirmation: {confirmation==="accepted"?"Accepted by email provider":confirmation==="review"?"Needs manual review":confirmation==="queued"||confirmation==="sending"?"Awaiting delivery":confirmation}</p>
                   {confirmation==="not sent" && order.paid_at && !order.anonymized_at && !order.privacy_hold && ["paid","queued","writing","written"].includes(order.status) && <>
-                    <p className="text-sm">Send to <strong>{order.sender_email}</strong> after physically mailing this order. A photo is optional. Keep addresses and private handwriting out of the photo unless appropriate for this customer.</p>
+                    <p className="text-sm">Send to <strong>{order.sender_email}</strong> after physically mailing this order. A photo is optional. Use the card exterior or stamp area, without readable addresses or private letter content. The email provider retains sent email data for 30 days.</p>
                     <label className="block text-sm">Finished card / stamped envelope photo
                     <input className="block mt-2 max-w-full" type="file" accept="image/*" disabled={photoBusy||Boolean(savingStatus)} onChange={e=>void choosePhoto(e.target.files?.[0])}/></label>
                     {photo&&<><img src={photo} alt="Confirmation attachment preview" className="max-h-64 max-w-full rounded border"/><Button variant="outline" onClick={()=>{setPhoto(null);setApproved(false);}}>Remove photo</Button></>}
-                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={approved} onChange={e=>setApproved(e.target.checked)}/>I have mailed this order and verified the recipient email and any photo.</label>
+                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={approved} onChange={e=>setApproved(e.target.checked)}/>I have mailed this order and verified the customer email and any photo.</label>
                     <Button disabled={!approved||photoBusy||Boolean(savingStatus)} onClick={sendConfirmation}>Mark mailed &amp; send confirmation</Button>
                     <p className="text-xs text-muted-foreground">The ordinary Mark Mailed button does not send email. Use the confirmation button instead when you want the customer notified.</p>
                   </>}
