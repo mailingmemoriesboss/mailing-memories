@@ -23,7 +23,7 @@ type OrderRow = {
 function jsonResponse(status: number, body: Record<string, unknown>) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
 }
 
@@ -78,7 +78,23 @@ export default async (req: Request) => {
 
     const orders = JSON.parse(text) as OrderRow[];
 
-    return jsonResponse(200, { orders });
+    // Keep the admin's order list usable even if notification storage is not ready.
+    let notificationAvailable = false;
+    let notifications: Record<string, string> = {};
+    try {
+      const result = await fetch(
+        `${supabaseUrl.replace(/\/$/, "")}/rest/v1/order_notification_outbox?select=order_id,status&order=queued_at.desc&limit=1000`,
+        { headers: { apikey: supabaseKey, Authorization: `Bearer ${supabaseKey}` }, signal: AbortSignal.timeout(4500) }
+      );
+      if (result.ok) {
+        const rows = await result.json() as { order_id: string; status: string }[];
+        notifications = Object.fromEntries(rows.map(row => [row.order_id, row.status]));
+        notificationAvailable = true;
+      }
+    } catch { /* Surface unavailable state below. */ }
+    return jsonResponse(200, { orders: orders.map(order => ({
+      ...order, notification_status: notificationAvailable ? (notifications[order.id] || "not recorded") : "unavailable",
+    })) });
   } catch (error) {
     return jsonResponse(500, {
       error: error instanceof Error ? error.message : "Unknown function error",
