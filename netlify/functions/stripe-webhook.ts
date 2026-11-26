@@ -21,7 +21,7 @@ export default async (req: Request) => {
   }
   try {
     const session = await stripe.checkout.sessions.retrieve((event.data.object as Stripe.Checkout.Session).id);
-    if (session.metadata?.orderFlow !== "durable-v1") {
+    if (!["durable-v1","durable-v2"].includes(session.metadata?.orderFlow || "")) {
       // Existing pre-migration sessions must be reconciled separately.
       return json(200, { received: true, legacy: true });
     }

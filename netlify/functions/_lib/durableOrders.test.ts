@@ -65,6 +65,18 @@ describe("durable checkout", () => {
     mockDb([[{ id, status: "pending_payment", stripe_checkout_session_id: "cs_test_other" }]]);
     await expect(confirmOrder(session)).rejects.toThrow();
   });
+  it("uses server quote rather than client amounts and preserves explicit permission",()=>{
+    const row=pendingOrder({...order,message_text:Array(251).fill("word").join(" "),amount_cents:1,showcase_consent:true},order.sender_email,id,true);
+    expect(row).toMatchObject({expected_amount_cents:2000,extra_card_count:1,message_word_count:251,showcase_consent:true,amount_cents:0});
+    expect(pendingOrder({...order,showcase_consent:"true"},order.sender_email,id,true)).toMatchObject({showcase_consent:false,showcase_consented_at:null});
+  });
+  it("verifies v2 stored price and rejects subtotal mismatch",async()=>{
+    const v2={...session,amount_subtotal:2000,amount_total:2000,metadata:{orderId:id,orderFlow:"durable-v2"}} as Stripe.Checkout.Session;
+    mockDb([[{id,status:"pending_payment",stripe_checkout_session_id:session.id,expected_amount_cents:2000}],[{id}]]);
+    expect(await confirmOrder(v2)).toEqual({id,amountPaidCents:2000});
+    mockDb([[{id,status:"pending_payment",stripe_checkout_session_id:session.id,expected_amount_cents:2500}]]);
+    await expect(confirmOrder(v2)).rejects.toThrow();
+  });
   it("accepts a valid 100 percent discount", async () => {
     mockDb([[{ id, status: "pending_payment", stripe_checkout_session_id: session.id }], [{ id }]]);
     expect(await confirmOrder({ ...session, amount_total: 0, payment_status: "no_payment_required" })).toEqual({ id, amountPaidCents: 0 });

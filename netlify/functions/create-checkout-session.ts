@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { quoteCard, EXTRA_CARD_CENTS } from "../../shared/cardPricing";
 import { db, json, OrderError, pendingOrder } from "./_lib/durableOrders";
 
 export default async (req: Request) => {
@@ -6,7 +7,10 @@ export default async (req: Request) => {
   try {
     const body = await req.json();
     const id = crypto.randomUUID();
-    const row = pendingOrder(body?.order, body?.contactEmail, id);
+    const pricingV2 = Netlify.env.get("CARD_PRICING_V2_ENABLED") === "true";
+    if (Boolean(body?.pricingV2) !== pricingV2) throw new OrderError(409,"Pricing has changed. Please refresh the page and review your quote.");
+    const row = pendingOrder(body?.order, body?.contactEmail, id, pricingV2);
+    const quote = quoteCard(String(row.message_text));
     const secret = Netlify.env.get("STRIPE_SECRET_KEY");
     const signingSecret = Netlify.env.get("STRIPE_WEBHOOK_SECRET");
     const price = Netlify.env.get("STRIPE_CARD_PRICE_ID") || "price_1SzlpFCNWxRiI3jgIryZeMVI";
@@ -16,10 +20,12 @@ export default async (req: Request) => {
     // The order must exist before a checkout URL is ever returned.
     const saved = await db("", "POST", row);
     if (saved[0]?.id !== id) throw new OrderError(503, "Unable to save your order.");
-    const metadata = { orderId: id, checkoutReference: id, orderFlow: "durable-v1" };
+    const metadata = { orderId: id, checkoutReference: id, orderFlow: pricingV2 ? "durable-v2" : "durable-v1" };
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [{ price, quantity: 1 }];
+    if (pricingV2 && quote.extraCards) lineItems.push({price_data:{currency:"usd",unit_amount:EXTRA_CARD_CENTS,product_data:{name:"Additional handwritten mini card (up to 250 words)"}},quantity:quote.extraCards});
     const session = await stripe.checkout.sessions.create({
       mode: "payment", payment_method_types: ["card"], allow_promotion_codes: true,
-      line_items: [{ price, quantity: 1 }], customer_email: body.contactEmail.trim(),
+      line_items: lineItems, customer_email: body.contactEmail.trim(),
       client_reference_id: id, metadata,
       payment_intent_data: { metadata },
       success_url: origin + "/send?payment=success&session_id={CHECKOUT_SESSION_ID}",

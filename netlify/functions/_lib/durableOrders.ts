@@ -1,4 +1,5 @@
 import type Stripe from "stripe";
+import { quoteCard, showcaseConsent, SHOWCASE_CONSENT_VERSION } from "../../../shared/cardPricing";
 
 export const json = (status: number, body: object) =>
   new Response(JSON.stringify(body), { status, headers: {
@@ -15,7 +16,7 @@ const required = ["message_text", "sender_name", "sender_email", "recipient_name
 const optional = ["occasion", "message_brief", "signature_name", "address_line2",
   "front_message", "return_address_line2"] as const;
 
-export function pendingOrder(value: unknown, contactEmail: unknown, id: string) {
+export function pendingOrder(value: unknown, contactEmail: unknown, id: string, pricingV2 = false) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new OrderError(400, "Complete order details are required before payment.");
   }
@@ -45,7 +46,9 @@ export function pendingOrder(value: unknown, contactEmail: unknown, id: string) 
     throw new OrderError(400, "Invalid mailing date.");
   }
   if (input.country && input.country !== "US") throw new OrderError(400, "US mailing only.");
-  return { ...out, id, order_type: "send_now", status: "pending_payment", occasion: out.occasion || "send-page",
+  const quote = quoteCard(String(out.message_text));
+  const consent = showcaseConsent(input.showcase_consent);
+  return { ...out, ...(pricingV2 ? { expected_amount_cents:quote.totalCents,message_word_count:quote.words,extra_card_count:quote.extraCards,showcase_consent:consent,showcase_consent_version:consent?SHOWCASE_CONSENT_VERSION:null,showcase_consented_at:consent?new Date().toISOString():null } : {}), id, order_type: "send_now", status: "pending_payment", occasion: out.occasion || "send-page",
     occasion_custom: id, message_mode: "exact_words", country: "US",
     state_region: String(out.state_region).toUpperCase(), return_state: String(out.return_state).toUpperCase(),
     requested_ship_date: date || null, reminder_enabled: false, reminder_send_at: null,
@@ -66,23 +69,26 @@ export async function db(query: string, method = "GET", body?: object): Promise<
 
 export async function confirmOrder(session: Stripe.Checkout.Session) {
   const total = session.amount_total;
+  const flow = session.metadata?.orderFlow;
+  const subtotal = session.amount_subtotal;
   if (session.mode !== "payment" || session.status !== "complete" ||
-      session.amount_subtotal !== 1500 || total === null || total < 0 || total > 1500 ||
+      (flow !== "durable-v1" && flow !== "durable-v2") || subtotal === null || subtotal < 1500 || (flow === "durable-v1" && subtotal !== 1500) || total === null || total < 0 || total > subtotal ||
       session.currency !== "usd" ||
       !(session.payment_status === "paid" || (total === 0 && session.payment_status === "no_payment_required"))) {
     throw new OrderError(402, "Payment is not verified.");
   }
   const id = session.metadata?.orderId;
-  if (session.metadata?.orderFlow !== "durable-v1" || !id ||
+  if (!id ||
       !/^[0-9a-f-]{36}$/i.test(id) || session.client_reference_id !== id) {
     throw new OrderError(409, "This payment requires order reconciliation.");
   }
   const query = "?id=eq." + encodeURIComponent(id);
-  const rows = await db(query + "&select=id,status,stripe_checkout_session_id,paid_at,amount_cents");
+  const rows = await db(query + "&select=id,status,stripe_checkout_session_id,paid_at,amount_cents" + (flow === "durable-v2" ? ",expected_amount_cents" : ""));
   const row = rows[0];
   if (!row || row.stripe_checkout_session_id !== session.id) {
     throw new OrderError(409, "Payment could not be matched to its saved order.");
   }
+  if (flow === "durable-v2" && row.expected_amount_cents !== subtotal) throw new OrderError(409,"Payment total differs from the saved order quote.");
   if (row.paid_at && row.amount_cents === total) return { id: row.id, amountPaidCents: total };
   if (row.status !== "pending_payment") throw new OrderError(409, "Order requires reconciliation.");
   const paymentIntent = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id ?? null;

@@ -238,6 +238,8 @@ export default function AdminOrderDetail() {
               <div><strong>Name:</strong> {order.sender_name}</div>
               <div><strong>Email:</strong> {order.sender_email}</div>
               <div><strong>Paid:</strong> {formatMoney(order.amount_cents)}</div>
+              {order.message_word_count!=null&&<div><strong>Inside words:</strong> {order.message_word_count} · <strong>Extra mini cards:</strong> {order.extra_card_count||0}</div>}
+              <div><strong>Showcase permission:</strong> {order.showcase_consent===true?"Opted in — only non-identifying examples; review before use":"Not granted"}</div>
               {order.paid_at && <div><strong>Paid at:</strong> {new Date(order.paid_at).toLocaleString()}</div>}
             </CardContent>
           </Card>
