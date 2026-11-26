@@ -50,6 +50,9 @@ export default async (req: Request) => {
       supabaseQuery = `id=eq.${encodeURIComponent(orderId as string)}`;
     }
 
+    // A pending checkout may still be paid; never delete its order details.
+    supabaseQuery += "&status=neq.pending_payment";
+
     const response = await fetch(
       `${supabaseUrl.replace(/\/$/, "")}/rest/v1/orders?${supabaseQuery}`,
       {
@@ -72,6 +75,10 @@ export default async (req: Request) => {
     }
 
     const deletedRows = JSON.parse(text);
+
+    if (!clearTest && Array.isArray(deletedRows) && deletedRows.length === 0) {
+      return jsonResponse(409, { error: "Order not found or payment is still pending." });
+    }
 
     return jsonResponse(200, {
       ok: true,

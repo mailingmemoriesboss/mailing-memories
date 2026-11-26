@@ -49,6 +49,7 @@ type OrderRow = {
   updated_at: string;
   order_type: "send_now" | "scheduled";
   status: OrderStatus;
+  notification_status?: string;
   occasion: string | null;
   occasion_custom: string | null;
   sender_name: string;
@@ -389,6 +390,9 @@ export default function AdminOrders() {
                         <Badge variant={badgeVariantMap[order.status]}>
                           {order.status.replaceAll("_", " ")}
                         </Badge>
+                        <div className={order.notification_status === "review" || order.notification_status === "unavailable" ? "mt-1 text-xs text-red-700" : "mt-1 text-xs text-muted-foreground"}>
+                          Email: {order.notification_status === "accepted" ? "Provider accepted" : order.notification_status === "review" ? "Needs review" : order.notification_status === "queued" || order.notification_status === "sending" ? "Awaiting delivery" : order.notification_status || "Not recorded"}
+                        </div>
                       </TableCell>
                       <TableCell>{order.order_type.replaceAll("_", " ")}</TableCell>
                       <TableCell>

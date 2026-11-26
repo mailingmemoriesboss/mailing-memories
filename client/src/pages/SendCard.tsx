@@ -148,36 +148,18 @@ export default function SendCard() {
       setSubmitError("");
 
       try {
-        const storedPendingOrder = localStorage.getItem(
-          "mailingMemoriesPendingOrder"
-        );
-
-        if (!storedPendingOrder) {
-          throw new Error(
-            "Payment was received, but the letter details could not be found in this browser. Please contact Mailing Memories with your payment email."
-          );
-        }
-
-        const pending = JSON.parse(storedPendingOrder);
-
-        if (!pending?.order || !pending?.checkoutReference) {
-          throw new Error(
-            "The saved letter information is incomplete. Please contact Mailing Memories."
-          );
-        }
+        // The server has already saved the order. Browser storage is optional.
+        let pending: { order?: Record<string, string> } = {};
+        try {
+          const stored = localStorage.getItem("mailingMemoriesPendingOrder");
+          if (stored) pending = JSON.parse(stored) || {};
+        } catch { /* Receipt can still be confirmed without local storage. */ }
 
         const response = await fetch("/api/finalize-paid-order", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            sessionId,
-            checkoutReference: pending.checkoutReference,
-            order: pending.order,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId }),
         });
-
         const data = await response.json();
 
         if (!response.ok) {
@@ -187,20 +169,22 @@ export default function SendCard() {
           );
         }
 
+try {
 sessionStorage.setItem(
   "mailingMemoriesConfirmation",
   JSON.stringify({
     orderId: data?.order?.id || "",
-    recipientName: pending.order.recipient_name || "",
-    recipientCity: pending.order.city || "",
-    recipientState: pending.order.state_region || "",
-    mailingDate: pending.order.requested_ship_date || null,
-    email: pending.order.sender_email || "",
+    recipientName: pending.order?.recipient_name || "",
+    recipientCity: pending.order?.city || "",
+    recipientState: pending.order?.state_region || "",
+    mailingDate: pending.order?.requested_ship_date || null,
+    email: pending.order?.sender_email || "",
     amountPaidCents: data?.amountPaidCents ?? 0,
   })
 );
 
 localStorage.removeItem("mailingMemoriesPendingOrder");
+} catch { /* Storage unavailable; payment is already recorded. */ }
 setSubmitError("");
 setLocation("/order-confirmed");
       } catch (error) {
@@ -329,9 +313,7 @@ setLocation("/order-confirmed");
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            contactEmail,
-          }),
+          body: JSON.stringify({ contactEmail, order: pendingOrder }),
         }
       );
 
@@ -350,7 +332,8 @@ setLocation("/order-confirmed");
         );
       }
 
-      localStorage.setItem(
+      try {
+localStorage.setItem(
         "mailingMemoriesPendingOrder",
         JSON.stringify({
           checkoutReference: checkoutData.checkoutReference,
@@ -358,6 +341,7 @@ setLocation("/order-confirmed");
         })
       );
 
+      } catch { /* Order is safely saved server-side. */ }
       window.location.assign(checkoutData.url);
     } catch (error) {
       setSubmitError(
@@ -1261,7 +1245,7 @@ Payment received. Your letter has been submitted successfully. Order ID: {savedO
 
       <section style={{ padding: "64px 24px", background: "var(--mm-cream)" }}>
         <div className="max-w-[1240px] mx-auto text-center">
-          <PenStroke color="var(--mm-burgundy)" width="120px" />
+          <PenStroke color="var(--mm-burgundy)" className="w-[120px] mx-auto" />
           <p
             style={{
               marginTop: "24px",

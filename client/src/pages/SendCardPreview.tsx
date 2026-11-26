@@ -346,29 +346,33 @@ export default function SendCardPreview() {
       setIsSubmitting(true);
       setSubmitError("");
       try {
-        const stored = localStorage.getItem("mailingMemoriesPendingOrder");
-        if (!stored) throw new Error("Payment was received, but the card details could not be found in this browser. Please contact Mailing Memories with your payment email.");
-        const pending = JSON.parse(stored);
-        if (!pending?.order || !pending?.checkoutReference) throw new Error("The saved card information is incomplete. Please contact Mailing Memories.");
+        // The server has already saved the order. Browser storage is optional.
+        let pending: { order?: Record<string, string> } = {};
+        try {
+          const stored = localStorage.getItem("mailingMemoriesPendingOrder");
+          if (stored) pending = JSON.parse(stored) || {};
+        } catch { /* Receipt can still be confirmed without local storage. */ }
 
         const response = await fetch("/api/finalize-paid-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sessionId, checkoutReference: pending.checkoutReference, order: pending.order }),
+          body: JSON.stringify({ sessionId }),
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data?.error || "Payment succeeded, but the order could not be finalized.");
 
-        sessionStorage.setItem("mailingMemoriesConfirmation", JSON.stringify({
+        try {
+sessionStorage.setItem("mailingMemoriesConfirmation", JSON.stringify({
           orderId: data?.order?.id || "",
-          recipientName: pending.order.recipient_name || "",
-          recipientCity: pending.order.city || "",
-          recipientState: pending.order.state_region || "",
-          mailingDate: pending.order.requested_ship_date || null,
-          email: pending.order.sender_email || "",
+          recipientName: pending.order?.recipient_name || "",
+          recipientCity: pending.order?.city || "",
+          recipientState: pending.order?.state_region || "",
+          mailingDate: pending.order?.requested_ship_date || null,
+          email: pending.order?.sender_email || "",
           amountPaidCents: data?.amountPaidCents ?? 0,
         }));
         localStorage.removeItem("mailingMemoriesPendingOrder");
+} catch { /* Storage unavailable; payment is already recorded. */ }
         setLocation("/order-confirmed");
       } catch (error) {
         setSubmitError(error instanceof Error ? error.message : "Payment succeeded, but the order could not be finalized.");
@@ -435,13 +439,15 @@ export default function SendCardPreview() {
       const checkoutResponse = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contactEmail }),
+        body: JSON.stringify({ contactEmail, order: pendingOrder }),
       });
       const checkoutData = await checkoutResponse.json();
       if (!checkoutResponse.ok) throw new Error(checkoutData?.error || "Secure payment could not be started. Please try again.");
       if (!checkoutData?.url || !checkoutData?.checkoutReference) throw new Error("Stripe did not return the information needed to continue.");
 
-      localStorage.setItem("mailingMemoriesPendingOrder", JSON.stringify({ checkoutReference: checkoutData.checkoutReference, order: pendingOrder }));
+      try {
+localStorage.setItem("mailingMemoriesPendingOrder", JSON.stringify({ checkoutReference: checkoutData.checkoutReference, order: pendingOrder }));
+      } catch { /* Order is safely saved server-side. */ }
       window.location.assign(checkoutData.url);
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Something went wrong while preparing secure payment.");
