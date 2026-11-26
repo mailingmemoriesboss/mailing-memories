@@ -37,4 +37,4 @@ export async function deliverConfirmation(id?:string) {
  if(!Array.isArray(result)||result.length!==1)throw Error("Confirmation lease lost");
  return providerId?"accepted":"queued";
 }
-export async function runFulfillmentQueue(){let processed=0;for(let i=0;i<2;i++){const r=await deliverConfirmation();if(r==="empty"||r==="disabled")break;processed++;}return json(200,{processed});}
+export async function runFulfillmentQueue(){let processed=0;for(let i=0;i<1;i++){const r=await deliverConfirmation();if(r==="empty"||r==="disabled")break;processed++;}return json(200,{processed});}
