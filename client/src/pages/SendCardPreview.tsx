@@ -262,6 +262,8 @@ function EnvelopePreview({ recipient, returnAddress }: { recipient: string[]; re
   );
 }
 
+import { quoteCard } from "@shared/cardPricing";
+
 export default function SendCardPreview() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState(1);
@@ -289,6 +291,11 @@ export default function SendCardPreview() {
   const [reviewConfirmed, setReviewConfirmed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [pricingV2,setPricingV2]=useState<boolean|null>(null);
+  const [showcase,setShowcase]=useState(false);
+  const quote=quoteCard(insideMessage);
+  const displayPrice=pricingV2?quote.totalCents/100:15;
+  useEffect(()=>{fetch("/api/card-pricing-config").then(r=>{if(!r.ok)throw Error("Pricing unavailable");return r.json();}).then(d=>setPricingV2(d.pricingV2===true)).catch(()=>setSubmitError("Unable to load pricing. Refresh before checkout."));},[]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -327,6 +334,7 @@ export default function SendCardPreview() {
             setReturnZip(order.return_postal_code || "");
             setContactEmail(order.sender_email || "");
             setMailingDate(order.requested_ship_date || "");
+            setShowcase(order.showcase_consent===true);
             setReviewConfirmed(true);
             setCurrentStep(3);
           }
@@ -386,7 +394,7 @@ sessionStorage.setItem("mailingMemoriesConfirmation", JSON.stringify({
 
   const cardReady = insideMessage.trim().length > 0 && signatureName.trim().length > 0;
   const envelopeReady = Boolean(recipientName.trim() && recipientAddress1.trim() && recipientCity.trim() && recipientState.trim() && recipientZip.trim() && returnName.trim() && returnAddress1.trim() && returnCity.trim() && returnState.trim() && returnZip.trim());
-  const reviewReady = Boolean(contactEmail.trim() && reviewConfirmed);
+  const reviewReady = Boolean(cardReady && envelopeReady && contactEmail.trim() && reviewConfirmed && pricingV2!==null);
 
   const recipientLines = useMemo(() => [
     recipientName || "Recipient Name",
@@ -424,7 +432,8 @@ sessionStorage.setItem("mailingMemoriesConfirmation", JSON.stringify({
         state_region: recipientState.toUpperCase(),
         postal_code: recipientZip,
         country: "US",
-        amount_cents: 1500,
+        amount_cents: pricingV2 ? quote.totalCents : 1500,
+        showcase_consent:pricingV2&&showcase,
         currency: "usd",
         front_message: frontMessage,
         return_name: returnName,
@@ -439,7 +448,7 @@ sessionStorage.setItem("mailingMemoriesConfirmation", JSON.stringify({
       const checkoutResponse = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contactEmail, order: pendingOrder }),
+        body: JSON.stringify({ contactEmail, order: pendingOrder, pricingV2 }),
       });
       const checkoutData = await checkoutResponse.json();
       if (!checkoutResponse.ok) throw new Error(checkoutData?.error || "Secure payment could not be started. Please try again.");
@@ -468,7 +477,7 @@ localStorage.setItem("mailingMemoriesPendingOrder", JSON.stringify({ checkoutRef
               </p>
             </div>
             <div style={{ padding: "10px 14px", border: "1px solid rgba(36,51,41,0.13)", borderRadius: "8px", background: "#fffdf8", fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--mm-forest)", boxShadow: "0 6px 20px rgba(61,48,36,0.06)" }}>
-              <strong>$15</strong> · postage included · Stripe checkout
+              <strong>{pricingV2?"From $15":"$15"}</strong> · postage included · Stripe checkout
             </div>
           </div>
         </div>
@@ -483,6 +492,7 @@ localStorage.setItem("mailingMemoriesPendingOrder", JSON.stringify({ checkoutRef
               <motion.div key="card" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.24 }}>
                 <StepHeader eyebrow="Step 1" title="Write the card" body="The card below is your writing space. The front is optional. The inside message and your signature are required before you continue." />
                 <CardWorkspace frontMessage={frontMessage} setFrontMessage={setFrontMessage} insideMessage={insideMessage} setInsideMessage={setInsideMessage} signatureName={signatureName} setSignatureName={setSignatureName} />
+                {pricingV2&&<div className="mt-4 rounded-lg border p-4 text-sm"><strong>{quote.words} words · ${displayPrice.toFixed(2)}</strong><p>First 250 words included. Each additional started 250-word block adds one $5 mini card, included in the same mailing.</p>{quote.extraCards>0&&<p>{quote.extraCards} additional mini card{quote.extraCards===1?"":"s"}.</p>}</div>}
                 <div className="flex flex-wrap items-center justify-between gap-4" style={{ marginTop: "26px" }}>
                   <p style={{ margin: 0, fontFamily: "var(--font-sans)", fontSize: "0.78rem", color: cardReady ? "var(--mm-forest)" : "var(--mm-ink-muted)" }}>
                     {cardReady ? "Card message ready." : "Add an inside message and signature to continue."}
@@ -536,7 +546,7 @@ localStorage.setItem("mailingMemoriesPendingOrder", JSON.stringify({ checkoutRef
 
             {currentStep === 3 && (
               <motion.div key="review" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.24 }}>
-                <StepHeader eyebrow="Step 3" title="One last look" body="Check the exact message and addresses before payment. Nothing is handwritten until Stripe confirms the $15 payment." />
+                <StepHeader eyebrow="Step 3" title="One last look" body="Check the exact message and addresses before payment. Nothing is handwritten until Stripe confirms your payment." />
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.72fr] gap-7 items-start">
                   <div className="flex flex-col gap-4">
                     <div style={{ padding: "22px", border: "1px solid var(--mm-line)", borderRadius: "10px", background: "#fffdf8" }}>
@@ -558,10 +568,11 @@ localStorage.setItem("mailingMemoriesPendingOrder", JSON.stringify({ checkoutRef
                   <div style={{ padding: "24px", border: "1px solid rgba(36,51,41,0.14)", borderRadius: "12px", background: "rgba(238,231,220,0.62)", boxShadow: "0 14px 32px rgba(61,48,36,0.06)" }}>
                     <div className="flex items-baseline justify-between gap-4" style={{ paddingBottom: "18px", borderBottom: "1px solid rgba(36,51,41,0.12)" }}>
                       <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--mm-forest)" }}>Handwritten card</span>
-                      <strong style={{ fontFamily: "var(--font-sans)", fontSize: "1.05rem", color: "var(--mm-forest)" }}>$15</strong>
+                      <strong style={{ fontFamily: "var(--font-sans)", fontSize: "1.05rem", color: "var(--mm-forest)" }}>${displayPrice.toFixed(2)}</strong>
                     </div>
                     <ul style={{ margin: "18px 0 22px", paddingLeft: "18px", fontFamily: "var(--font-sans)", fontSize: "0.8rem", lineHeight: 1.8, color: "var(--mm-ink-soft)" }}>
-                      <li>Folded cardstock card</li>
+                      <li>Folded cardstock card{pricingV2?" (up to 250 words)":""}</li>
+                      {pricingV2&&quote.extraCards>0&&<li>{quote.extraCards} additional mini card{quote.extraCards===1?"":"s"} × $5</li>}
                       <li>Handwritten and hand-addressed</li>
                       <li>Envelope and U.S. postage included</li>
                       <li>{mailingDate ? "Mailed on your selected date" : "Mailed within 1–2 business days"}</li>
@@ -575,6 +586,7 @@ localStorage.setItem("mailingMemoriesPendingOrder", JSON.stringify({ checkoutRef
                       <span>I reviewed the message and mailing addresses and they are correct.</span>
                     </label>
 
+                    {pricingV2&&<label className="mt-4 flex items-start gap-2 text-sm"><input type="checkbox" checked={showcase} onChange={e=>setShowcase(e.target.checked)}/><span>Optional: I give Mailing Memories permission to use a non-identifying excerpt or image of my card as an example of its work. Names, addresses and identifying details will be removed. My choice does not affect my order.</span></label>}
                     {submitError && <div style={{ marginTop: "16px", padding: "11px 12px", border: "1px solid rgba(125,63,63,0.2)", borderRadius: "7px", background: "rgba(125,63,63,0.06)", fontFamily: "var(--font-sans)", fontSize: "0.78rem", lineHeight: 1.55, color: "#713b3b" }}>{submitError}</div>}
 
                     <button
