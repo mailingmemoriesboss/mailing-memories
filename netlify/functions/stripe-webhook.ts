@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { confirmOrder, json } from "./_lib/durableOrders";
+import { deliverOne } from "./_lib/orderNotifications";
 
 export default async (req: Request) => {
   if (req.method !== "POST") return json(405, { error: "Method not allowed" });
@@ -25,7 +26,12 @@ export default async (req: Request) => {
       return json(200, { received: true, legacy: true });
     }
     if (session.payment_status === "unpaid") return json(200, { received: true, pending: true });
-    await confirmOrder(session);
+    const order = await confirmOrder(session);
+    // The payment update has already durably queued the email in the same transaction.
+    // Email failure must never undo payment; the scheduled worker will retry.
+    try { await deliverOne(order.id); } catch {
+      console.error("Immediate owner notification failed; review outbox and scheduled worker.");
+    }
     return json(200, { received: true });
   } catch {
     // Non-2xx response lets Stripe retry; do not acknowledge an unsaved paid order.
