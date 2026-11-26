@@ -3,6 +3,7 @@ import { json } from "./_lib/durableOrders";
 import { enabled,validPhoto,storage,deliverConfirmation } from "./_lib/fulfillmentConfirmation";
 export default async (req:Request)=>{
  try{
+  if(new URL(req.url).hostname!=="mailingmemories.com")return json(404,{error:"Not found"});
   const secret=Netlify.env.get("ADMIN_SESSION_SECRET");
   if(!secret||!verifyAdminSessionToken(readAdminSessionCookie(req),secret))return json(401,{error:"Admin authentication required"});
   if(!enabled())return json(503,{error:"Fulfillment confirmations not enabled"});
