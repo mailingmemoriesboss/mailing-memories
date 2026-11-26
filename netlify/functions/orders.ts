@@ -92,7 +92,14 @@ export default async (req: Request) => {
         notificationAvailable = true;
       }
     } catch { /* Surface unavailable state below. */ }
+    let fulfillmentAvailable=false;
+    let confirmations: Record<string,string>={};
+    try {
+      const result=await fetch(`${supabaseUrl.replace(/\/$/, "")}/rest/v1/fulfillment_confirmation_outbox?select=order_id,status&limit=1000`,{headers:{apikey:supabaseKey,Authorization:`Bearer ${supabaseKey}`},signal:AbortSignal.timeout(4500)});
+      if(result.ok){const rows=await result.json() as {order_id:string;status:string}[];confirmations=Object.fromEntries(rows.map(r=>[r.order_id,r.status]));fulfillmentAvailable=true;}
+    }catch{/* Keep order list available. */}
     return jsonResponse(200, { orders: orders.map(order => ({
+      fulfillment_confirmation_status: fulfillmentAvailable?(confirmations[order.id]||"not sent"):"unavailable",
       ...order, notification_status: notificationAvailable ? (notifications[order.id] || "not recorded") : "unavailable",
     })) });
   } catch (error) {
