@@ -56,7 +56,7 @@ export default async (req: Request) => {
     }
 
     const response = await fetch(
-      `${supabaseUrl.replace(/\/$/, "")}/rest/v1/orders?id=eq.${encodeURIComponent(id)}`,
+      `${supabaseUrl.replace(/\/$/, "")}/rest/v1/orders?id=eq.${encodeURIComponent(id)}&status=not.in.(pending_payment,draft)`,
       {
         method: "PATCH",
         headers: {
@@ -81,6 +81,7 @@ export default async (req: Request) => {
     const rows = JSON.parse(text);
     const order = Array.isArray(rows) ? rows[0] : rows;
 
+    if (!order) return jsonResponse(409, { error: "Order not found or payment is not yet verified." });
     return jsonResponse(200, { ok: true, order });
   } catch (error) {
     return jsonResponse(500, {
