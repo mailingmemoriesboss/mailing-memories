@@ -176,7 +176,7 @@ function CategoryChips({ activeId, onSelect }: { activeId: string; onSelect: (id
 /* ═══════════════════════════════════════════════════════
    CATEGORY SECTION
    ═══════════════════════════════════════════════════════ */
-function CategorySection({ category }: { category: typeof CATEGORIES[0] }) {
+function CategorySection({ category, handlePhraseClick }: { category: typeof CATEGORIES[0]; handlePhraseClick: (phrase: string) => void }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -476,7 +476,7 @@ export default function Messages() {
           {/* Active Category Section */}
           {activeData && (
             <FadeIn delay={0.2}>
-              <CategorySection category={activeData} />
+              <CategorySection category={activeData} handlePhraseClick={handlePhraseClick} />
             </FadeIn>
           )}
 
