@@ -39,6 +39,10 @@ export default function AdminOrderDetail() {
   const [loading, setLoading] = useState(true);
   const [savingStatus, setSavingStatus] = useState("");
   const [error, setError] = useState("");
+  const [photo,setPhoto]=useState<string|null>(null);
+  const [approved,setApproved]=useState(false);
+  const [photoBusy,setPhotoBusy]=useState(false);
+  const [confirmation,setConfirmation]=useState("unavailable");
 
   const id = useMemo(() => new URLSearchParams(window.location.search).get("id"), []);
 
@@ -56,6 +60,7 @@ export default function AdminOrderDetail() {
       const data = await response.json();
       if (!response.ok) throw new Error(data?.error || "Unable to load order.");
       setOrder(data.order);
+      try {const state=await fetch(`/api/fulfill-order?id=${encodeURIComponent(id)}`);setConfirmation(state.ok?(await state.json()).status:"unavailable");} catch {setConfirmation("unavailable");}
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to load order.");
     } finally {
@@ -86,6 +91,40 @@ export default function AdminOrderDetail() {
     } finally {
       setSavingStatus("");
     }
+  }
+
+  async function choosePhoto(file?:File) {
+    setPhoto(null);setApproved(false);
+    if(!file)return;
+    setPhotoBusy(true);
+    try {
+      if(!file.type.startsWith("image/")||file.size>25*1024*1024)throw Error("Choose an image under 25 MB.");
+      const bitmap=await createImageBitmap(file);
+      try {
+        const scale=Math.min(1,1400/Math.max(bitmap.width,bitmap.height));
+        const canvas=document.createElement("canvas");
+        canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+        const ctx=canvas.getContext("2d");if(!ctx)throw Error("Image processing unavailable.");
+        ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+        let data=canvas.toDataURL("image/jpeg",0.82);
+        for(let q=0.72;data.length>700000&&q>=0.32;q-=0.1)data=canvas.toDataURL("image/jpeg",q);
+        if(!data.startsWith("data:image/jpeg;base64,")||data.length>700000)throw Error("Choose a smaller image.");
+        setPhoto(data);
+      }finally{bitmap.close();}
+    }catch(e){toast.error(e instanceof Error?e.message:"Unable to read photo.");}
+    finally{setPhotoBusy(false);}
+  }
+  async function sendConfirmation(){
+    if(!order||!approved)return;
+    setSavingStatus("confirmation");
+    try{
+      const res=await fetch("/api/fulfill-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:order.id,photo:photo?.split(",")[1]??null,confirm:true})});
+      const data=await res.json();if(!res.ok)throw Error(data.error||"Confirmation failed.");
+      setPhoto(null);setApproved(false);setConfirmation(data.status);
+      toast.success(data.status==="accepted"?"Confirmation accepted by email provider":"Mailing recorded; confirmation status: "+data.status);
+      await loadOrder();
+    }catch(e){toast.error(e instanceof Error?e.message:"Check order before retrying.");}
+    finally{setSavingStatus("");}
   }
 
   if (loading) {
@@ -214,7 +253,7 @@ export default function AdminOrderDetail() {
                   <Button
                     key={status}
                     variant={order.status === status ? "default" : "outline"}
-                    disabled={Boolean(savingStatus)}
+                    disabled={photoBusy||Boolean(savingStatus)}
                     onClick={() => updateStatus(status)}
                   >
                     {savingStatus === status && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -222,6 +261,21 @@ export default function AdminOrderDetail() {
                   </Button>
                 ))}
               </div>
+              {confirmation!=="unavailable" && (
+                <div className="mt-6 border-t pt-5 space-y-3">
+                  <h3 className="font-semibold">Customer mailing confirmation</h3>
+                  <p className="text-sm">Confirmation: {confirmation==="accepted"?"Accepted by email provider":confirmation==="review"?"Needs manual review":confirmation==="queued"||confirmation==="sending"?"Awaiting delivery":confirmation}</p>
+                  {confirmation==="not sent" && order.paid_at && !order.anonymized_at && !order.privacy_hold && ["paid","queued","writing","written"].includes(order.status) && <>
+                    <p className="text-sm">Send to <strong>{order.sender_email}</strong> after physically mailing this order. A photo is optional. Use the card exterior or stamp area, without readable addresses or private letter content. The email provider retains sent email data for 30 days.</p>
+                    <label className="block text-sm">Finished card / stamped envelope photo
+                    <input className="block mt-2 max-w-full" type="file" accept="image/*" disabled={photoBusy||Boolean(savingStatus)} onChange={e=>void choosePhoto(e.target.files?.[0])}/></label>
+                    {photo&&<><img src={photo} alt="Confirmation attachment preview" className="max-h-64 max-w-full rounded border"/><Button variant="outline" onClick={()=>{setPhoto(null);setApproved(false);}}>Remove photo</Button></>}
+                    <label className="flex items-start gap-2 text-sm"><input type="checkbox" checked={approved} onChange={e=>setApproved(e.target.checked)}/>I have mailed this order and verified the customer email and any photo.</label>
+                    <Button disabled={!approved||photoBusy||Boolean(savingStatus)} onClick={sendConfirmation}>Mark mailed &amp; send confirmation</Button>
+                    <p className="text-xs text-muted-foreground">The ordinary Mark Mailed button does not send email. Use the confirmation button instead when you want the customer notified.</p>
+                  </>}
+                </div>
+              )}
               {order.privacy_hold && (
                 <div className="mt-3 text-sm text-muted-foreground">
                   Privacy hold is active; automatic 30-day anonymization will be deferred until the hold is cleared.

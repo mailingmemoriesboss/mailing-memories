@@ -14,6 +14,7 @@ export function calendarRow(row: Record<string, any>) {
 }
 
 export default async (req: Request) => {
+  if (new URL(req.url).hostname !== "mailingmemories.com") return json(404,{error:"Not found"});
   if (req.method !== "GET") return json(405,{error:"Method not allowed"});
   if (!authorized(req.headers.get("authorization"), Netlify.env.get("CALENDAR_SYNC_TOKEN"))) {
     return json(401,{error:"Unauthorized"});
