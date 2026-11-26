@@ -1245,7 +1245,7 @@ Payment received. Your letter has been submitted successfully. Order ID: {savedO
 
       <section style={{ padding: "64px 24px", background: "var(--mm-cream)" }}>
         <div className="max-w-[1240px] mx-auto text-center">
-          <PenStroke color="var(--mm-burgundy)" width="120px" />
+          <PenStroke color="var(--mm-burgundy)" className="w-[120px] mx-auto" />
           <p
             style={{
               marginTop: "24px",
