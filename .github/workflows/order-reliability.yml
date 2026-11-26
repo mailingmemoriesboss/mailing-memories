@@ -16,6 +16,6 @@ jobs:
           node-version: "22"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec vitest run netlify/functions/_lib/durableOrders.test.ts netlify/functions/_lib/orderNotifications.test.ts
+      - run: pnpm exec vitest run --root . netlify/functions/_lib/durableOrders.test.ts netlify/functions/_lib/orderNotifications.test.ts
       - run: pnpm check
       - run: pnpm build
