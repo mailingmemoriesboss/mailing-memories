@@ -50,6 +50,7 @@ type OrderRow = {
   order_type: "send_now" | "scheduled";
   status: OrderStatus;
   notification_status?: string;
+  fulfillment_confirmation_status?: string;
   occasion: string | null;
   occasion_custom: string | null;
   sender_name: string;
@@ -98,6 +99,8 @@ export default function AdminOrders() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [isClearingTests, setIsClearingTests] = useState(false);
+  const [testingEmail,setTestingEmail]=useState(false);
+  async function testEmail(){setTestingEmail(true);try{const r=await fetch("/api/test-fulfillment-email",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({confirm:true})});const d=await r.json();if(!r.ok)throw Error(d.error||"Test failed");toast.success("Provider accepted owner test. Check your business inbox.");}catch(e){toast.error(e instanceof Error?e.message:"Test failed");}finally{setTestingEmail(false);}}
 
   async function loadOrders() {
     try {
@@ -231,6 +234,7 @@ export default function AdminOrders() {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            <AlertDialog><AlertDialogTrigger asChild><Button variant="outline" disabled={testingEmail}>Test business email</Button></AlertDialogTrigger><AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Send owner-only test email?</AlertDialogTitle><AlertDialogDescription>No customer will be contacted and no order will change. The test goes to your configured business inbox, at most once per UTC day.</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={testEmail}>Send test</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="outline" className="gap-2 border-mm-line text-mm-ink" disabled={isClearingTests}>
@@ -391,8 +395,9 @@ export default function AdminOrders() {
                           {order.status.replaceAll("_", " ")}
                         </Badge>
                         <div className={order.notification_status === "review" || order.notification_status === "unavailable" ? "mt-1 text-xs text-red-700" : "mt-1 text-xs text-muted-foreground"}>
-                          Email: {order.notification_status === "accepted" ? "Provider accepted" : order.notification_status === "review" ? "Needs review" : order.notification_status === "queued" || order.notification_status === "sending" ? "Awaiting delivery" : order.notification_status || "Not recorded"}
+                          Owner email: {order.notification_status === "accepted" ? "Provider accepted" : order.notification_status === "review" ? "Needs review" : order.notification_status === "queued" || order.notification_status === "sending" ? "Awaiting delivery" : order.notification_status || "Not recorded"}
                         </div>
+                        <div className="mt-1 text-xs text-muted-foreground">Customer confirmation: {order.fulfillment_confirmation_status==="accepted"?"Provider accepted":order.fulfillment_confirmation_status==="review"?"Needs review":order.fulfillment_confirmation_status==="sending"||order.fulfillment_confirmation_status==="queued"?"Awaiting delivery":order.fulfillment_confirmation_status||"Not recorded"}</div>
                       </TableCell>
                       <TableCell>{order.order_type.replaceAll("_", " ")}</TableCell>
                       <TableCell>
